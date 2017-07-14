@@ -160,9 +160,6 @@ instance(Enum, int).where(fromEnum=int, toEnum=int)
 instance(Enum, bool).where(fromEnum=int, toEnum=bool)
 instance(Enum, str).where(fromEnum=ord, toEnum=chr)
 
-if sys.version[0] == '2':
-    instance(Enum, long).where(fromEnum=int, toEnum=long)
-
 
 #=============================================================================#
 # List
