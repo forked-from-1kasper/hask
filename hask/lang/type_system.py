@@ -2,6 +2,7 @@ import functools
 import types
 import string
 import sys
+import builtins
 from collections import namedtuple
 
 from hask.lang.hindley_milner import TypeVariable
@@ -26,39 +27,9 @@ else:
 # Typeclasses
 
 
-if sys.version[0] == '2':
-    __python_builtins__ = set((
-        types.BooleanType, types.BufferType, types.BuiltinFunctionType,
-        types.BuiltinMethodType, types.ClassType, types.CodeType,
-        types.ComplexType, types.DictProxyType, types.DictType,
-        types.DictionaryType, types.EllipsisType, types.FileType,
-        types.FloatType, types.FrameType, types.FunctionType,
-        types.GeneratorType, types.GetSetDescriptorType, types.InstanceType,
-        types.IntType, types.LambdaType, types.ListType, types.LongType,
-        types.MemberDescriptorType, types.MethodType, types.ModuleType,
-        types.NoneType, types.NotImplementedType, types.ObjectType,
-        types.SliceType, types.StringType, types.StringTypes,
-        types.TracebackType, types.TupleType, types.TypeType,
-        types.UnboundMethodType, types.UnicodeType, types.XRangeType, set,
-        frozenset))
-
-    __python_function_types__ = set((
-        types.FunctionType, types.LambdaType, types.MethodType,
-        types.UnboundMethodType, types.BuiltinFunctionType,
-        types.BuiltinMethodType))
-
-else:
-    __python_builtins__ = set((
-        bool, dict, type(Ellipsis), float, int, type(None), str, tuple,
-        type, types.BuiltinFunctionType, types.BuiltinMethodType,
-        types.CodeType, types.DynamicClassAttribute, types.FrameType,
-        types.FunctionType, types.GeneratorType, types.GetSetDescriptorType,
-        types.LambdaType, types.MappingProxyType, types.MemberDescriptorType,
-        types.MethodType, types.ModuleType, types.TracebackType))
-
-    __python_function_types__ = set((
-        types.FunctionType, types.LambdaType, types.MethodType,
-        types.BuiltinFunctionType, types.BuiltinMethodType))
+__python_function_types__ = set((
+    types.FunctionType, types.LambdaType, types.MethodType,
+    types.BuiltinFunctionType, types.BuiltinMethodType))
 
 
 def is_builtin(cls):
@@ -71,7 +42,7 @@ def is_builtin(cls):
     Returns:
         True if a type is a Python builtin type, and False otherwise.
     """
-    return cls in __python_builtins__
+    return cls in builtins.__dict__.values()
 
 
 def nt_to_tuple(nt):
@@ -114,7 +85,7 @@ class TypeMeta(type):
             raise TypeError("No instance for {0}".format(item))
 
 
-class Typeclass(object):
+class Typeclass(object, metaclass=TypeMeta):
     """
     Base class for Hask typeclasses.
 
@@ -123,7 +94,6 @@ class Typeclass(object):
     attributes/functions belong to the typeclass, and then call build_instance.
     See typeclasses.py for examples.
     """
-    __metaclass__ = TypeMeta
 
     @classmethod
     def make_instance(typeclass, type_, *args):
