@@ -243,7 +243,7 @@ def typify(fn, hkt=None):
     def add(x, y):
         return x + y
     """
-    args = [chr(i) for i in range(97, 98 + fn.func_code.co_argcount)]
+    args = [chr(i) for i in range(97, 98 + fn.__code__.co_argcount)]
     if hkt is not None:
         args[-1] = hkt(args[-1])
     return sig(__signature__(args, []))

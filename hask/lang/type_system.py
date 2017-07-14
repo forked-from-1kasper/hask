@@ -584,7 +584,7 @@ def pattern_match(value, pattern, env=None):
         if isinstance(value, ADT):
             return pattern_match(nt_to_tuple(value), nt_to_tuple(pattern), env)
 
-        elif hasattr(value, "__iter__"):
+        elif hasattr(value, "__iter__") and (not isinstance(value, str)):
             matches = []
             if len(value) != len(pattern):
                 return False, env
