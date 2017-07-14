@@ -31,7 +31,6 @@ language tools from Haskell, including:
 
 Features not yet implemented, but coming soon:
 
-* Python 3 compatibility
 * Better support for polymorphic return values/type defaulting
 * Better support for lazy evaluation (beyond just the `List` type and pattern matching)
 * More of the Haskell standard library (`Control.*` libraries, QuickCheck, and more)
@@ -41,11 +40,15 @@ Features not yet implemented, but coming soon:
 
 ## Installation
 
-1) `git clone https://github.com/billpmurphy/hask`
+1) `git clone https://github.com/1kasper/hask`
 
-2) `python setup.py install`
+2) `python3 setup.py install`
 
-To run the tests: `python tests.py`.
+To run the tests: `python3 tests.py`.
+
+### Python 2 support?
+
+No, use [original hask](https://github.com/billpmurphy/hask).
 
 
 ## Why did you make this?

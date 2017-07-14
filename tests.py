@@ -897,7 +897,6 @@ class TestBuiltins(unittest.TestCase):
 
     def test_numerics(self):
         self.assertTrue(has_instance(int, Num))
-        self.assertTrue(has_instance(long, Num))
         self.assertTrue(has_instance(float, Num))
         self.assertTrue(has_instance(complex, Num))
 

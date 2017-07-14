@@ -1,4 +1,4 @@
-import fractions
+import math
 
 from .lang import H
 from .lang import sig
@@ -171,7 +171,7 @@ def gcd(x, y):
     2, gcd(0,4) = 4. gcd(0,0) = 0. (That is, the common divisor that is
     "greatest" in the divisibility preordering.)
     """
-    return fractions.gcd(x, y)
+    return math.gcd(x, y)
 
 
 @sig(H[(Integral, "a")]/ "a" >> "a" >> "a")
