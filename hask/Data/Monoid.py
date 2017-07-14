@@ -1,7 +1,7 @@
-from ..lang import Typeclass
-from ..lang import build_instance
-from ..lang import H
-from ..lang import sig
+from hask.lang import Typeclass
+from hask.lang import build_instance
+from hask.lang import H
+from hask.lang import sig
 
 
 class Monoid(Typeclass):

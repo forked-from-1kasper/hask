@@ -2,23 +2,23 @@ import itertools
 import functools
 import operator
 
-from ..lang import H
-from ..lang import sig
-from ..lang import t
-from ..lang import L
-from ..lang import __
-from ..lang import caseof
-from ..lang import m
-from ..lang import p
+from hask.lang import H
+from hask.lang import sig
+from hask.lang import t
+from hask.lang import L
+from hask.lang import __
+from hask.lang import caseof
+from hask.lang import m
+from hask.lang import p
 
-from Eq import Eq
-from Ord import Ord
-from Ord import Ordering
-from Num import Num
-from Num import Integral
-from Maybe import Maybe
-from Maybe import Just
-from Maybe import Nothing
+from hask.Data.Eq import Eq
+from hask.Data.Ord import Ord
+from hask.Data.Ord import Ordering
+from hask.Data.Num import Num
+from hask.Data.Num import Integral
+from hask.Data.Maybe import Maybe
+from hask.Data.Maybe import Just
+from hask.Data.Maybe import Nothing
 
 #=============================================================================#
 # Basic functions

@@ -1,7 +1,7 @@
-from ..lang import build_instance
-from ..lang import List
-from ..lang import instance
-from ..Data.Functor import Functor
+from hask.lang import build_instance
+from hask.lang import List
+from hask.lang import instance
+from hask.Data.Functor import Functor
 
 
 class Applicative(Functor):

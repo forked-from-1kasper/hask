@@ -1,1 +1,1 @@
-from ..lang import Eq
+from hask.lang import Eq

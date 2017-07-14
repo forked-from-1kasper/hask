@@ -1,11 +1,11 @@
-from ..lang import build_instance
-from ..lang import sig
-from ..lang import H
-from ..lang import t
-from ..Control.Applicative import Applicative
-from ..Control.Monad import Monad
-from Foldable import Foldable
-from Functor import Functor
+from hask.lang import build_instance
+from hask.lang import sig
+from hask.lang import H
+from hask.lang import t
+from hask.Control.Applicative import Applicative
+from hask.Control.Monad import Monad
+from hask.Data.Foldable import Foldable
+from hask.Data.Functor import Functor
 
 
 class Traversable(Foldable, Functor):

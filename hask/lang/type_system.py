@@ -4,16 +4,16 @@ import string
 import sys
 from collections import namedtuple
 
-from hindley_milner import TypeVariable
-from hindley_milner import TypeOperator
-from hindley_milner import Var
-from hindley_milner import App
-from hindley_milner import Lam
-from hindley_milner import unify
-from hindley_milner import analyze
-from hindley_milner import Function
-from hindley_milner import Tuple
-from hindley_milner import ListType
+from hask.lang.hindley_milner import TypeVariable
+from hask.lang.hindley_milner import TypeOperator
+from hask.lang.hindley_milner import Var
+from hask.lang.hindley_milner import App
+from hask.lang.hindley_milner import Lam
+from hask.lang.hindley_milner import unify
+from hask.lang.hindley_milner import analyze
+from hask.lang.hindley_milner import Function
+from hask.lang.hindley_milner import Tuple
+from hask.lang.hindley_milner import ListType
 
 
 if sys.version[0] == '2':

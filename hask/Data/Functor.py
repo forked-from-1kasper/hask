@@ -1,14 +1,14 @@
 import itertools
-from ..lang import TypedFunc
-from ..lang import Typeclass
-from ..lang import is_builtin
-from ..lang import build_instance
-from ..lang import List
-from ..lang import L
-from ..lang import H
-from ..lang import sig
-from ..lang import t
-from ..lang import instance
+from hask.lang import TypedFunc
+from hask.lang import Typeclass
+from hask.lang import is_builtin
+from hask.lang import build_instance
+from hask.lang import List
+from hask.lang import L
+from hask.lang import H
+from hask.lang import sig
+from hask.lang import t
+from hask.lang import instance
 
 
 class Functor(Typeclass):

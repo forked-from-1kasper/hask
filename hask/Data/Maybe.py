@@ -1,23 +1,23 @@
-from ..lang import Read
-from ..lang import Show
-from ..lang import L
-from ..lang import H
-from ..lang import sig
-from ..lang import t
-from ..lang import data
-from ..lang import d
-from ..lang import caseof
-from ..lang import m
-from ..lang import p
-from ..lang import deriving
-from ..lang import instance
-from ..lang import typify
+from hask.lang import Read
+from hask.lang import Show
+from hask.lang import L
+from hask.lang import H
+from hask.lang import sig
+from hask.lang import t
+from hask.lang import data
+from hask.lang import d
+from hask.lang import caseof
+from hask.lang import m
+from hask.lang import p
+from hask.lang import deriving
+from hask.lang import instance
+from hask.lang import typify
 
-from Eq import Eq
-from Ord import Ord
-from Functor import Functor
-from ..Control.Applicative import Applicative
-from ..Control.Monad import Monad
+from hask.Data.Eq import Eq
+from hask.Data.Ord import Ord
+from hask.Data.Functor import Functor
+from hask.Control.Applicative import Applicative
+from hask.Control.Monad import Monad
 
 
 # data Maybe a = Nothing | Just a deriving(Show, Eq, Ord)

@@ -1,24 +1,24 @@
 import functools
 import operator
 
-from ..lang import sig
-from ..lang import H
-from ..lang import t
-from ..lang import L
-from ..lang import Typeclass
-from ..lang import build_instance
-from ..lang import is_builtin
-from ..lang import List
-from ..lang import instance
+from hask.lang import sig
+from hask.lang import H
+from hask.lang import t
+from hask.lang import L
+from hask.lang import Typeclass
+from hask.lang import build_instance
+from hask.lang import is_builtin
+from hask.lang import List
+from hask.lang import instance
 
-import List as DL
-from ..Control.Applicative import Applicative
-from ..Control.Monad import Monad
-from Eq import Eq
-from Num import Num
-from Maybe import Maybe
-from Ord import Ord
-from Ord import Ordering
+import hask.Data.List as DL
+from hask.Control.Applicative import Applicative
+from hask.Control.Monad import Monad
+from hask.Data.Eq import Eq
+from hask.Data.Num import Num
+from hask.Data.Maybe import Maybe
+from hask.Data.Ord import Ord
+from hask.Data.Ord import Ordering
 
 
 class Foldable(Typeclass):

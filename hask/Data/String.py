@@ -1,6 +1,6 @@
-from ..lang import H
-from ..lang import sig
-from ..lang import L
+from hask.lang import H
+from hask.lang import sig
+from hask.lang import L
 
 
 @sig(H/ str >> [str])

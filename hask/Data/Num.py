@@ -2,18 +2,18 @@ import math
 import fractions
 import sys
 
-from ..lang import data
-from ..lang import d
-from ..lang import deriving
-from ..lang import H
-from ..lang import sig
-from ..lang import t
-from ..lang import instance
-from ..lang import build_instance
-from ..lang import Enum
-from ..lang import Show
-from Eq import Eq
-from Ord import Ord
+from hask.lang import data
+from hask.lang import d
+from hask.lang import deriving
+from hask.lang import H
+from hask.lang import sig
+from hask.lang import t
+from hask.lang import instance
+from hask.lang import build_instance
+from hask.lang import Enum
+from hask.lang import Show
+from hask.Data.Eq import Eq
+from hask.Data.Ord import Ord
 
 
 class Num(Show, Eq):

@@ -4,20 +4,20 @@ import string
 import sys
 from collections import deque, defaultdict
 
-from type_system import typeof
-from type_system import Typeclass
-from type_system import TypedFunc
-from type_system import TypeSignature
-from type_system import TypeSignatureHKT
-from type_system import ADT
-from type_system import build_ADT
-from type_system import build_sig
-from type_system import make_fn_type
-from type_system import PatternMatchBind
-from type_system import PatternMatchListBind
-from type_system import pattern_match
-from type_system import Undefined
-from type_system import PyFunc
+from hask.lang.type_system import typeof
+from hask.lang.type_system import Typeclass
+from hask.lang.type_system import TypedFunc
+from hask.lang.type_system import TypeSignature
+from hask.lang.type_system import TypeSignatureHKT
+from hask.lang.type_system import ADT
+from hask.lang.type_system import build_ADT
+from hask.lang.type_system import build_sig
+from hask.lang.type_system import make_fn_type
+from hask.lang.type_system import PatternMatchBind
+from hask.lang.type_system import PatternMatchListBind
+from hask.lang.type_system import pattern_match
+from hask.lang.type_system import Undefined
+from hask.lang.type_system import PyFunc
 
 
 #=============================================================================#
