@@ -8,7 +8,6 @@ from hask.lang import H
 
 
 callable = callable ** (H/ "a" >> bool)
-cmp = cmp ** (H/ "a" >> "a" >> int)
 delattr = delattr ** (H/ "a" >> str >> None)
 divmod = divmod ** (H/ "a" >> "b" >> ("c", "c"))
 getattr = getattr ** (H/ "a" >> str >> "b")
@@ -22,4 +21,4 @@ oct = oct ** (H/ int >> str)
 repr = repr ** (H/ "a" >> str)
 setattr = setattr ** (H/ "a" >> str >> "b" >> None)
 sorted = sorted ** (H/ "a" >> list)
-unichr = unichr ** (H/ int >> unicode)
+chr = chr ** (H/ int >> str)

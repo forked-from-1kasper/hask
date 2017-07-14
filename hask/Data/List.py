@@ -1139,10 +1139,10 @@ def unzip7(xs):
 ## Functions on strings
 
 
-from String import lines
-from String import words
-from String import unlines
-from String import unwords
+from .String import lines
+from .String import words
+from .String import unlines
+from .String import unwords
 
 
 #=============================================================================#

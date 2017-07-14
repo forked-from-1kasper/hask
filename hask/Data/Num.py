@@ -88,16 +88,6 @@ instance(Num, int).where(
     sub = int.__sub__
 )
 
-instance(Num, long).where(
-    add = long.__add__,
-    mul = long.__mul__,
-    abs = long.__abs__,
-    signum = lambda x: -1L if x < 0L else (1L if x > 0L else 0L),
-    fromInteger = long,
-    negate = long.__neg__,
-    sub = long.__sub__
-)
-
 instance(Num, float).where(
     add = float.__add__,
     mul = float.__mul__,
@@ -149,7 +139,7 @@ Rational = t(Ratio, int)
 
 instance(Fractional, float).where(
     fromRational = lambda rat: float(rat[0])/float(rat[1]),
-    div = float.__div__,
+    div = float.__truediv__,
     recip = lambda x: 1.0/x
 )
 
@@ -421,10 +411,6 @@ instance(Real, int).where(
     toRational = lambda x: toRatio(x, 1)
 )
 
-instance(Real, long).where(
-    toRational = lambda x: toRatio(x, 1)
-)
-
 instance(Real, float).where(
     toRational = lambda x: toRatio(round(x), 1) # obviously incorrect
 )
@@ -432,20 +418,10 @@ instance(Real, float).where(
 instance(Integral, int).where(
     quotRem = lambda x, y: (x / y, x % y),
     toInteger = int,
-    quot = int.__div__,
+    quot = int.__floordiv__,
     rem = int.__mod__,
-    div = int.__div__,
+    div = int.__floordiv__,
     mod = int.__mod__,
-    divMod = divmod
-)
-
-instance(Integral, long).where(
-    quotRem = lambda x, y: (x / y, x % y),
-    toInteger = int,
-    quot = long.__div__,
-    rem = long.__mod__,
-    div = long.__div__,
-    mod = long.__mod__,
     divMod = divmod
 )
 

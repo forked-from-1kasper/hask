@@ -485,7 +485,7 @@ class __data__(Syntax):
         super(__data__, self).__init__("Syntax error in `data`")
 
     def __getattr__(self, value):
-        if not value[0] in string.uppercase:
+        if not value[0] in string.ascii_uppercase:
             raise SyntaxError("Type constructor name must be capitalized")
         return __new_tcon_enum__(value)
 
@@ -532,7 +532,7 @@ class __new_tcon_enum__(__new_tcon__):
             raise SyntaxError("Type parameters must be strings")
 
         # make sure all type params are letters only
-        is_letters = lambda xs: all((x in string.lowercase for x in xs))
+        is_letters = lambda xs: all((x in string.ascii_lowercase for x in xs))
         if not all((is_letters(arg) for arg in typeargs)):
             raise SyntaxError("Type parameters must be lowercase letters")
 
@@ -570,7 +570,7 @@ class __d__(Syntax):
         super(__d__, self).__init__("Syntax error in `d`")
 
     def __getattr__(self, value):
-        if not value[0] in string.uppercase:
+        if not value[0] in string.ascii_uppercase:
             raise SyntaxError("Data constructor name must be capitalized")
         return __new_dcon_enum__(value)
 

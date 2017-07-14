@@ -11,7 +11,7 @@ from hask.lang import is_builtin
 from hask.lang import List
 from hask.lang import instance
 
-import .List as DL
+import hask.Data.List as DL
 from hask.Control.Applicative import Applicative
 from hask.Control.Monad import Monad
 from .Eq import Eq

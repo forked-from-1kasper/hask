@@ -189,9 +189,9 @@ def lcm(x, y):
 # Monads and functors
 
 
-from Data.Functor import Functor
-from Control.Applicative import Applicative
-from Control.Monad import Monad
+from .Data.Functor import Functor
+from .Control.Applicative import Applicative
+from .Control.Monad import Monad
 
 
 @sig(H[(Monad, "m")]/ t("m", "a") >> t("m", None))
@@ -310,91 +310,91 @@ from .lang import undefined
 #=============================================================================#
 # List operations
 
-from Data.List import map
-from Data.List import filter
-from Data.List import head
-from Data.List import last
-from Data.List import tail
-from Data.List import init
-from Data.List import null
-from Data.List import reverse
-from Data.List import length
+from .Data.List import map
+from .Data.List import filter
+from .Data.List import head
+from .Data.List import last
+from .Data.List import tail
+from .Data.List import init
+from .Data.List import null
+from .Data.List import reverse
+from .Data.List import length
 
-from Data.List import foldl
-from Data.List import foldl1
-from Data.List import foldr
-from Data.List import foldr1
+from .Data.List import foldl
+from .Data.List import foldl1
+from .Data.List import foldr
+from .Data.List import foldr1
 
 
 #=============================================================================#
 ## Special folds
 
-from Data.List import and_
-from Data.List import or_
-from Data.List import any
-from Data.List import all
-from Data.List import sum
-from Data.List import product
-from Data.List import concat
-from Data.List import concatMap
-from Data.List import maximum
-from Data.List import minimum
+from .Data.List import and_
+from .Data.List import or_
+from .Data.List import any
+from .Data.List import all
+from .Data.List import sum
+from .Data.List import product
+from .Data.List import concat
+from .Data.List import concatMap
+from .Data.List import maximum
+from .Data.List import minimum
 
 
 #=============================================================================#
 ## Building lists
 ### Scans
 
-from Data.List import scanl
-from Data.List import scanl1
-from Data.List import scanr
-from Data.List import scanr1
+from .Data.List import scanl
+from .Data.List import scanl1
+from .Data.List import scanr
+from .Data.List import scanr1
 
 
 #=============================================================================#
 ### Infinite lists
 
-from Data.List import iterate
-from Data.List import repeat
-from Data.List import replicate
-from Data.List import cycle
+from .Data.List import iterate
+from .Data.List import repeat
+from .Data.List import replicate
+from .Data.List import cycle
 
 
 #=============================================================================#
 ## Sublists
 
-from Data.List import take
-from Data.List import drop
-from Data.List import splitAt
-from Data.List import takeWhile
-from Data.List import dropWhile
-from Data.List import span
-from Data.List import break_
+from .Data.List import take
+from .Data.List import drop
+from .Data.List import splitAt
+from .Data.List import takeWhile
+from .Data.List import dropWhile
+from .Data.List import span
+from .Data.List import break_
 
 
 #=============================================================================#
 ## Searching lists
 
-from Data.List import elem
-from Data.List import notElem
-from Data.List import lookup
+from .Data.List import elem
+from .Data.List import notElem
+from .Data.List import lookup
 
 
 #=============================================================================#
 ## Zipping and unzipping lists
 
-from Data.List import zip
-from Data.List import zip3
-from Data.List import zipWith
-from Data.List import zipWith3
-from Data.List import unzip
-from Data.List import unzip3
+from .Data.List import zip
+from .Data.List import zip3
+from .Data.List import zipWith
+from .Data.List import zipWith3
+from .Data.List import unzip
+from .Data.List import unzip3
 
 
 #=============================================================================#
 ## Functions on strings
 
-from Data.List import lines
-from Data.List import words
-from Data.List import unlines
-from Data.List import unwords
+from .Data.List import lines
+from .Data.List import words
+from .Data.List import unlines
+from .Data.List import unwords

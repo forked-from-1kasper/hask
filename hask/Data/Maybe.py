@@ -16,8 +16,8 @@ from hask.lang import typify
 from .Eq import Eq
 from .Ord import Ord
 from .Functor import Functor
-from .Applicative import Applicative
-from .Monad import Monad
+from hask.Control.Applicative import Applicative
+from hask.Control.Monad import Monad
 
 
 # data Maybe a = Nothing | Just a deriving(Show, Eq, Ord)
