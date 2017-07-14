@@ -1,4 +1,5 @@
 from hask.lang import H
+from hask.cmp import cmp
 
 
 #=============================================================================#
@@ -8,6 +9,7 @@ from hask.lang import H
 
 
 callable = callable ** (H/ "a" >> bool)
+cmp = cmp ** (H/ "a" >> "a" >> int)
 delattr = delattr ** (H/ "a" >> str >> None)
 divmod = divmod ** (H/ "a" >> "b" >> ("c", "c"))
 getattr = getattr ** (H/ "a" >> str >> "b")

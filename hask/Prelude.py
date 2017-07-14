@@ -182,7 +182,7 @@ def lcm(x, y):
     lcm(x,y) is the smallest positive integer that both x and y divide.
     """
     g = gcd(x, y)
-    return 0 if g == 0 else (x * y) / g
+    return 0 if g == 0 else (x * y) // g
 
 
 #=============================================================================#

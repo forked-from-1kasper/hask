@@ -117,7 +117,7 @@ def map(f, xs):
 
     map(f, xs) is the list obtained by applying f to each element of xs
     """
-    return L[itertools.imap(f, xs)]
+    return L[builtins.map(f, xs)]
 
 
 @sig(H/ ["a"] >> ["a"] )
