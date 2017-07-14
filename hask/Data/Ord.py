@@ -8,7 +8,7 @@ from hask.lang import data
 from hask.lang import d
 from hask.lang import deriving
 
-from hask.Data.Eq import Eq
+from .Eq import Eq
 
 
 # data Ordering = LT | EQ | GT deriving(Show, Eq, Ord, Bounded)

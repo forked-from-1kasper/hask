@@ -4,8 +4,8 @@ from hask.lang import H
 from hask.lang import t
 from hask.Control.Applicative import Applicative
 from hask.Control.Monad import Monad
-from hask.Data.Foldable import Foldable
-from hask.Data.Functor import Functor
+from .Foldable import Foldable
+from .Functor import Functor
 
 
 class Traversable(Foldable, Functor):

@@ -6,6 +6,7 @@ __version__ = "0.0.1"
 
 
 import hask.lang
+import hask.Data
 import hask.Data.Char
 import hask.Data.Either
 import hask.Data.Eq

@@ -11,14 +11,14 @@ from hask.lang import is_builtin
 from hask.lang import List
 from hask.lang import instance
 
-import hask.Data.List as DL
+import .List as DL
 from hask.Control.Applicative import Applicative
 from hask.Control.Monad import Monad
-from hask.Data.Eq import Eq
-from hask.Data.Num import Num
-from hask.Data.Maybe import Maybe
-from hask.Data.Ord import Ord
-from hask.Data.Ord import Ordering
+from .Eq import Eq
+from .Num import Num
+from .Maybe import Maybe
+from .Ord import Ord
+from .Ord import Ordering
 
 
 class Foldable(Typeclass):

@@ -12,8 +12,8 @@ from hask.lang import instance
 from hask.lang import build_instance
 from hask.lang import Enum
 from hask.lang import Show
-from hask.Data.Eq import Eq
-from hask.Data.Ord import Ord
+from .Eq import Eq
+from .Ord import Ord
 
 
 class Num(Show, Eq):

@@ -7,13 +7,13 @@ from hask.lang import t
 # not a long-term solution (not extensible beyond builtin types) but it will do
 # for now.
 
-from hask.Data.Num import Integral
-from hask.Data.Num import RealFrac
-from hask.Data.Num import Ratio
-from hask.Data.Num import R
-from hask.Data.Num import Rational
-from hask.Data.Num import toRatio
-from hask.Data.Num import toRational
+from .Num import Integral
+from .Num import RealFrac
+from .Num import Ratio
+from .Num import R
+from .Num import Rational
+from .Num import toRatio
+from .Num import toRational
 
 
 @sig(H[(Integral, "a")]/ t(Ratio, "a") >> "a")

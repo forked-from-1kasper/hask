@@ -1,2 +1,2 @@
-import hask.Data.Tuple as Tuple
+from . import Tuple
 

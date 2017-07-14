@@ -11,14 +11,14 @@ from hask.lang import caseof
 from hask.lang import m
 from hask.lang import p
 
-from hask.Data.Eq import Eq
-from hask.Data.Ord import Ord
-from hask.Data.Ord import Ordering
-from hask.Data.Num import Num
-from hask.Data.Num import Integral
-from hask.Data.Maybe import Maybe
-from hask.Data.Maybe import Just
-from hask.Data.Maybe import Nothing
+from .Eq import Eq
+from .Ord import Ord
+from .Ord import Ordering
+from .Num import Num
+from .Num import Integral
+from .Maybe import Maybe
+from .Maybe import Just
+from .Maybe import Nothing
 
 #=============================================================================#
 # Basic functions

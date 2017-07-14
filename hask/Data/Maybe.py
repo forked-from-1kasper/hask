@@ -13,11 +13,11 @@ from hask.lang import deriving
 from hask.lang import instance
 from hask.lang import typify
 
-from hask.Data.Eq import Eq
-from hask.Data.Ord import Ord
-from hask.Data.Functor import Functor
-from hask.Control.Applicative import Applicative
-from hask.Control.Monad import Monad
+from .Eq import Eq
+from .Ord import Ord
+from .Functor import Functor
+from .Applicative import Applicative
+from .Monad import Monad
 
 
 # data Maybe a = Nothing | Just a deriving(Show, Eq, Ord)
