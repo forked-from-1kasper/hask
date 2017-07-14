@@ -1,3 +1,5 @@
+**Work In Progress**: attempt to port to python 3.
+
 # Hask
 
 [![Build Status](https://travis-ci.org/billpmurphy/hask.svg)](https://travis-ci.org/billpmurphy/hask)
