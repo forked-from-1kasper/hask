@@ -416,7 +416,7 @@ instance(Real, float).where(
 )
 
 instance(Integral, int).where(
-    quotRem = lambda x, y: (x / y, x % y),
+    quotRem = lambda x, y: (x // y, x % y),
     toInteger = int,
     quot = int.__floordiv__,
     rem = int.__mod__,

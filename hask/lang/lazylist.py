@@ -2,6 +2,8 @@ import collections
 import itertools
 import sys
 
+from hask.cmp import cmp
+
 from .hindley_milner import TypeVariable
 from .hindley_milner import ListType
 from .hindley_milner import unify
@@ -356,7 +358,7 @@ class List(collections.Sequence, Hask):
         # make sure that the list is evaluated enough to do the indexing, but
         # not any more than necessary
         # if index is negative, evaluate the entire list
-        if i >= 0:
+        if (not isinstance(i, type(None))) and (i >= 0):
             while (i+1) > len(self.__head):
                 try:
                     self.__next()

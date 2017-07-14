@@ -1,6 +1,7 @@
 import itertools
 import functools
 import operator
+import builtins
 
 from hask.lang import H
 from hask.lang import sig
@@ -900,7 +901,7 @@ def zip(xs, ys):
     zip takes two lists and returns a list of corresponding pairs. If one input
     list is short, excess elements of the longer list are discarded.
     """
-    return L[itertools.izip(xs, ys)]
+    return L[builtins.zip(xs, ys)]
 
 
 @sig(H/ ["a"] >> ["b"] >> ["c"] >> [("a", "b", "c")])

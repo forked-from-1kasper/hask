@@ -1,4 +1,3 @@
-import itertools
 from hask.lang import TypedFunc
 from hask.lang import Typeclass
 from hask.lang import is_builtin
@@ -41,7 +40,7 @@ def fmap(f, x):
 
 
 instance(Functor, List).where(
-    fmap = lambda fn, lst: L[itertools.imap(fn, iter(lst))]
+    fmap = lambda fn, lst: L[map(fn, iter(lst))]
 )
 
 instance(Functor, TypedFunc).where(

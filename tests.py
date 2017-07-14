@@ -618,7 +618,7 @@ class TestADTInternals_Enum(unittest.TestCase):
         self.assertTrue(self.E3 == self.E3)
 
     def test_derive_show_data(self):
-        self.assertNotEquals("E1", str(self.E1))
+        self.assertNotEqual("E1", str(self.E1))
 
         Show.derive_instance(self.Type_Const)
 
@@ -683,7 +683,7 @@ class TestADTInternals_Builtin(unittest.TestCase):
         self.assertFalse(self.M3(1, 2, 3) == self.M3(1, 9, 3))
 
     def test_derive_show_data(self):
-        self.assertNotEquals("M1(1)", str(self.M1(1)))
+        self.assertNotEqual("M1(1)", str(self.M1(1)))
 
         Show.derive_instance(self.Type_Const)
         self.assertEqual("M1(1)", str(self.M1(1)))
@@ -1659,9 +1659,9 @@ class TestList(unittest.TestCase):
         self.assertEqual(L[1, 2], L[[1, 2]])
         self.assertEqual(L[range(10)], L[range(10)])
         self.assertEqual(L[range(5)], L[0, 1, 2, 3, 4])
-        self.assertEqual(L[range(10)], L[xrange(10)])
-        self.assertEqual(L[xrange(10)], L[xrange(10)])
-        self.assertEqual(L[xrange(5)], L[0, 1, 2, 3, 4])
+        self.assertEqual(L[list(range(10))], L[range(10)])
+        self.assertEqual(L[range(10)], L[range(10)])
+        self.assertEqual(L[range(5)], L[0, 1, 2, 3, 4])
         self.assertEqual(L[(i for i in range(5))], L[(i for i in range(5))])
         self.assertEqual(L[(i for i in range(5))], L[0, 1, 2, 3, 4])
         self.assertEqual(L[(i for i in [])], L[[]])
@@ -1870,7 +1870,7 @@ class TestList(unittest.TestCase):
     def test_functor(self):
         from hask.Prelude import id, map, fmap
         f = (lambda x: x ** 2 - 1) ** (H/ int >> int)
-        g = (lambda y: y / 4 + 9) ** (H/ int >> int)
+        g = (lambda y: y // 4 + 9) ** (H/ int >> int)
 
         self.assertEqual(L[0, 3, 8, 15], fmap(f, L[1, ..., 4]))
         self.assertEqual(L[0, 3, 8, 15], fmap(f, L[1, ...])[:4])
@@ -2014,13 +2014,13 @@ class TestDataList(unittest.TestCase):
         from hask.Data.List import unfoldr
 
         plus_one = (lambda x: x + 1) ** (H/ int >> int)
-        self.assertEquals(iterate(plus_one, 0)[:10], L[range(10)])
-        self.assertEquals(iterate(__+1, 0)[:10], L[range(10)])
+        self.assertEqual(iterate(plus_one, 0)[:10], L[range(10)])
+        self.assertEqual(iterate(__+1, 0)[:10], L[range(10)])
 
         uf = (lambda x: Nothing if x > 5 else Just((x+1, x+1))) ** \
                 (H/ int >> t(Maybe, (int, int)))
-        self.assertEquals(L[[]], unfoldr(uf, 6))
-        self.assertEquals(L[1, ..., 6], unfoldr(uf, 0))
+        self.assertEqual(L[[]], unfoldr(uf, 6))
+        self.assertEqual(L[1, ..., 6], unfoldr(uf, 0))
 
     def test_sublists(self):
         from hask.Data.List import take, drop, splitAt, takeWhile, dropWhile

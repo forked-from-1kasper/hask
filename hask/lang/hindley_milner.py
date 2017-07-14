@@ -139,7 +139,7 @@ class TypeOperator(object):
         if num_types == 0:
             return show_type(self.name)
         return "({0} {1})".format(show_type(self.name),
-                                  ' '.join(map(show_type, self.types)))
+                                  ' '.join(list(map(show_type, self.types))))
 
 
 class Function(TypeOperator):
@@ -150,7 +150,7 @@ class Function(TypeOperator):
 
     def __str__(self):
         return "({1} {0} {2})".format(show_type(self.name),
-                                      *map(show_type, self.types))
+                                      *list(map(show_type, self.types)))
 
 
 class Tuple(TypeOperator):
@@ -160,7 +160,7 @@ class Tuple(TypeOperator):
         super(self.__class__, self).__init__(tuple, types)
 
     def __str__(self):
-        return "({0})".format(", ".join(map(show_type, self.types)))
+        return "({0})".format(", ".join(list(map(show_type, self.types))))
 
 
 class ListType(TypeOperator):
