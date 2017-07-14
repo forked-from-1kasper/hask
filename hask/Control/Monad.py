@@ -9,7 +9,7 @@ from hask.lang import is_builtin
 from hask.lang import List
 from hask.lang import instance
 from hask.Data.Functor import fmap
-from hask.Control.Applicative import Applicative
+from .Applicative import Applicative
 
 
 class Monad(Applicative):
