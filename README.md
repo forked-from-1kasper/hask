@@ -1,5 +1,8 @@
 **Work In Progress**: attempt to port to python 3.
 
+[![Build Status](https://travis-ci.org/1kasper/hask.svg?branch=master)](https://travis-ci.org/1kasper/hask)
+[![Coverage Status](https://coveralls.io/repos/github/1kasper/hask/badge.svg?branch=master)](https://coveralls.io/github/1kasper/hask?branch=master)
+
 # Hask
 
 
