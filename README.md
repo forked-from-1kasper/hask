@@ -408,7 +408,7 @@ def not_in(y, xs):
 # type signature with a type constructor (Maybe) that has type arguments
 @sig(H/ int >> int >> t(Maybe, int))
 def safe_div(x, y):
-    return Nothing if y == 0 else Just(x/y)
+    return Nothing if y == 0 else Just(x//y)
 
 
 # type signature for a function that returns nothing
@@ -605,7 +605,7 @@ The `bind` function also has an infix form, which is `>>` in Hask.
 ```python
 @sig(H/ int >> int >> t(Maybe, int))
 def safe_div(x, y):
-    return Nothing if y == 0 else Just(x/y)
+    return Nothing if y == 0 else Just(x//y)
 
 
 >>> from hask.Prelude import flip
