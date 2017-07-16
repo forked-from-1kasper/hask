@@ -2222,14 +2222,63 @@ class TestDataString(unittest.TestCase):
 class TestDataChar(unittest.TestCase):
 
     def test_char(self):
-        from hask.Data.Char import ord, chr
+        from hask.Data.Char import ord, chr, isSpace
+        from hask.Data.Char import isUpper, isLower
+        from hask.Data.Char import isDigit, isOctDigit, isHexDigit
+        from hask.Data.Char import isAscii, isLatin1
+        from hask.Data.Char import toUpper, toLower
+        from hask.Data.Char import digitToInt, intToDigit
+
+        from string import ascii_lowercase, ascii_uppercase
+        from string import digits, hexdigits, octdigits
 
         self.assertEqual("a", chr(97))
+        for i in "\t\n\r\f\v":
+            self.assertEqual(True, isSpace(i))
+        self.assertEqual(False, isSpace("a"))
+
+        for s in ascii_lowercase:
+            self.assertEqual(True, isLower(s))
+            self.assertEqual(False, isUpper(s))
+
+        for s in ascii_uppercase:
+            self.assertEqual(False, isLower(s))
+            self.assertEqual(True, isUpper(s))
+
+        for i in digits:
+            self.assertEqual(True, isDigit(i))
+
+        for i in octdigits:
+            self.assertEqual(True, isOctDigit(i))
+
+        for i in hexdigits:
+            self.assertEqual(True, isHexDigit(i))
+
         with self.assertRaises(te): ord(97)
         with self.assertRaises(te): chr("a")
         with self.assertRaises(te): chr * chr
+
         for i in range(256):
             self.assertEqual(i, ord * chr % i)
+
+        for i in range(128):
+            self.assertEqual(True, isAscii(chr(i)))
+
+        for i in range(256):
+            self.assertEqual(True, isLatin1(chr(i)))
+
+        for i in range(len(ascii_lowercase)):
+            self.assertEqual(ascii_lowercase[i], toLower(ascii_uppercase[i]))
+
+        for i in range(len(ascii_uppercase)):
+            self.assertEqual(ascii_uppercase[i], toUpper(ascii_lowercase[i]))
+
+        lowercase_hexdigits = "0123456789abcdef"
+        for i in range(len(lowercase_hexdigits)):
+            self.assertEqual(i, digitToInt(lowercase_hexdigits[i]))
+
+        for i in range(len(lowercase_hexdigits)):
+            self.assertEqual(lowercase_hexdigits[i], intToDigit(i))
 
 
 class TestDataNum(unittest.TestCase):
