@@ -1,5 +1,3 @@
-**Work In Progress**: attempt to port to python 3.
-
 [![Build Status](https://travis-ci.org/1kasper/hask.svg?branch=master)](https://travis-ci.org/1kasper/hask)
 [![Coverage Status](https://coveralls.io/repos/github/1kasper/hask/badge.svg?branch=master)](https://coveralls.io/github/1kasper/hask?branch=master)
 
@@ -40,7 +38,7 @@ Features not yet implemented, but coming soon:
 
 ## Installation
 
-1) `git clone https://github.com/1kasper/hask`
+1) `git clone https://github.com/forked-from-1kasper/hask`
 
 2) `python3 setup.py install`
 
