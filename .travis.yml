@@ -1,6 +1,6 @@
 language: python
 python:
-  - 3.6
+  - 3.7
 install:
   - python3 setup.py install
   - pip install coveralls
@@ -9,4 +9,4 @@ script:
 after_success:
   coveralls
 notifications:
-  email: false
+  email: true
