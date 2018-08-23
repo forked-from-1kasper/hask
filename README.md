@@ -1,8 +1,7 @@
-[![Build Status](https://travis-ci.org/forked-from-1kasper/hask.svg?branch=master)](https://travis-ci.org/forked-from-1kasper/hask)
-[![Coverage Status](https://coveralls.io/repos/github/1kasper/hask/badge.svg?branch=master)](https://coveralls.io/github/1kasper/hask?branch=master)
-
 # Hask
 
+[![Build Status](https://travis-ci.org/forked-from-1kasper/hask.svg?branch=master)](https://travis-ci.org/forked-from-1kasper/hask)
+[![Coverage Status](https://coveralls.io/repos/github/1kasper/hask/badge.svg?branch=master)](https://coveralls.io/github/1kasper/hask?branch=master)
 
 Hask is a pure-Python, zero-dependencies library that mimics most of the core
 language tools from Haskell, including:
@@ -19,13 +18,12 @@ language tools from Haskell, including:
   monadic error handling, guards, and more
 * Python port of (some of) the standard libraries from Haskell's `base`,
   including:
-    * Algebraic datatypes from the Haskell `Prelude`, including `Maybe` and
-      `Either`
-    * Typeclasses from the Haskell `base` libraries, including `Functor`,
-      `Applicative`, `Monad`, `Enum`, `Num`, and all the rest
-    * Standard library functions from `base`, including all functions from
-      `Prelude`, `Data.List`, `Data.Maybe`, and more
-
+  * Algebraic datatypes from the Haskell `Prelude`, including `Maybe` and
+    `Either`
+  * Typeclasses from the Haskell `base` libraries, including `Functor`,
+    `Applicative`, `Monad`, `Enum`, `Num`, and all the rest
+  * Standard library functions from `base`, including all functions from
+    `Prelude`, `Data.List`, `Data.Maybe`, and more
 
 Features not yet implemented, but coming soon:
 
@@ -44,12 +42,11 @@ Features not yet implemented, but coming soon:
 
 To run the tests: `python3 tests.py`.
 
-### Python 2 support?
+### Python 2 support
 
 No, use [original hask](https://github.com/billpmurphy/hask).
 
-
-## Why did you make this?
+## “Why did you make this?”
 
 I wanted to cram as much of Haskell into Python as possible while still being
 100% compatible with the rest of Python, just to see if any useful ideas came
@@ -58,7 +55,6 @@ out of the result. Also, it was fun!
 Contributions, forks, and extensions to this experiment are always welcome!
 Feel free to submit a pull request, open an issue, or email me. In the spirit
 of this project, abusing the Python language as much as possible is encouraged.
-
 
 ## Features
 
@@ -71,9 +67,7 @@ To import all the language features: `from hask import *`
 To import the Prelude: `from hask import Prelude`
 To import a `base` library, e.g. `Data.List`: `from hask import Data.List`
 
-
 ### The List type and list comprehensions
-
 
 Hask provides the `List` type, a lazy and statically-typed list, similar to
 Haskell's standard list type.
@@ -118,7 +112,6 @@ the List with `len`.)
 One way to create infinite lists is via list comprehensions. As in Haskell,
 there are four basic type of list comprehensions:
 
-
 ```python
 # list from 1 to infinity, counting by ones
 L[1, ...]
@@ -138,7 +131,6 @@ or any other instance of the `Enum` typeclass (more on this later).
 
 Hask provides all of the Haskell functions for List manipulation (`take`,
 `drop`, `takeWhile`, etc.), or you can also use Python-style indexing.
-
 
 ```python
 >>> L[1, ...]
@@ -269,7 +261,6 @@ int
 [int]
 ```
 
-
 ### The type system and typed functions
 
 So what's up with those types? Hask operates its own shadow [Hindley-Milner
@@ -283,25 +274,25 @@ objects:
 
 1) Use the `sig` decorator to decorate the function with the type signature
 
-```python
-@sig(H/ "a" >> "b" >> "a")
-def const(x, y):
-    return x
-```
+  ```python
+  @sig(H/ "a" >> "b" >> "a")
+  def const(x, y):
+      return x
+  ```
 
 2) Use the `**` operator (similar to `::` in Haskell) to provide the type.
 Useful for turning functions or lambdas into `TypedFunc` objects in the REPL,
 or wrapping already-defined Python functions.
 
-```python
-def const(x, y):
-    return x
+  ```python
+  def const(x, y):
+      return x
+  
+  const = const ** (H/ "a" >> "b" >> "a")
+  ```
 
-const = const ** (H/ "a" >> "b" >> "a")
-```
-
-`TypedFunc` objects have several special properties.  First, they are type
-checked--when arguments are supplied, the type inference engine will check
+`TypedFunc` objects have several special properties. First, they are type
+checked—when arguments are supplied, the type inference engine will check
 whether their types match the type signature, and raise a `TypeError` if there
 is a discrepancy.
 
@@ -337,7 +328,7 @@ operators. `*` is the compose operator (equivalent to `(.)` in Haskell), so
 `f * g` is equivalent to `lambda x: f(g(x))`. `%` is just the apply operator,
 which applies a `TypedFunc` to one argument (equivalent to `($)` in Haskell).
 The convinience of this notation (when combined with partial application)
-cannot be overstated--you can get rid of a ton of nested parenthesis this way.
+cannot be overstated—you can get rid of a ton of nested parenthesis this way.
 
 ```python
 >>> from hask.Prelude import flip
@@ -522,9 +513,7 @@ up.
 >>> Nothing[0]  # IndexError
 ```
 
-
 ### Typeclasses and typeclass instances
-
 
 [Typeclasses](https://en.wikipedia.org/wiki/Type_class) allow you to add
 additional functionality to your ADTs. Hask implements all of the major
@@ -535,7 +524,6 @@ As an example, let's add a [`Monad`](https://wiki.haskell.org/Monad) instance
 for the `Maybe` type.  First, however, `Maybe` needs
 [`Functor`](https://wiki.haskell.org/Functor) and
 [`Applicative`](https://wiki.haskell.org/Applicative_functor) instances.
-
 
 ```python
 def maybe_fmap(fn, x):
@@ -580,12 +568,10 @@ Note that this example uses `*` as both the function compose operator and as
 `fmap`, to lift functions into a `Maybe` value. If this seems confusing,
 remember that `fmap` for functions is just function composition!
 
-
 Now that `Maybe` is an instance of `Functor`, we can make it an instance of
 `Applicative` and then an instance of `Monad` by defining the appropriate
 function implementations. To implement `Applicative`, we just need to provide
 `pure`. To implement `Monad`, we need to provide `bind`.
-
 
 ```python
 from hask import Applicative, Monad
@@ -655,11 +641,9 @@ If you want instances of the `Show`, `Eq`, `Read`, `Ord`, and `Bounded`
 typeclasses for your ADTs, it is adviseable to use `deriving` to automagically
 generate instances rather than defining them manually.
 
-
-Defining your own typeclasses is pretty easy--take a look at `help(Typeclass)`
+Defining your own typeclasses is pretty easy—take a look at `help(Typeclass)`
 and look at the typeclasses defined in `Data.Functor` and `Data.Num` to
 see how it's done.
-
 
 ### Operator sections
 
@@ -700,7 +684,6 @@ polymorphic, to allow for any operator overloading.
 Note that if you are using IPython, Hask's `__` will conflict with IPython's
 special double underscore variable. To avoid conflicts, you can use `from hask
 import __ as _s` in IPython.
-
 
 ### Guards
 
@@ -830,7 +813,6 @@ def some_function(x, y):
     ...
 ```
 
-
 ### Standard libraries
 
 All of your favorite functions from `Prelude`, `Data.List`, `Data.Maybe`,
@@ -880,12 +862,6 @@ points:
   regular tuples
 * `typify` converts a Python function into a `TypedFunc` object
 
-
-
-
-
-
-
 ## Appendix
 
 **Table 1.** Overview of Hask typeclasses.
@@ -911,7 +887,6 @@ points:
 | `Floating` | `Fractional` | `exp`, `sqrt`, `log`, `pow`, `logBase`, `sin`, `tan`, `cos`, `asin`, `atan`, `acos`, `sinh`, `tanh`, `cosh`, `asinh`, `atanh`, `acosh` | |
 | `RealFrac` | `Real`, `Fractional` | `properFraction`, `truncate`, `round`, `ceiling`, `floor` |
 | `RealFloat` | `Floating`, `RealFrac` | `floatRange`, `isNaN`, `isInfinite`, `isNegativeZero`, `atan2` |
-
 
 **Table 2.** Hask library structure.
 
