@@ -194,7 +194,8 @@ class sig(Syntax):
         return str(x)
     """
     def __init__(self, signature):
-        super(self.__class__, self).__init__("Syntax error in type signature")
+        #super(self.__class__, self).__init__("Syntax error in type signature")
+        super().__init__("Syntax error in type signature")
 
         if not isinstance(signature, __signature__):
             msg = "Signature expected in sig(); found %s" % signature

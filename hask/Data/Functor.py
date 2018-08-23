@@ -1,14 +1,9 @@
-from hask.lang import TypedFunc
-from hask.lang import Typeclass
-from hask.lang import is_builtin
-from hask.lang import build_instance
-from hask.lang import List
-from hask.lang import L
-from hask.lang import H
-from hask.lang import sig
-from hask.lang import t
-from hask.lang import instance
-
+from hask.lang import TypedFunc, Typeclass, is_builtin
+from hask.lang import build_instance, List
+from hask.lang import L, H, sig, t
+from hask.lang import instance, deriving, Show, data, d
+from hask.Data.Function import const, comp
+from hask.Data.Unit import Unit, Star
 
 class Functor(Typeclass):
     """
@@ -38,6 +33,9 @@ class Functor(Typeclass):
 def fmap(f, x):
     return Functor[x].fmap(f, x)
 
+@sig(H[(Functor, "f")]/ t("f", "a") >> t("f", Unit))
+def void(x):
+    return fmap(const(Star), x)
 
 instance(Functor, List).where(
     fmap = lambda fn, lst: L[map(fn, iter(lst))]

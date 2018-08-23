@@ -9,7 +9,7 @@ def fst(tup):
 
     Extract the first component of a pair.
     """
-    x, y = tup
+    x, _ = tup
     return x
 
 
@@ -20,7 +20,7 @@ def snd(tup):
 
     Extract the second component of a pair.
     """
-    x, y = tup
+    _, y = tup
     return y
 
 

@@ -27,6 +27,8 @@ from .Data.Ord import LT
 from .Data.Ord import EQ
 from .Data.Ord import GT
 
+from hask.Data.Unit import Unit, Star
+
 
 #=============================================================================#
 ### Tuples
@@ -63,7 +65,7 @@ from .lang import enumFromTo
 
 from .lang import Bounded
 from .Data.Functor import Functor
-from .Data.Functor import fmap
+from .Data.Functor import fmap, void
 
 from .Control.Applicative import Applicative
 from .Control.Monad import Monad
@@ -239,35 +241,7 @@ def mapM_(f, xs):
 #=============================================================================#
 # Miscellaneous functions
 
-
-@sig(H/ "a" >> "a")
-def id(a):
-    """
-    id :: a -> a
-
-    Identity function.
-    """
-    return a
-
-
-@sig(H/ "a" >> "b" >> "a")
-def const(a, b):
-    """
-    const :: a -> b -> a
-
-    Constant function.
-    """
-    return a
-
-
-@sig(H/ (H/ "a" >> "b" >> "c") >> "b" >> "a" >> "c")
-def flip(f, b, a):
-    """
-    flip :: (a -> b -> c) -> b -> a -> c
-
-    flip(f) takes its (first) two arguments in the reverse order of f.
-    """
-    return f(a, b)
+from hask.Data.Function import id, const, flip, comp
 
 
 @sig(H/ (H/ "a" >> bool) >> (H/ "a" >> "a") >> "a" >> "a")
@@ -319,6 +293,7 @@ from .Data.List import init
 from .Data.List import null
 from .Data.List import reverse
 from .Data.List import length
+from .Data.List import L
 
 from .Data.List import foldl
 from .Data.List import foldl1
