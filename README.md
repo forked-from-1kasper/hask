@@ -240,7 +240,8 @@ Left(1)
 Foo(1, 2, 'hello')
 ```
 
-You can view the type of an object with `_t` (equivalent to `:t` in ghci).
+You can view the type of an object with `showType`
+or `_t` (with `from hask import _t`) (equivalent to `:t` in ghci).
 
 ```python
 >>> from hask import _t
@@ -257,7 +258,7 @@ int
 >>> _t(Just)
 (a -> Maybe a)
 
->>> _t(L[1, 2, 3, 4])
+>>> showType(L[1, 2, 3, 4])
 [int]
 ```
 

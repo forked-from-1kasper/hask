@@ -1,5 +1,4 @@
-from hask.lang import H, sig
-from hask.cmp import cmp
+from hask.lang.syntax import H, sig
 from hask.Data.Unit import Unit, Star
 import builtins
 
@@ -11,7 +10,7 @@ import builtins
 
 
 callable = callable ** (H/ "a" >> bool)
-cmp = cmp ** (H/ "a" >> "a" >> int)
+cmp = (lambda a, b: (a > b) - (a < b)) ** (H/ "a" >> "a" >> int)
 divmod = divmod ** (H/ "a" >> "b" >> ("c", "c"))
 getattr = getattr ** (H/ "a" >> str >> "b")
 hasattr = hasattr ** (H/ "a" >> str >> bool)

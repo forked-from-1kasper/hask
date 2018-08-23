@@ -2,8 +2,6 @@ import collections
 import itertools
 import sys
 
-from hask.cmp import cmp
-
 from .hindley_milner import TypeVariable
 from .hindley_milner import ListType
 from .hindley_milner import unify
@@ -22,6 +20,9 @@ from .syntax import Syntax
 from .syntax import instance
 from .syntax import sig
 from .syntax import H
+
+
+cmp = lambda a, b: (a > b) - (a < b)
 
 
 class Enum(Typeclass):

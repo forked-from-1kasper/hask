@@ -1,17 +1,11 @@
 import math
 import fractions
 import sys
+import builtins
 
-from hask.lang import data
-from hask.lang import d
-from hask.lang import deriving
-from hask.lang import H
-from hask.lang import sig
-from hask.lang import t
-from hask.lang import instance
-from hask.lang import build_instance
-from hask.lang import Enum
-from hask.lang import Show
+from hask.lang import data, d, deriving, H, sig, t
+from hask.lang import instance, build_instance
+from hask.lang import Enum, Show
 from .Eq import Eq
 from .Ord import Ord
 
@@ -322,7 +316,7 @@ instance(Floating, float).where(
     exp = math.exp,
     sqrt = math.sqrt,
     log = math.log,
-    pow = pow,
+    pow = math.pow,
     logBase = math.log,
     sin = math.sin,
     tan = math.tan,
@@ -412,7 +406,7 @@ instance(Real, int).where(
 )
 
 instance(Real, float).where(
-    toRational = lambda x: toRatio(round(x), 1) # obviously incorrect
+    toRational = lambda x: toRatio(builtins.round(x), 1) # obviously incorrect
 )
 
 instance(Integral, int).where(
@@ -507,7 +501,7 @@ def floor(x):
 instance(RealFrac, float).where(
     properFraction = lambda x: (int(math.floor(x)), x - math.floor(x)),
     truncate = lambda x: int(math.floor(x) if x > 0 else math.floor(x+1)),
-    round = lambda x: int(round(x, 0)),
+    round = lambda x: int(builtins.round(x, 0)),
     ceiling = math.ceil,
     floor = math.floor
 )
