@@ -128,7 +128,7 @@ class __constraints__(Syntax):
             # only one typeclass constraint
             else:
                 self.__add_constraint(constraints)
-        super(__constraints__, self).__init__("Syntax error in type signature")
+        super().__init__("Syntax error in type signature")
         return
 
     def __add_constraint(self, con):
@@ -160,7 +160,7 @@ class __signature__(Syntax):
     """
     def __init__(self, args, constraints):
         self.sig = TypeSignature(args, constraints)
-        super(__signature__, self).__init__("Syntax error in type signature")
+        super().__init__("Syntax error in type signature")
         return
 
     def __rshift__(self, arg):
@@ -351,7 +351,7 @@ class __pattern_bind_list__(Syntax, PatternMatchListBind):
     def __init__(self, head, tail):
         self.head = [head]
         self.tail = tail
-        super(__pattern_bind_list__, self).__init__("Syntax error in match")
+        super().__init__("Syntax error in match")
 
     def __rxor__(self, head):
         self.head.insert(0, head)
@@ -365,7 +365,7 @@ class __pattern_bind__(Syntax, PatternMatchBind):
     """
     def __init__(self, name):
         self.name = name
-        super(__pattern_bind__, self).__init__("Syntax error in match")
+        super().__init__("Syntax error in match")
 
     def __rxor__(self, cell):
         return __pattern_bind_list__(cell, self)
@@ -378,7 +378,6 @@ class __pattern_bind__(Syntax, PatternMatchBind):
             return __pattern_bind_list__(self, other)
 
         raise self.invalid_syntax
-        return
 
 
 class __match_line__(Syntax):
@@ -483,7 +482,7 @@ class __data__(Syntax):
     data.Maybe("a") == d.Nothing | d.Just("a") & deriving(Read, Show, Eq, Ord)
     """
     def __init__(self):
-        super(__data__, self).__init__("Syntax error in `data`")
+        super().__init__("Syntax error in `data`")
 
     def __getattr__(self, value):
         if not value[0] in string.ascii_uppercase:
@@ -498,7 +497,7 @@ class __new_tcon__(Syntax):
     def __init__(self, name, args=()):
         self.name = name
         self.args = args
-        super(__new_tcon__, self).__init__("Syntax error in `data`")
+        super().__init__("Syntax error in `data`")
 
     def __eq__(self, d):
         # one data constructor, zero or more derived typeclasses
@@ -568,7 +567,7 @@ class __d__(Syntax):
     See help(data) for more information.
     """
     def __init__(self):
-        super(__d__, self).__init__("Syntax error in `d`")
+        super().__init__("Syntax error in `d`")
 
     def __getattr__(self, value):
         if not value[0] in string.ascii_uppercase:
@@ -585,7 +584,7 @@ class __new_dcon__(Syntax):
         self.name = dcon_name
         self.args = args
         self.classes = classes
-        super(__new_dcon__, self).__init__("Syntax error in `d`")
+        super().__init__("Syntax error in `d`")
         return
 
 
@@ -659,7 +658,7 @@ class __new_dcons_deriving__(Syntax):
     def __init__(self, data_consts, classes=()):
         self.dcons = data_consts
         self.classes = classes
-        super(__new_dcons_deriving__, self).__init__("Syntax error in `d`")
+        super().__init__("Syntax error in `d`")
         return
 
 
@@ -675,7 +674,7 @@ class __new_dcons__(__new_dcons_deriving__):
     """
 
     def __init__(self, data_consts):
-        super(__new_dcons__, self).__init__(data_consts)
+        super().__init__(data_consts)
         return
 
     def __or__(self, new_dcon):
@@ -731,7 +730,7 @@ class __section__(Syntax):
     + - * / // ** >> << | & ^ == != > >= < <=
     """
     def __init__(self, syntax_err_msg):
-        super(__section__, self).__init__(syntax_err_msg)
+        super().__init__(syntax_err_msg)
         return
 
     @staticmethod
@@ -832,7 +831,7 @@ class __guard_test__(Syntax):
         if not callable(fn):
             raise ValueError("Guard condition must be callable")
         self.__test = fn
-        super(__guard_test__, self).__init__("Syntax error in guard condition")
+        super().__init__("Syntax error in guard condition")
 
     def __rshift__(self, value):
         if isinstance(value, __guard_test__) or \
@@ -855,7 +854,7 @@ class __guard_conditional__(Syntax):
         self.check = fn
         self.return_value = return_value
         msg = "Syntax error in guard condition"
-        super(__guard_conditional__, self).__init__(msg)
+        super().__init__(msg)
 
 
 class __guard_base__(Syntax):
@@ -868,7 +867,7 @@ class __guard_base__(Syntax):
     """
     def __init__(self, value):
         self.value = value
-        super(__guard_base__, self).__init__("Syntax error in guard")
+        super().__init__("Syntax error in guard")
 
 
 class __unmatched_guard__(__guard_base__):

@@ -414,7 +414,7 @@ def scanl1(f, xs):
 
     scanl1 is a variant of scanl that has no starting value argument
     """
-    raise NotImplementedError()
+    return L[itertools.accumulate(xs, f)]
 
 
 @sig(H/ (H/ "a" >> "a" >> "b") >> "b" >> ["a"] >> ["b"])
@@ -667,7 +667,7 @@ def group(xs):
     It is a special case of groupBy, which allows the programmer to supply
     their own equality test.
     """
-    return groupBy(xs, (__==__))
+    return groupBy(xs, (__ == __))
 
 
 @sig(H/ ["a"] >> [["a"]])
@@ -1239,9 +1239,10 @@ def sortOn(f, xs):
     Sort a list by comparing the results of a key function applied to each
     element.
 
-    Note: Current implementation is not lazy
+    >>> sortOn(fst, L[(2, "world"), (4, "!"), (1, "Hello")])
+    L[(1, 'Hello'), (2, 'world'), (4, '!')]
     """
-    raise NotImplementedError()
+    return L[sorted(xs, key=f)]
 
 
 @sig(H[(Ord, "a")]/ "a" >> ["a"] >> ["a"])

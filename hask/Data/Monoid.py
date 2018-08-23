@@ -25,7 +25,7 @@ class Monoid(Typeclass):
 @sig(H[(Monoid, "m")]/ "m" >> "m" >> "m")
 def mappend(x, y):
     """
-    mappend :: a -> a -> a
+    mappend :: (Monoid m) => m -> m -> m
 
     An associative operation
     """
@@ -35,7 +35,7 @@ def mappend(x, y):
 @sig(H[(Monoid, "m")]/ ["m"] >> "m")
 def mconcat(m):
     """
-    mconcat :: [a] -> a
+    mconcat :: (Monoid m) => [m] -> m
 
     Fold a list using the monoid.
     """
