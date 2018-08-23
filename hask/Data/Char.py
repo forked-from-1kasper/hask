@@ -1,5 +1,7 @@
 from hask.lang import H
 from hask.lang import sig
+import unicodedata
+import builtins
 
 
 #=============================================================================#
@@ -14,7 +16,7 @@ def isControl(s):
     Selects control characters, which are the non-printing characters of the
     Latin-1 subset of Unicode.
     """
-    raise NotImplementedError
+    return unicodedata.category(s) == 'Cc' # Other, Control category
 
 
 @sig(H/ str >> bool)
@@ -59,7 +61,18 @@ def isAlpha(s):
     title-case letters, plus letters of caseless scripts and modifiers
     letters). This function is equivalent to isLetter.
     """
-    raise NotImplementedError
+    return s.isalpha()
+
+
+@sig(H/ str >> bool)
+def isNumber(s):
+    """
+    isNumber :: str -> bool
+
+    Selects Unicode numeric characters, including digits from various scripts,
+    Roman numerals, etc.
+    """
+    return unicodedata.category(s) in ['Nd', 'Nl', 'No']
 
 
 @sig(H/ str >> bool)
@@ -73,7 +86,7 @@ def isAlphaNum(s):
     function but not by isDigit. Such digits may be part of identifiers but are
     not used by the printer and reader to represent numbers.
     """
-    raise NotImplementedError
+    return isAlpha(s) or isNumber(s)
 
 
 @sig(H/ str >> bool)
@@ -137,18 +150,7 @@ def isMark(s):
     Selects Unicode mark characters, e.g. accents and the like, which combine
     with preceding letters.
     """
-    raise NotImplementedError
-
-
-@sig(H/ str >> bool)
-def isNumber(s):
-    """
-    isNumber :: str -> bool
-
-    Selects Unicode numeric characters, including digits from various scripts,
-    Roman numerals, etc.
-    """
-    raise NotImplementedError
+    return unicodedata.category(s) in ['Mn', 'Mc', 'Me']
 
 
 @sig(H/ str >> bool)
@@ -159,7 +161,7 @@ def isPunctuation(s):
     Selects Unicode punctuation characters, including various kinds of
     connectors, brackets and quotes.
     """
-    raise NotImplementedError
+    return unicodedata.category(s) in ['Pc', 'Pd', 'Ps', 'Pe', 'Pi', 'Pf', 'Po']
 
 
 @sig(H/ str >> bool)
@@ -170,7 +172,7 @@ def isSymbol(s):
     Selects Unicode symbol characters, including mathematical and currency
     symbols.
     """
-    raise NotImplementedError
+    return unicodedata.category(s) in ['Sm', 'Sc', 'Sk', 'So']
 
 
 @sig(H/ str >> bool)
@@ -180,7 +182,7 @@ def isSeparator(s):
 
     Selects Unicode space and separator characters.
     """
-    raise NotImplementedError
+    return unicodedata.category(s) in ['Zs', 'Zl', 'Zp']
 
 
 #=============================================================================#
@@ -304,5 +306,5 @@ def intToDigit(s):
 #=============================================================================#
 # Numeric representations
 
-chr = chr ** (H/ int >> str)
-ord = ord ** (H/ str >> int)
+chr = builtins.chr ** (H/ int >> str)
+ord = builtins.ord ** (H/ str >> int)
