@@ -121,7 +121,7 @@ from .Control.Applicative import Applicative
 from .Control.Monad import Monad
 
 
-@sig(H[(Monad, "m")]/ t("m", "a") >> t("m", None))
+@sig(H[(Monad, "m")]/ t("m", "a") >> t("m", Unit))
 def sequence(xs):
     """
     sequence :: Monad m => [m a] -> m [a]
@@ -132,10 +132,10 @@ def sequence(xs):
     raise NotImplementedError()
 
 
-@sig(H[(Monad, "m")]/ t("m", "a") >> t("m", None))
+@sig(H[(Monad, "m")]/ t("m", "a") >> t("m", Unit))
 def sequence_(xs):
     """
-    sequence_ :: Monad m => [m a] -> m None
+    sequence_ :: Monad m => [m a] -> m Unit
 
     Evaluate each action in the sequence from left to right, and ignore the
     results.

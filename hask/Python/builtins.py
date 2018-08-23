@@ -1,5 +1,7 @@
-from hask.lang import H
+from hask.lang import H, sig
 from hask.cmp import cmp
+from hask.Data.Unit import Unit, Star
+import builtins
 
 
 #=============================================================================#
@@ -10,7 +12,6 @@ from hask.cmp import cmp
 
 callable = callable ** (H/ "a" >> bool)
 cmp = cmp ** (H/ "a" >> "a" >> int)
-delattr = delattr ** (H/ "a" >> str >> None)
 divmod = divmod ** (H/ "a" >> "b" >> ("c", "c"))
 getattr = getattr ** (H/ "a" >> str >> "b")
 hasattr = hasattr ** (H/ "a" >> str >> bool)
@@ -21,6 +22,15 @@ issubclass = issubclass ** (H/ "a" >> "b" >> bool)
 len = len ** (H/ "a" >> int)
 oct = oct ** (H/ int >> str)
 repr = repr ** (H/ "a" >> str)
-setattr = setattr ** (H/ "a" >> str >> "b" >> None)
 sorted = sorted ** (H/ "a" >> list)
 chr = chr ** (H/ int >> str)
+
+@sig(H/ "a" >> str >> Unit)
+def delattr(obj, name):
+    builtins.delattr(obj, name)
+    return Star
+
+@sig(H/ "a" >> str >> "b" >> Unit)
+def setattr(obj, name, value):
+    builtins.setattr(obj, name, value)
+    return Star

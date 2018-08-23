@@ -16,6 +16,7 @@ from hask import Typeclass
 from hask import Read, Show, Eq, Ord, Bounded, Num
 from hask import Functor, Applicative, Monad
 from hask import Foldable, Traversable
+from hask import Unit, Star
 
 # internals
 from hask.lang.type_system import make_fn_type
@@ -322,17 +323,14 @@ class TestHindleyMilner(unittest.TestCase):
         self.unified(build_sig_arg(set, {}, {}), TypeOperator(set, []))
         self.unified(build_sig_arg(example, {}, {}), TypeOperator(example, []))
 
-        # unit type (None)
-        self.unified(build_sig_arg(None, {}, {}), TypeOperator(None, []))
-
         # tuple
         self.unified(
                 build_sig_arg((int, int), {}, {}),
                 Tuple([TypeOperator(int, []), TypeOperator(int, [])]))
         self.unified(
-                build_sig_arg((None, (None, int)), {}, {}),
-                Tuple([TypeOperator(None, []),
-                       Tuple([TypeOperator(None, []), TypeOperator(int, [])])]))
+                build_sig_arg((Unit, (Unit, int)), {}, {}),
+                Tuple([TypeOperator(Unit, []),
+                       Tuple([TypeOperator(Unit, []), TypeOperator(int, [])])]))
         a = TypeVariable()
         self.unified(
                 build_sig_arg(("a", "a", "a"), {}, {}),
@@ -495,12 +493,12 @@ class TestTypeSystem(unittest.TestCase):
         with self.assertRaises(te): flatten(L["a", "b"])
 
     def test_TypedFunc_None(self):
-        @sig(H/ None >> None)
+        @sig(H/ Unit >> Unit)
         def n_to_n(n):
-            return
+            return Star
 
-        self.assertIsNone(None, n_to_n % None)
-        self.assertIsNone(None, n_to_n * n_to_n % None)
+        self.assertEqual(n_to_n % Star, Star)
+        self.assertEqual(n_to_n * n_to_n % Star, Star)
         with self.assertRaises(te): n_to_n(1)
 
     def test_TypedFunc_func(self):
@@ -2466,9 +2464,9 @@ class Test_README_Examples(unittest.TestCase):
             return Nothing if y == 0 else Just(x/y)
 
         # type signature for a function that returns nothing
-        @sig(H/ int >> None)
+        @sig(H/ int >> Unit)
         def launch_missiles(num_missiles):
-            return
+            return Star
 
         Ratio, R =\
                 data.Ratio("a") == d.R("a", "a") & deriving(Eq)

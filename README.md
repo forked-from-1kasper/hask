@@ -360,7 +360,7 @@ primitives that can be combined to build any type signature:
 | `List` of some type | `[int]`, `["a"]`, `[["a"]]` |
 | Tuple type | `(int, int)`, `("a", "b", "c")`, `(int, ("a", "b"))` |
 | ADT with type parameters | `t(Maybe, "a")`, `t(Either, "a", str)` |
-| Unit type (`None`) | `None` |
+| Unit type (`Unit`) | `Star` |
 | Untyped Python function | `func` |
 | Typeclass constraint | `H[(Eq, "a"), (Show, "b")]/`, `H[(Functor, "f"), (Show, "f")]/` |
 
@@ -404,9 +404,10 @@ def safe_div(x, y):
 
 
 # type signature for a function that returns nothing
-@sig(H/ int >> None)
+@sig(H/ int >> Unit)
 def launch_missiles(num_missiles):
     print "Launching {0} missiles! Bombs away!" % num_missiles
+    return Star
 ```
 
 It is also possible to create type synonyms using `t`. For example, check out the definition of `Rational`:

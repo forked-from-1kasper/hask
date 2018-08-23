@@ -114,7 +114,7 @@ class __constraints__(Syntax):
     (H/ (H/ "a" >> "b") >> ["a"] >> ["b"])
     (H[(Eq, "a")]/ "a" >> ["a"] >> bool)
     (H/ int >> int >> t(Maybe, int))
-    (H/ int >> None)
+    (H/ int >> Unit)
 
     See help(sig) for more information on type signature decorators.
     """

@@ -71,3 +71,4 @@ from hask.Prelude import Traversable, Functor, Applicative, Monad, Foldable
 from hask.Prelude import Maybe, Just, Nothing, in_maybe
 from hask.Prelude import Either, Left, Right, in_either
 from hask.Prelude import Ordering, LT, EQ, GT
+from hask.Prelude import Unit, Star

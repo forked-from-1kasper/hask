@@ -269,10 +269,6 @@ def build_sig_arg(arg, cons, var_dict):
         return TypeOperator(hkt, [build_sig_arg(a, cons, var_dict)
                                   for a in arg.params])
 
-    # None (the unit type)
-    elif arg is None:
-        return TypeOperator(None, [])
-
     # Tuples: ("a", "b"), (int, ("a", float)), etc.
     elif isinstance(arg, tuple):
         return Tuple(list(map(lambda x: build_sig_arg(x, cons, var_dict),

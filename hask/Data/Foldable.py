@@ -12,6 +12,7 @@ from hask.lang import List
 from hask.lang import instance
 
 import hask.Data.List as DL
+from hask.Data.Unit import Unit, Star
 from hask.Control.Applicative import Applicative
 from hask.Control.Monad import Monad
 from .Eq import Eq
@@ -241,7 +242,7 @@ def foldrM(f, b, ta):
 
 
 @sig(H[(Foldable, "t"), (Applicative, "f")]/ (H/ "a" >> t("f", "b")) >>
-        t("f", "a") >> t("f", None))
+        t("f", "a") >> t("f", Unit))
 def traverse_(f, t):
     """
     traverse_ :: (Foldable t, Applicative f) => (a -> f b) -> t a -> f ()
@@ -254,7 +255,7 @@ def traverse_(f, t):
 
 
 @sig(H[(Foldable, "t"), (Applicative, "f")]/ t("f", "a") >>
-        (H/ "a" >> t("f", "b")) >> t("f", None))
+        (H/ "a" >> t("f", "b")) >> t("f", Unit))
 def for_(t, f):
     """
     for_ :: (Foldable t, Applicative f) => t a -> (a -> f b) -> f ()
@@ -266,7 +267,7 @@ def for_(t, f):
 
 
 @sig(H[(Foldable, "t"), (Applicative, "f")]/ t("t", t("m", "a")) >>
-        t("f", None))
+        t("f", Unit))
 def sequenceA_(t):
     """
     sequenceA_ :: (Foldable t, Applicative f) => t (f a) -> f ()
@@ -282,7 +283,7 @@ def sequenceA_(t):
 
 
 @sig(H[(Foldable, "t"), (Monad, "m")]/ (H/ "a" >> t("m", "b")) >>
-        t("m", "a") >> t("m", None))
+        t("m", "a") >> t("m", Unit))
 def mapM_(f, t):
     """
     mapM_ :: (Foldable t, Monad m) => (a -> m b) -> t a -> m ()
@@ -297,7 +298,7 @@ def mapM_(f, t):
 
 
 @sig(H[(Foldable, "t"), (Monad, "m")]/ t("m", "a") >>
-        (H/ "a" >> t("m", "b")) >> t("m", None))
+        (H/ "a" >> t("m", "b")) >> t("m", Unit))
 def forM_(t, f):
     """
     forM_ :: (Foldable t, Monad m) => t a -> (a -> m b) -> m ()
@@ -310,7 +311,7 @@ def forM_(t, f):
     return mapM_(f, t)
 
 
-@sig(H[(Foldable, "t"), (Monad, "m")]/ t("t", t("m", "a")) >> t("m", None))
+@sig(H[(Foldable, "t"), (Monad, "m")]/ t("t", t("m", "a")) >> t("m", Unit))
 def sequence_(t):
     """
     sequence_ :: (Foldable t, Monad m) => t (m a) -> m ()
