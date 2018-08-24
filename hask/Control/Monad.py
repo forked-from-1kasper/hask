@@ -34,10 +34,6 @@ class Monad(Applicative):
     def make_instance(typeclass, cls, bind):
         bind = bind ** (H[(Monad, "m")]/ t("m", "a") >> (H/ "a" >> t("m", "b"))
                 >> t("m", "b"))
-        if not is_builtin(cls):
-            def bind_wrap(s, o):
-                return Monad[s].bind(s, o)
-            cls.__rshift__ = bind_wrap
         build_instance(Monad, cls, {"bind":bind})
         return
 

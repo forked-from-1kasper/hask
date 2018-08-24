@@ -178,53 +178,69 @@ Here is the definition for the infamous `Maybe` type:
 ```python
 from hask import data, d, deriving
 from hask import Read, Show, Eq, Ord
+from hask.lang.adt_syntax import ADT, HKT
 
-Maybe, Nothing, Just =\
-    data.Maybe("a") == d.Nothing | d.Just("a") & deriving(Read, Show, Eq, Ord)
+@ADT
+class Maybe(HKT("a", deriving=[Read, Show, Eq, Ord])):
+    Nothing : []
+    Just : "a"
+Nothing, Just = Maybe.enums # brings `Nothing` and `Just` to outer scope
 ```
 
 Let's break this down a bit. The syntax for defining a new [type
 constructor](https://wiki.haskell.org/Constructor#Type_constructor) is:
 
 ```python
-data.TypeName("type param", "type param 2" ... "type param n")
+@ADT
+class TypeName(HKT("type param", "type param2" ... "type param n"))
 ```
 
 This defines a new algebraic datatype with type parameters.
 
 To define [data
 constructors](https://wiki.haskell.org/Constructor#Data_constructor) for this
-type, use `d.` The name of the data constructor goes first, followed by its
-fields. Multiple data constructors should be separted by `|`. If your data
-constructor has no fields, you can omit the parens. For example:
+type, use static field with annotations without realization.
+The name of the data constructor goes first, followed by its
+fields. If your data constructor has no fields, use `[]`.
+For example:
 
 ```python
-FooBar, Foo, Bar =\
-    data.FooBar("a", "b") == d.Foo("a", "b", str) | d.Bar
+@ADT
+class FooBar(HKT("a", "b")):
+    Foo : ["a", "b", str]
+    Bar
+Foo, Bar = FooBar.enums
 ```
 
-To automagically derive typeclass instances for the type, add `&
-deriving(...typeclasses...)` after the data constructor declarations.
+To automagically derive typeclass instances for the type, add
+`deriving` parameter after the tzpe parameters.
 Currently, the only typeclasses that can be derived are `Eq`, `Show`, `Read`,
 `Ord`, and `Bounded`.
 
 Putting it all together, here are the definitions of `Either` and `Ordering`:
 
 ```python
-Either, Left, Right =\
-    data.Either("a", "b") == d.Left("a") | d.Right("b") & deriving(Read, Show, Eq)
+@ADT
+class Either(HKT("a", "b", deriving=[Read, Show, Eq])):
+    Left : "a"
+    Right : "b"
+Left, Right = Either.enums
 
 
-Ordering, LT, EQ, GT =\
-    data.Ordering == d.LT | d.EQ | d.GT & deriving(Read, Show, Eq, Ord, Bounded)
+@ADT
+class Ordering(HKT(deriving=[Read, Show, Eq, Ord, Bounded])):
+    LT : []
+    EQ : []
+    GT : []
+LT, EQ, GT = Ordering.enums
 ```
 
-You can now use the data constructors defined in a `data` statement to create
-instances of these new types. If the data constructor takes no arguments, you
-can use it just like a variable.
+You can now use the data constructors to create instances of these new types.
+If the data constructor takes no arguments,
+you can use it just like a variable.
 
 ```python
->>> Just(10)
+>>> Maybe.Just(10)
 Just(10)
 
 >>> Nothing
@@ -240,8 +256,8 @@ Left(1)
 Foo(1, 2, 'hello')
 ```
 
-You can view the type of an object with `showType`
-or `_t` (with `from hask import _t`) (equivalent to `:t` in ghci).
+You can view the type of an object with `showType` or `_t`
+(with `from hask import _t`; equivalent to `:t` in ghci).
 
 ```python
 >>> from hask import _t
@@ -411,12 +427,13 @@ def launch_missiles(num_missiles):
     return Star
 ```
 
-It is also possible to create type synonyms using `t`. For example, check out the definition of `Rational`:
+It is also possible to create type synonyms using `t`.
+For example, check out the definition of `Rational`:
 
 ```python
-Ratio, R =\
-        data.Ratio("a") == d.R("a", "a") & deriving(Eq)
-
+class Ratio(HKT("a", deriving=[Eq])):
+    R : ["a", "a"]
+R = Ratio.R
 
 Rational = t(Ratio, int)
 
@@ -542,21 +559,23 @@ instance(Functor, Maybe).where(
 
 `Maybe` is now an instance of `Functor`. This allows us to call `fmap`
 and map any function of type `a -> b` into a value of type `Maybe a`.
+Otherwise you can use `map`—infix version of `fmap`.
 
 ```python
 >>> times2 = (lambda x: x * 2) ** (H/ int >> int)
 >>> toFloat = float ** (H/ int >> float)
 
->>> fmap(toFloat, Just(10))
+>>> toFloat |map| Just(10)
 Just(10.0)
 
->>> fmap(toFloat, fmap(times2, Just(25)))
+>>> toFloat |map| fmap(times2, Just(25))
 Just(50.0)
 ```
 
 Lots of nested calls to `fmap` get unwieldy very fast. Fortunately, any
-instance of `Functor` can be used with the infix `fmap` operator, `*`. This is
-equivalent to `<$>` in Haskell. Rewriting our example from above:
+instance of `Functor` can be used with the another infix `fmap` operator, `*`.
+This is equivalent to `<$>` in Haskell.
+Rewriting our example from above:
 
 ```python
 >>> (toFloat * times2) * Just(25)
@@ -589,7 +608,7 @@ instance(Monad, Maybe).where(
 )
 ```
 
-The `bind` function also has an infix form, which is `>>` in Hask.
+The `mbind` function also has an infix form, which is `|bind|` in Hask.
 
 ```python
 @sig(H/ int >> int >> t(Maybe, int))
@@ -601,15 +620,15 @@ def safe_div(x, y):
 >>> divBy = flip(safe_div)
 
 
->>> Just(9) >> divBy(3)
+>>> mbind(Just(9), divBy(3))
 Just(3)
 
 
->>> Just(12) >> divBy(2) >> divBy(2) >> divBy(3)
+>>> Just(12) |bind| divBy(2) |bind| divBy(2) |bind| divBy(3)
 Just(1)
 
 
->>> Just(12) >> divBy(0) >> divBy(6)
+>>> Just(12) |bind| divBy(0) |bind| divBy(6)
 Nothing
 ```
 
@@ -618,7 +637,7 @@ As in Haskell, `List` is also a monad, and `bind` for the `List` type is just
 
 ```python
 >>> from hask.Data.List import replicate
->>> L[1, 2] >> replicate(2) >> replicate(2)
+>>> L[1, 2] |bind| replicate(2) |bind| replicate(2)
 L[1, 1, 1, 1, 2, 2, 2, 2]
 ```
 
@@ -773,12 +792,12 @@ returning `Nothing` if the attempt was unsuccessful:
 
 ```python
 >>> cheese = 10
->>> cheese_left = Just(cheese) >> maybe_eat >> maybe_eat >> maybe_eat
+>>> cheese_left = Just(cheese) |bind| maybe_eat |bind| maybe_eat |bind| maybe_eat
 >>> cheese_left
 Just(7)
 
 >>> cheese = 1
->>> cheese_left = Just(cheese) >> maybe_eat >> maybe_eat >> maybe_eat
+>>> cheese_left = Just(cheese) |bind| maybe_eat |bind| maybe_eat |bind| maybe_eat
 >>> cheese_left
 Nothing
 ```
@@ -874,7 +893,7 @@ points:
 | `Bounded` | | `minBound`, `maxBound` | | |
 | `Functor` | | `fmap` | | `*` |
 | `Applicative` | `Functor` | `pure` | | |
-| `Monad` | `Applicative` | `bind` | | `>>` |
+| `Monad` | `Applicative` | `bind` | `mbind` | |
 | `Monoid` | | `mappend`, `mempty` |  `mconcat` | `+` |
 | `Foldable` | | `foldr` | `foldr_`, `foldl`, `foldl_`, `foldr1`, `foldl1`, `toList`, `null`, `length`, `elem`, `maximum`, `minimum`, `sum`, `product` | `len`, `iter` |
 | `Traversable` | `Foldable`, `Functor` | `traverse` | `sequenceA`, `mapM`, `sequence` | |
