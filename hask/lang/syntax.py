@@ -2,6 +2,7 @@ import inspect
 import operator
 import string
 import sys
+import warnings
 from collections import deque, defaultdict
 
 from hask.lang.type_system import typeof
@@ -485,6 +486,7 @@ class __data__(Syntax):
         super().__init__("Syntax error in `data`")
 
     def __getattr__(self, value):
+        #warnings.warn("old ADT syntax is deprecated", DeprecationWarning)
         if not value[0] in string.ascii_uppercase:
             raise SyntaxError("Type constructor name must be capitalized")
         return __new_tcon_enum__(value)

@@ -20,25 +20,17 @@ from hask import Unit, Star
 
 # internals
 from hask.lang.type_system import make_fn_type
-from hask.lang.type_system import build_sig_arg
-from hask.lang.type_system import build_sig
-from hask.lang.type_system import build_ADT
-from hask.lang.type_system import typeof
-from hask.lang.type_system import pattern_match
-from hask.lang.type_system import PatternMatchBind
+from hask.lang.type_system import build_sig_arg, build_sig, build_ADT
+from hask.lang.type_system import typeof, pattern_match, PatternMatchBind
 
-from hask.lang.hindley_milner import Var
-from hask.lang.hindley_milner import App
-from hask.lang.hindley_milner import Lam
-from hask.lang.hindley_milner import Let
-from hask.lang.hindley_milner import TypeVariable
-from hask.lang.hindley_milner import TypeOperator
-from hask.lang.hindley_milner import Function
-from hask.lang.hindley_milner import Tuple
+from hask.lang.hindley_milner import Var, App, Lam, Let
+from hask.lang.hindley_milner import TypeVariable, TypeOperator, Function, Tuple
 from hask.lang.hindley_milner import analyze
 from hask.lang.hindley_milner import unify
 
 from hask.lang.lazylist import List
+
+from hask.lang.adt_syntax import ADT, HKT
 
 te = TypeError
 se = SyntaxError
@@ -827,8 +819,12 @@ class TestADTSyntax(unittest.TestCase):
 
     def test_adts(self):
         """Assorted ADT tests that don't fit anywhere else"""
-        T, M1, M2, M3 =\
-        data.T("a", "b") == d.M1("a") | d.M2("b") | d.M3 & deriving(Eq)
+        @ADT
+        class T(HKT("a", "b", deriving=[Eq])):
+            M1 : "a"
+            M2 : "b"
+            M3 : []
+        M1, M2, M3 = T.enums
 
         self.assertEqual(M1(20), M1(20))
         self.assertEqual(M2(20), M2(20))
@@ -841,8 +837,11 @@ class TestADTSyntax(unittest.TestCase):
         self.assertFalse(M3 != M3)
         with self.assertRaises(te): M1("a") == M1(3.0)
 
-        A, B, C =\
-        data.A == d.B(str, str) | d.C(str) & deriving(Show, Eq)
+        @ADT
+        class A(HKT(deriving=[Show, Eq])):
+            B : [str, str]
+            C : [str]
+        B, C = A.enums
         self.assertTrue(has_instance(A, Show))
         self.assertTrue(has_instance(A, Eq))
         self.assertEqual("B('a', 'b')", str(B("a", "b")))
@@ -855,8 +854,10 @@ class TestADTSyntax(unittest.TestCase):
         with self.assertRaises(te): M1("a") == C("a")
 
         # make sure everything works with only 1 constructor
-        A, B =\
-        data.A == d.B(str, str) & deriving(Show, Eq)
+        @ADT
+        class A(HKT(deriving=[Show, Eq])):
+            B : [str, str]
+        B = A.B
         self.assertTrue(has_instance(A, Show))
         self.assertTrue(has_instance(A, Eq))
         self.assertEqual("B('a', 'b')", str(B("a", "b")))
@@ -864,13 +865,24 @@ class TestADTSyntax(unittest.TestCase):
         self.assertNotEqual(B("a", "b"), B("a", "c"))
 
         # make sure everything works with a bunch of constructors
-        X, X1, X2, X3, X4, X5, X6 =\
-        data.X == d.X1 | d.X2 | d.X3 | d.X4 | d.X5 | d.X6 & deriving(Eq, Ord)
+        @ADT
+        class X(HKT(deriving=[Eq, Ord])):
+            X1 : []
+            X2 : []
+            X3 : []
+            X4 : []
+            X5 : []
+            X6 : []
+        X1, X2, X3, X4, X5, X6 = X.enums
         self.assertTrue(X1 != X2 and X2 != X3 and X3 != X4 and X4 != X5 and \
                 X4 != X5 and X5 != X6)
         self.assertTrue(X1 < X2 < X3 < X4 < X5 < X6)
         with self.assertRaises(te): X1 < A("a", "a")
-        with self.assertRaises(te): data.X == d.A | d.B & deriving(Show, 1)
+        with self.assertRaises(te):
+            @ADT
+            class X(HKT(deriving=[Show, 1])):
+                A : []
+                B : []
 
 
 class TestBuiltins(unittest.TestCase):
@@ -1210,14 +1222,14 @@ class TestSyntax(unittest.TestCase):
 class TestTypeclass(unittest.TestCase):
 
     def test_typeclasses(self):
-        A, B =\
-                data.A == d.B & deriving(Show, Eq)
+        @ADT
+        class A(HKT(deriving=[Show, Eq])):
+            B : []
+        B = A.B
         self.assertTrue(has_instance(A, Show))
         self.assertTrue(has_instance(A, Eq))
         self.assertFalse(has_instance(A, Ord))
         with self.assertRaises(te): Ord[B]
-        with self.assertRaises(te):
-            A, B = data.A == d.B & deriving(Show, Ord)
 
         class example(object):
             def __str__(self):
@@ -2407,8 +2419,11 @@ class Test_README_Examples(unittest.TestCase):
         self.assertTrue(55 in L[1, 3, ...])
 
     def test_ADT(self):
-        FooBar, Foo, Bar =\
-        data.FooBar("a", "b") == d.Foo("a", "b", str) | d.Bar
+        @ADT
+        class FooBar(HKT("a", "b")):
+            Foo : ["a", "b", str]
+            Bar : []
+        Foo, Bar = FooBar.enums
         self.assertIsNotNone(Foo(1, 2, "s"))
 
     def test_sig(self):
@@ -2468,8 +2483,10 @@ class Test_README_Examples(unittest.TestCase):
         def launch_missiles(num_missiles):
             return Star
 
-        Ratio, R =\
-                data.Ratio("a") == d.R("a", "a") & deriving(Eq)
+        @ADT
+        class Ratio(HKT("a", deriving=[Eq])):
+            R : ["a", "a"]
+        R = Ratio.R
 
         Rational = t(Ratio, int)
 
@@ -2508,7 +2525,11 @@ class Test_README_Examples(unittest.TestCase):
 
     def test_typeclasses(self):
         from hask.Prelude import fmap
-        M, N, J = data.M("a") == d.N | d.J("a") & deriving(Show, Eq, Ord)
+        @ADT
+        class M(HKT("a", deriving=[Show, Eq, Ord])):
+            N : []
+            J : "a"
+        N, J = M.enums
 
         def maybe_fmap(fn, maybe_value):
             return ~(caseof(maybe_value)

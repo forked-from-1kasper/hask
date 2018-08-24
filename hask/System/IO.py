@@ -7,9 +7,12 @@ from hask.Data.Functor import Functor, fmap
 from hask.Control.Applicative import Applicative
 from hask.Control.Monad import Monad, bind, bindIgnore
 from hask.Data.Unit import Unit, Star
+from hask.lang.adt_syntax import ADT, HKT
 
-IO, LazyPure =\
-  data.IO("a") == d.LazyPure((H/ Unit >> "a").sig)
+@ADT
+class IO(HKT("a")):
+    LazyPure: [(H/ Unit >> "a").sig]
+LazyPure = IO.LazyPure
 
 @sig(H/ String >> t(IO, Unit))
 def putStr(s):

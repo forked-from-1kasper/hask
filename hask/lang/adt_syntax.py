@@ -1,6 +1,7 @@
 from hask.lang.type_system import build_ADT
 from hask.lang import H, t, sig
 from hask.lang import Read, Show, Eq, Ord
+from hask.lang.type_system import TypeMeta
 
 def ADT(cls):
     if not isinstance(cls, HKT):
@@ -13,6 +14,10 @@ def ADT(cls):
 
     typeargs = list(typeargsObj[0].typeargs)
     deriving = typeargsObj[0].deriving
+
+    for obj in deriving:
+        if not isinstance(obj, TypeMeta):
+            raise TypeError('“%a” is not typeclass' % obj)
 
     annotations = env.get('__annotations__', {})
     data_constructors = [(key, annotations[key]) for key in annotations]

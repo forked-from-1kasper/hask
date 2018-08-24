@@ -1,22 +1,16 @@
-from hask.lang import Show
-from hask.lang import Read
-from hask.lang import Bounded
-from hask.lang import Ord
-from hask.lang import sig
-from hask.lang import H
-from hask.lang import data
-from hask.lang import d
+from hask.lang import Show, Read, Bounded, Ord
+from hask.lang import sig, H, data, d
 from hask.lang import deriving
-
 from .Eq import Eq
-
+from hask.lang.adt_syntax import ADT, HKT
 
 # data Ordering = LT | EQ | GT deriving(Show, Eq, Ord, Bounded)
-Ordering, LT, EQ, GT =\
-data.Ordering == d.LT | d.EQ | d.GT & deriving(Read, Show, Eq, Ord, Bounded)
-
-
-#TODO: Down?
+@ADT
+class Ordering(HKT(deriving=[Read, Show, Eq, Ord, Bounded])):
+    LT : []
+    EQ : []
+    GT : []
+LT, EQ, GT = Ordering.enums
 
 
 @sig(H[(Ord, "a")]/ "a" >> "a" >> "a")

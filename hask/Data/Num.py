@@ -8,7 +8,7 @@ from hask.lang import instance, build_instance
 from hask.lang import Enum, Show
 from .Eq import Eq
 from .Ord import Ord
-
+from hask.lang.adt_syntax import ADT, HKT
 
 class Num(Show, Eq):
     """
@@ -164,9 +164,10 @@ def div(a, b):
     """
     return Num[a].mul(a, b)
 
-
-Ratio, R =\
-        data.Ratio("a") == d.R("a", "a") & deriving(Eq)
+@ADT
+class Ratio(HKT("a", deriving=[Eq])):
+    R : ["a", "a"]
+R = Ratio.R
 
 Rational = t(Ratio, int)
 
