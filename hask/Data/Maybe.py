@@ -8,10 +8,14 @@ from .Functor import Functor
 from hask.Control.Applicative import Applicative
 from hask.Control.Monad import Monad
 
+from hask.lang.adt_syntax import ADT, HKT
 
 # data Maybe a = Nothing | Just a deriving(Show, Eq, Ord)
-Maybe, Nothing, Just =\
-    data.Maybe("a") == d.Nothing | d.Just("a") & deriving(Read, Show, Eq, Ord)
+@ADT
+class Maybe(HKT("a", deriving = [Read, Show, Eq, Ord])):
+    Nothing : []
+    Just : ["a"]
+Nothing, Just = Maybe.enums
 
 instance(Functor, Maybe).where(
     fmap = lambda f, x: ~(caseof(x)
