@@ -4,8 +4,8 @@ from hask import *
 def helloPrint(s):
     return print(Just(s + "!"))
 
-helloTest = putStr("Enter string: ") |chain| (getLine |bind| helloPrint)
-helloTest2 = (lambda s: s + "!") ** (H/ String >> String) |map| getLine
+helloTest = putStr("Enter string: ") |chain| getLine |bind| helloPrint
+helloTest2 = Data.Function.flip(Data.String.concat, "!") |map| getLine
 helloTest3 = Data.String.concat |map| getLine |ap| getLine
 
 main = helloTest |chain| \

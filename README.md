@@ -653,27 +653,27 @@ Hask also supports operator sections (e.g. `(1+)` in Haskell). Sections are
 just `TypedFunc` objects, so they are automagically curried and typechecked.
 
 ```python
->>> from hask import __
+>>> from hask import _
 
->>> f = (__ - 20) * (2 ** __) * (__ + 3)
+>>> f = (_ - 20) * (2 ** _) * (_ + 3)
 >>> f(10)
 8172
 
->>> ((90/__) * (10+__)) * Just(20)
+>>> ((90/_) * (10+_)) * Just(20)
 Just(3)
 
 >>> from hask.Data.List import takeWhile
->>> takeWhile(__<5, L[1, ...])
+>>> takeWhile(_ < 5, L[1, ...])
 L[1, 2, 3, 4]
 
->>> (__+__)('Hello ', 'world')
+>>> (_ + _)('Hello ', 'world')
 'Hello world'
 
->>> (__**__)(2)(10)
+>>> (_ ** _)(2)(10)
 1024
 
 >>> from hask.Data.List import zipWith, take
->>> take(5) % zipWith(__ * __, L[1, ...], L[1, ...])
+>>> take(5) % zipWith(_ * _, L[1, ...], L[1, ...])
 L[1, 4, 9, 16, 25]
 ```
 
@@ -682,10 +682,6 @@ signature with the `(lambda x: ...) ** (H/ ...)` syntax.
 
 In addition, the types of the `TypedFuncs` created by sections are always
 polymorphic, to allow for any operator overloading.
-
-Note that if you are using IPython, Hask's `__` will conflict with IPython's
-special double underscore variable. To avoid conflicts, you can use `from hask
-import __ as _s` in IPython.
 
 ### Guards
 
@@ -713,9 +709,9 @@ Guards will also play nicely with sections:
 >>> porridge_tempurature = 80
 
 >>> ~(guard(porridge_tempurature)
-...     | c(__ < 20)  >> "Porridge is too cold!"
-...     | c(__ < 90)  >> "Porridge is just right!"
-...     | c(__ < 150) >> "Porridge is too hot!"
+...     | c(_ < 20)  >> "Porridge is too cold!"
+...     | c(_ < 90)  >> "Porridge is just right!"
+...     | c(_ < 150) >> "Porridge is too hot!"
 ...     | otherwise   >> "Porridge has gone thermonuclear"
 ... )
 'Porridge is just right!'
@@ -729,7 +725,7 @@ def examine_password_security(password):
     analysis = ~(guard(password)
         | c(lambda x: len(x) > 20) >> "Wow, that's one secure password"
         | c(lambda x: len(x) < 5)  >> "You made Bruce Schneier cry"
-        | c(__ == "12345")         >> "Same combination as my luggage!"
+        | c(_ == "12345")         >> "Same combination as my luggage!"
         | otherwise                >> "Hope it's not 'password'"
     )
     return analysis
@@ -894,7 +890,7 @@ points:
 
 | Module | Dependencies | Exported functions |
 | ------ | ------------ | ------------------ |
-| `hask` | `hask.lang`, `hask.Data.Char`, `hask.Data.Either`, `hask.Data.Eq`, `hask.Data.Foldable`, `hask.Data.Functor`, `hask.Data.List`, `hask.Data.Maybe`, `hask.Data.Monoid`, `hask.Data.Num`, `hask.Data.Ord`, `hask.Data.Ratio`, `hask.Data.String`, `hask.Data.Traversable`, `hask.Data.Tuple`, `hask.Control.Applicative`, `hask.Control.Monad`, `hask.Python.builtins` | `instance`, `__`, `guard`, `c`, `otherwise`, `NoGuardMatchException`, `L`, `data`, `d`, `deriving`, `sig`, `H`, `t`, `func`, `TypeSignatureError`, `caseof`, `p`, `m`, `IncompletePatternError`, `_t`, `_i`, `_q`, `typeof`, `has_instance`, `Typeclass`, `Hask`, `Read`, `Show`, `Eq`, `Ord`, `Enum`, `Bounded`, `Num`, `Real`, `Integral`, `Fractional`, `Floating`, `RealFrac`, `RealFloat`, `Functor`, `Applicative`, `Monad`, `Traversable`, `Foldable`, `Maybe`, `Just`, `Nothing`, `in_maybe`, `Either`, `Left`, `Right`, `in_either`, `Ordering`, `LT`, `EQ`, `GT` |
+| `hask` | `hask.lang`, `hask.Data.Char`, `hask.Data.Either`, `hask.Data.Eq`, `hask.Data.Foldable`, `hask.Data.Functor`, `hask.Data.List`, `hask.Data.Maybe`, `hask.Data.Monoid`, `hask.Data.Num`, `hask.Data.Ord`, `hask.Data.Ratio`, `hask.Data.String`, `hask.Data.Traversable`, `hask.Data.Tuple`, `hask.Control.Applicative`, `hask.Control.Monad`, `hask.Python.builtins` | `instance`, `_`, `guard`, `c`, `otherwise`, `NoGuardMatchException`, `L`, `data`, `d`, `deriving`, `sig`, `H`, `t`, `func`, `TypeSignatureError`, `caseof`, `p`, `m`, `IncompletePatternError`, `_t`, `_i`, `_q`, `typeof`, `has_instance`, `Typeclass`, `Hask`, `Read`, `Show`, `Eq`, `Ord`, `Enum`, `Bounded`, `Num`, `Real`, `Integral`, `Fractional`, `Floating`, `RealFrac`, `RealFloat`, `Functor`, `Applicative`, `Monad`, `Traversable`, `Foldable`, `Maybe`, `Just`, `Nothing`, `in_maybe`, `Either`, `Left`, `Right`, `in_either`, `Ordering`, `LT`, `EQ`, `GT` |
 | `hask.Prelude` | `hask.lang` | `hask.Data.Either`, `hask.Data.Eq`, `hask.Data.Foldable`, `hask.Data.Functor`, `hask.Data.List`, `hask.Data.Maybe`, `hask.Data.Num`, `hask.Data.Ord`, `hask.Data.Traversable`, `hask.Data.Tuple`, `hask.Control.Applicative`, `hask.Control.Monad` | `Maybe`, `Just`, `Nothing`, `in_maybe`, `maybe`, `Either`, `Left`, `Right`, `in_either`, `either`, `Ordering`, `LT`, `EQ`, `GT`, `fst`, `snd`, `curry`, `uncurry`, `Read`, `Show`, `show`, `Eq`, `Ord`, `max`, `min`, `compare`, `Enum`, `fromEnum`, `succ`, `pred`, `enumFromThen`, `enumFrom`, `enumFromThenTo`, `enumFromTo`, `Bounded`, `Functor`, `fmap`, `Applicative`, `Monad`, `Foldable`, `Traversable`, `Num`, `abs`, `negate`, `signum`, `Fractional`, `recip`, `Integral`, `toRatio`, `Ratio`, `R`, `Rational`, `Floating`, `exp`, `sqrt`, `log`, `pow`, `logBase`, `sin`, `tan`, `cos`, `asin`, `atan`, `acos`, `sinh`, `tanh`, `cosh`, `asinh`, `atanh`, `acosh`, `Real`, `toRational`, `RealFrac`, `properFraction`, `truncate`, `round`, `ceiling`, `floor`, `RealFloat`, `isNaN`, `isInfinite`, `isNegativeZero`, `atan2`, `subtract`, `even`, `odd`, `gcd`, `lcm`, `Functor`, `Applicative`, `Monad`, `sequence`, `sequence_`, `mapM`, `mapM_`, `id`, `const`, `flip`, `until`, `asTypeOf`, `error`, `undefined`, `map`, `filter`, `head`, `last`, `tail`, `init`, `null`, `reverse`, `length`, `foldl`, `foldl1`, `foldr`, `foldr1`, `and_`, `or_`, `any`, `all`, `sum`, `product`, `concat`, `concatMap`, `maximum`, `minimum`, `scanl`, `scanl1`, `scanr`, `scanr1`, `iterate`, `repeat`, `replicate`, `cycle`, `take`, `drop`, `splitAt`, `takeWhile`, `dropWhile`, `span`, `break_`, `elem`, `notElem`, `lookup`, `zip`, `zip3`, `zipWith`, `zipWith3`, `unzip`, `unzip3`, `lines`, `words`, `unlines`, `unwords` |
 | `hask.Data.Maybe` | `hask.lang`, `hask.Data.Eq`, `hask.Data.Ord`, `hask.Data.Functor`, `hask.Control.Applicative`, `hask.Control.Monad` | `Maybe` (`Nothing`, `Just`), `in_maybe`, `maybe`, `isJust`, `isNothing`, `fromJust`, `listToMaybe`, `maybeToList`, `catMaybes`, `mapMaybe` |
 | `hask.Data.Either` | `hask.lang`, `hask.Data.Eq`, `hask.Data.Ord`, `hask.Data.Functor`, `hask.Control.Applicative`, `hask.Control.Monad` | `Either` (`Left`, `Right`), `in_either`, `either`, `lefts`, `rights`, `isLeft`, `isRight`, `partitionEithers` |
@@ -913,4 +909,4 @@ points:
 | `hask.Control.Applicative` | `hask.lang`, `hask.Data.Functor` | `Applicative` |
 | `hask.Control.Monad` | `hask.lang`, `hask.Control.Applicative`, `hask.Data.Functor` | `Monad` (`bind`, `>>`), `join`, `liftM` |
 | `hask.Python.builtins` | `hask.lang` | `callable`, `cmp`, `delattr`, `divmod`, `frozenset`, `getattr`, `hasattr`, `hash`, `hex`, `isinstance`, `issubclass`, `len`, `oct`, `repr`, `setattr`, `sorted`, `unichr` |
-| `hask.lang` | | `Show` (`show`), `Read`, `Eq`, `Ord`, `Enum` (`fromEnum`, `succ`, `pred`, `enumFrom`, `enumFromTo`, `enumFromThen`, `enumFromThenTo`), `Bounded`, `typeof`, `is_builtin`, `has_instance`, `nt_to_tuple`, `build_instance`, `Typeclass`, `Hask`, `TypedFunc`, `TypeSignatureError`, `undefined`, `caseof`, `m`, `p`, `IncompletePattnerError`, `data`, `d`, `deriving`, `H`, `sig`, `t`, `func`, `typify`, `NoGuardMatchException`, `guard`, `c`, `otherwise`, `instance`, `__`, `_t`, `_q`, `_i`, `List`, `L` |
+| `hask.lang` | | `Show` (`show`), `Read`, `Eq`, `Ord`, `Enum` (`fromEnum`, `succ`, `pred`, `enumFrom`, `enumFromTo`, `enumFromThen`, `enumFromThenTo`), `Bounded`, `typeof`, `is_builtin`, `has_instance`, `nt_to_tuple`, `build_instance`, `Typeclass`, `Hask`, `TypedFunc`, `TypeSignatureError`, `undefined`, `caseof`, `m`, `p`, `IncompletePattnerError`, `data`, `d`, `deriving`, `H`, `sig`, `t`, `func`, `typify`, `NoGuardMatchException`, `guard`, `c`, `otherwise`, `instance`, `_`, `_t`, `_q`, `_i`, `List`, `L` |

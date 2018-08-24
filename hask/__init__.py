@@ -41,7 +41,7 @@ from .Python.builtins import *
 from hask.lang import instance
 
 ## Operator sections
-from hask.lang import __
+from hask.lang import __ as _
 
 ## Guard expressions
 from hask.lang import guard, c, otherwise, NoGuardMatchException

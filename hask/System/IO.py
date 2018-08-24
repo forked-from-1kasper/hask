@@ -60,27 +60,6 @@ getContents.__doc__ = """
     Returns all user input as a single string.
 """
 
-@sig(H/ t(IO, "a") >> "a")
-def unsafePerformIO(io):
-    """
-    unsafePerformIO :: IO a -> a
-
-    Unsafe performs IO.
-    """
-    return io.i0(Star)
-
-@sig(H/ (H/ "a" >> "b") >> t(IO, "a") >> t(IO, "b"))
-def fmapIO(f, x):
-    """
-    fmapIO :: (a -> b) -> (IO a -> IO b)
-
-    (<$>) realization of IO.
-    *Do not use this. Use Data.Functor.fmap*
-    """
-    def _fmap(n):
-        unboxed = unsafePerformIO(x)
-        return f(unboxed)
-    return LazyPure(_fmap ** (H/ Unit >> "b"))
 
 @sig(H/ "a" >> t(IO, "a"))
 def pure(x):
@@ -91,33 +70,40 @@ def pure(x):
     """
     return LazyPure((lambda n: x) ** (H/ Unit >> "a"))
 
-@sig(H[(Applicative, "f")]/ t("f", H/ "a" >> "b") >> t("f", "a") >> t("f", "b"))
-def apIO(f, x):
-    """
-    apIO :: (a -> b) -> (IO a -> IO b)
 
-    (<*>) realization of IO.
-    *Do not use this. Use Control.Applicative.ap*
+@sig(H/ t(IO, "a") >> "a")
+def unsafePerformIO(io):
     """
-    def _ap(n):
-        unboxedF = unsafePerformIO(f)
-        unboxedX = unsafePerformIO(x)
-        return unboxedF(unboxedX)
-    return LazyPure(_ap ** (H/ Unit >> "b"))
+    unsafePerformIO :: IO a -> a
 
-@sig(H/ t(IO, "a") >> (H/ "a" >> t(IO, "b")) >> t(IO, "b"))
-def bindIO(x, f):
+    Unsafe performs IO.
     """
-    bindIO :: IO a -> (a -> IO b) -> IO b
+    return io.i0(Star)
 
-    (>>=) realization of IO.
-    *Do not use this. Use Control.Monad.bind*
-    """
-    def _bind(n):
-        unboxed = unsafePerformIO(x)
-        return unsafePerformIO(f(unboxed))
-    return LazyPure(_bind ** (H/ Unit >> "b"))
+@sig(H/ (H/ "a" >> "b") >> t(IO, "a") >> Unit >> "b")
+def unsafeFmapIO(f, x, n):
+    unboxed = unsafePerformIO(x)
+    return f(unboxed)
 
-instance(Functor, IO).where(fmap = fmapIO)
-instance(Applicative, IO).where(pure = pure, ap = apIO)
-instance(Monad, IO).where(bind = bindIO)
+
+@sig(H[(Applicative, "f")]/ t("f", H/ "a" >> "b") >> t("f", "a") >> Unit >> "b")
+def unsafeApIO(f, x, n):
+    unboxedF = unsafePerformIO(f)
+    unboxedX = unsafePerformIO(x)
+    return unboxedF(unboxedX)
+
+
+@sig(H/ t(IO, "a") >> (H/ "a" >> t(IO, "b")) >> Unit >> "b")
+def unsafeBindIO(x, f, n):
+    unboxed = unsafePerformIO(x)
+    return unsafePerformIO(f(unboxed))
+
+
+instance(Functor, IO).where(fmap = lambda f, x: LazyPure(unsafeFmapIO(f, x)))
+instance(Applicative, IO).where(
+    pure = pure,
+    ap = lambda f, x: LazyPure(unsafeApIO(f, x))
+)
+instance(Monad, IO).where(
+    bind = lambda x, f: LazyPure(unsafeBindIO(x, f))
+)

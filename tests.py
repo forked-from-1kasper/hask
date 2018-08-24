@@ -6,7 +6,7 @@ from hask import H, sig, t, func, TypeSignatureError
 from hask import p, m, caseof, IncompletePatternError
 from hask import has_instance
 from hask import guard, c, otherwise, NoGuardMatchException
-from hask import __
+from hask import _
 from hask import data, d, deriving, instance
 from hask import L
 from hask import Ordering, LT, EQ, GT
@@ -354,10 +354,10 @@ class TestHindleyMilner(unittest.TestCase):
                 typeof(Left(2.0)),
                 build_sig_arg(t(Either, "a", int), {}, {}))
         self.unified(
-                typeof(Just(__+1)),
+                typeof(Just(_ + 1)),
                 build_sig_arg(t(Maybe, "a"), {}, {}))
         self.unified(
-                typeof(Just(__+1)),
+                typeof(Just(_ + 1)),
                 build_sig_arg(t(Maybe, (H/ "a" >> "b")), {}, {}))
 
     def test_signature_build(self):
@@ -961,57 +961,57 @@ class TestSyntax(unittest.TestCase):
         with self.assertRaises(se): s ^= 1
 
     def test_section(self):
-        """Operator sections (e.g. `(1+__)` )"""
+        """Operator sections (e.g. `(1 + _)` )"""
 
         # basic sections
-        self.assertEqual(4, (__ + 1)(3))
-        self.assertEqual(4, (1 + __)(3))
-        self.assertEqual(3, (__ - 5)(8))
-        self.assertEqual(3, (8 - __)(5))
-        self.assertEqual(8, (__ * 2)(4))
-        self.assertEqual(8, (2 * __)(4))
-        self.assertEqual(1, (__ % 4)(5))
-        self.assertEqual(1, (5 % __)(4))
+        self.assertEqual(4, (_ + 1)(3))
+        self.assertEqual(4, (1 + _)(3))
+        self.assertEqual(3, (_ - 5)(8))
+        self.assertEqual(3, (8 - _)(5))
+        self.assertEqual(8, (_ * 2)(4))
+        self.assertEqual(8, (2 * _)(4))
+        self.assertEqual(1, (_ % 4)(5))
+        self.assertEqual(1, (5 % _)(4))
 
-        self.assertTrue((__ < 4)(3))
-        self.assertTrue((5 < __)(9))
-        self.assertTrue((__ > 4)(5))
-        self.assertTrue((5 > __)(4))
-        self.assertTrue((__ == 4)(4))
-        self.assertTrue((5 == __)(5))
-        self.assertTrue((__ != 4)(3))
-        self.assertTrue((5 != __)(8))
-        self.assertTrue((__ >= 4)(5))
-        self.assertTrue((5 >= __)(5))
-        self.assertTrue((__ <= 4)(4))
-        self.assertTrue((5 <= __)(8))
-        self.assertFalse((__ < 4)(4))
-        self.assertFalse((5 < __)(2))
-        self.assertFalse((__ > 4)(3))
-        self.assertFalse((5 > __)(5))
-        self.assertFalse((__ == 4)(9))
-        self.assertFalse((5 == __)(8))
-        self.assertFalse((__ != 4)(4))
-        self.assertFalse((5 != __)(5))
-        self.assertFalse((__ >= 4)(1))
-        self.assertFalse((5 >= __)(6))
-        self.assertFalse((__ <= 4)(6))
-        self.assertFalse((5 <= __)(4))
+        self.assertTrue((_ < 4)(3))
+        self.assertTrue((5 < _)(9))
+        self.assertTrue((_ > 4)(5))
+        self.assertTrue((5 > _)(4))
+        self.assertTrue((_ == 4)(4))
+        self.assertTrue((5 == _)(5))
+        self.assertTrue((_ != 4)(3))
+        self.assertTrue((5 != _)(8))
+        self.assertTrue((_ >= 4)(5))
+        self.assertTrue((5 >= _)(5))
+        self.assertTrue((_ <= 4)(4))
+        self.assertTrue((5 <= _)(8))
+        self.assertFalse((_ < 4)(4))
+        self.assertFalse((5 < _)(2))
+        self.assertFalse((_ > 4)(3))
+        self.assertFalse((5 > _)(5))
+        self.assertFalse((_ == 4)(9))
+        self.assertFalse((5 == _)(8))
+        self.assertFalse((_ != 4)(4))
+        self.assertFalse((5 != _)(5))
+        self.assertFalse((_ >= 4)(1))
+        self.assertFalse((5 >= _)(6))
+        self.assertFalse((_ <= 4)(6))
+        self.assertFalse((5 <= _)(4))
 
         # double sections
-        self.assertEqual(3, (__+__)(1, 2))
-        self.assertEqual(1, (__-__)(2, 1))
-        self.assertEqual(4, (__*__)(1, 4))
-        self.assertEqual(3, (__/__)(12, 4))
-        self.assertEqual(3, (__+__)(1)(2))
-        self.assertEqual(1, (__-__)(2)(1))
-        self.assertEqual(4, (__*__)(1)(4))
-        self.assertEqual(3, (__/__)(12)(4))
+        self.assertEqual(3, (_ + _)(1, 2))
+        self.assertEqual(1, (_ - _)(2, 1))
+        self.assertEqual(4, (_ * _)(1, 4))
+        self.assertEqual(3, (_ / _)(12, 4))
+        self.assertEqual(3, (_ + _)(1)(2))
+        self.assertEqual(1, (_ - _)(2)(1))
+        self.assertEqual(4, (_ * _)(1)(4))
+        self.assertEqual(3, (_ / _)(12)(4))
 
         # sections composed with `fmap`
-        self.assertEqual(12, ((__*4) * (__+2) * (1+__))(0))
-        self.assertEqual(2, (__+1) * (__/2) * (2-__) % 0)
-        self.assertEqual(4, (__ + 1) * (__ * 3) % 1)
+        self.assertEqual(12, ((_ * 4) * (_ + 2) * (1 + _))(0))
+        self.assertEqual(2, (_ + 1) * (_ / 2) * (2 - _) % 0)
+        self.assertEqual(4, (_ + 1) * (_ * 3) % 1)
 
     def test_guard(self):
         me = NoGuardMatchException
@@ -1418,8 +1418,8 @@ class TestMaybe(unittest.TestCase):
         from hask.Control.Monad import join, liftM
         self.assertEqual(join(Just(Just(1))), Just(1))
         self.assertEqual(join(Just(Nothing)), Nothing)
-        self.assertEqual(liftM(__+1, Just(1)), Just(2))
-        self.assertEqual(liftM(__+1, Nothing), Nothing)
+        self.assertEqual(liftM(_ + 1, Just(1)), Just(2))
+        self.assertEqual(liftM(_ + 1, Nothing), Nothing)
 
     def test_functions(self):
         from hask.Data.Maybe import maybe, isJust, isNothing, fromJust
@@ -1436,8 +1436,8 @@ class TestMaybe(unittest.TestCase):
         self.assertEqual(fromJust(Just(Nothing)), Nothing)
         with self.assertRaises(ve): fromJust(Nothing)
 
-        self.assertEqual(2, maybe(0, (__+1), Just(1)))
-        self.assertEqual(0, maybe(0, (__+1)) % Nothing)
+        self.assertEqual(2, maybe(0, (_ + 1), Just(1)))
+        self.assertEqual(0, maybe(0, (_ + 1)) % Nothing)
         self.assertEqual(Nothing, listToMaybe(L[[]]))
         self.assertEqual(Just("a"), listToMaybe(L[["a"]]))
         self.assertEqual(Just("a"), listToMaybe(L["a", "b"]))
@@ -1548,10 +1548,10 @@ class TestEither(unittest.TestCase):
 
     def test_functor(self):
         from hask.Prelude import id, flip, fmap, const
-        self.assertEqual(Left(7), fmap(__+1, Left(7)))
-        self.assertEqual(Left("a"), fmap(__+1, Left("a")))
-        self.assertEqual(Right(8), fmap(__+1, Right(7)))
-        with self.assertRaises(te): fmap(__+1, Right("a"))
+        self.assertEqual(Left(7), fmap(_ + 1, Left(7)))
+        self.assertEqual(Left("a"), fmap(_ + 1, Left("a")))
+        self.assertEqual(Right(8), fmap(_ + 1, Right(7)))
+        with self.assertRaises(te): fmap(_ + 1, Right("a"))
         self.assertEqual(Right(Left(1)), fmap(const(Left(1)), Right("a")))
         self.assertEqual(Left("a"), fmap(const(Left(1)), Left("a")))
 
@@ -1984,15 +1984,15 @@ class TestDataList(unittest.TestCase):
         self.assertTrue(and_(L[[]]))
         self.assertFalse(and_(repeat(False)))
 
-        self.assertTrue(any(__>5, L[0, ..., 6]))
-        self.assertFalse(any(__>6, L[0, ..., 6]))
-        self.assertFalse(any(__>6, L[[]]))
-        self.assertTrue(any(__>0, L[0, ...]))
+        self.assertTrue(any(_ > 5, L[0, ..., 6]))
+        self.assertFalse(any(_ > 6, L[0, ..., 6]))
+        self.assertFalse(any(_ > 6, L[[]]))
+        self.assertTrue(any(_ > 0, L[0, ...]))
 
-        self.assertTrue(all(__>6, L[7, ..., 15]))
-        self.assertFalse(all(__>6, L[0, ..., 5]))
-        self.assertTrue(all(__>6, L[[]]))
-        self.assertFalse(all(__<0, L[0, ...]))
+        self.assertTrue(all(_ > 6, L[7, ..., 15]))
+        self.assertFalse(all(_ > 6, L[0, ..., 5]))
+        self.assertTrue(all(_ > 6, L[[]]))
+        self.assertFalse(all(_ < 0, L[0, ...]))
 
         self.assertEqual(55, sum(L[1, ..., 10]))
         self.assertEqual(0, sum(L[[]]))
@@ -2013,7 +2013,7 @@ class TestDataList(unittest.TestCase):
 
         plus_one = (lambda x: x + 1) ** (H/ int >> int)
         self.assertEqual(iterate(plus_one, 0)[:10], L[range(10)])
-        self.assertEqual(iterate(__+1, 0)[:10], L[range(10)])
+        self.assertEqual(iterate(_ + 1, 0)[:10], L[range(10)])
 
         uf = (lambda x: Nothing if x > 5 else Just((x+1, x+1))) ** \
                 (H/ int >> t(Maybe, (int, int)))
@@ -2043,9 +2043,9 @@ class TestDataList(unittest.TestCase):
         self.assertEqual((L[1, 2], L[[]]), splitAt(10, L[1, 2]))
         self.assertEqual(L[1, ..., 10], splitAt(10, L[1, ...])[0])
 
-        self.assertEqual(L[1, ..., 4], takeWhile(__<5, L[1, ...]))
-        self.assertEqual(L[[]], takeWhile(__>5, L[1, ...]))
-        self.assertEqual(L[[]], takeWhile(__|True, L[[]]))
+        self.assertEqual(L[1, ..., 4], takeWhile(_ < 5, L[1, ...]))
+        self.assertEqual(L[[]], takeWhile(_ > 5, L[1, ...]))
+        self.assertEqual(L[[]], takeWhile(_ | True, L[[]]))
 
         self.assertEqual(L[ L[[]], L[[1]], L[1, 2], L[1, 2, 3]],
                          inits(L[1, 2, 3]))
@@ -2091,10 +2091,10 @@ class TestDataList(unittest.TestCase):
         self.assertEqual(L[(1, "a"), (2, "b")], zip(L[1, 2], L["a", "b", "c"]))
         self.assertEqual(L[[]], zip(L[[]], L[[]]))
 
-        self.assertEqual(L[1, 1, 1], zipWith(__-__, L[1, 2, 3], L[0, 1, 2]))
-        self.assertEqual(L[1, 1, 1], zipWith(__-__, L[1, 2, 3, 4], L[0, 1, 2]))
-        self.assertEqual(L[1, 1, 1], zipWith(__-__, L[1, 2, 3], L[0, 1, 2, 3]))
-        self.assertEqual(L[[]], zipWith(__-__, L[[]], L[[]]))
+        self.assertEqual(L[1, 1, 1], zipWith(_ - _, L[1, 2, 3], L[0, 1, 2]))
+        self.assertEqual(L[1, 1, 1], zipWith(_ - _, L[1, 2, 3, 4], L[0, 1, 2]))
+        self.assertEqual(L[1, 1, 1], zipWith(_ - _, L[1, 2, 3], L[0, 1, 2, 3]))
+        self.assertEqual(L[[]], zipWith(_ - _, L[[]], L[[]]))
 
         self.assertEqual((L["a", "b"], L[2, 4]), unzip(L[("a", 2), ("b", 4)]))
         self.assertEqual((L[[]], L[[]]), unzip(L[[]]))
@@ -2184,12 +2184,12 @@ class TestPrelude(unittest.TestCase):
         self.assertEqual("a", id * id * id % "a")
         self.assertEqual(1, const(1, 2))
         self.assertEqual(1, const(1) * const(3) % "a")
-        self.assertEqual(1, flip(__-__, 2, 3))
+        self.assertEqual(1, flip(_ - _, 2, 3))
         self.assertEqual(1, flip(const, 2, 1))
         self.assertEqual(2, flip(flip(const))(2, 1))
 
-        self.assertEqual(1, until(__>0, __+1, -20))
-        self.assertEqual(-20, until(__<0, __+1, -20))
+        self.assertEqual(1, until(_ > 0, _ + 1, -20))
+        self.assertEqual(-20, until(_ < 0, _ + 1, -20))
         self.assertEqual("a", asTypeOf("a", "a"))
         self.assertEqual(1, asTypeOf(1, 1))
 
@@ -2362,7 +2362,7 @@ class TestPython(unittest.TestCase):
         class Example(object):
             a = 1
 
-        self.assertTrue(callable(__+1))
+        self.assertTrue(callable(_ + 1))
         self.assertEqual(1, cmp(10) % 9)
         self.assertEqual(divmod(5)(2), (2, 1))
 
@@ -2568,18 +2568,18 @@ class Test_README_Examples(unittest.TestCase):
         self.assertFalse(Person("Philip Wadler", 59) == Person("Simon Peyton Jones", 57))
 
     def test_sections(self):
-        f = (__ - 20) * (2 ** __) * (__ + 3)
+        f = (_ - 20) * (2 ** _) * (_ + 3)
         self.assertEqual(8172, f(10))
-        self.assertEqual("Hello world", (__+__)('Hello ', 'world'))
-        self.assertEqual(1024, (__**__)(2)(10))
+        self.assertEqual("Hello world", (_ + _)('Hello ', 'world'))
+        self.assertEqual(1024, (_ ** _)(2)(10))
 
     def test_guard(self):
         porridge_tempurature = 80
         self.assertEqual(
                 ~(guard(porridge_tempurature)
-                    | c(__ < 20)  >> "Porridge is too cold!"
-                    | c(__ < 90)  >> "Porridge is just right!"
-                    | c(__ < 150) >> "Porridge is too hot!"
+                    | c(_ < 20)  >> "Porridge is too cold!"
+                    | c(_ < 90)  >> "Porridge is just right!"
+                    | c(_ < 150) >> "Porridge is too hot!"
                     | otherwise   >> "Porridge has gone thermonuclear"
                 ),
                 'Porridge is just right!')
@@ -2588,7 +2588,7 @@ class Test_README_Examples(unittest.TestCase):
             analysis = ~(guard(password)
                 | c(lambda x: len(x) > 20) >> "Wow, that's one secure password"
                 | c(lambda x: len(x) < 5)  >> "You made Bruce Schneier cry"
-                | c(__ == "12345")         >> "Same combination as my luggage!"
+                | c(_ == "12345")         >> "Same combination as my luggage!"
                 | otherwise                >> "Hope it's not `password`"
             )
             return analysis
