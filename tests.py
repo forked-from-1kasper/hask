@@ -31,6 +31,7 @@ from hask.lang.hindley_milner import unify
 from hask.lang.lazylist import List
 
 from hask.lang.adt_syntax import ADT, HKT
+from hask.Control.Monad import bind
 
 te = TypeError
 se = SyntaxError
@@ -1402,9 +1403,9 @@ class TestMaybe(unittest.TestCase):
     def test_monad(self):
         f = (lambda x: Just(str(x))) ** (H/ int >> t(Maybe, str))
         g = (lambda x: Just(x * 10)) ** (H/ int >> t(Maybe, int))
-        self.assertEqual(Just("1"), Just(1) >> f)
-        self.assertEqual(Just(10), Just(1) >> g)
-        self.assertEqual(Just(1000), Just(1) >> g >> g >> g)
+        self.assertEqual(Just("1"), Just(1) |bind| f)
+        self.assertEqual(Just(10), Just(1) |bind| g)
+        self.assertEqual(Just(1000), Just(1) |bind| g |bind| g |bind| g)
 
         @sig(H[(Num, "a")]/ "a" >> "a" >> t(Maybe, "a"))
         def safediv(x, y):
@@ -1412,20 +1413,20 @@ class TestMaybe(unittest.TestCase):
 
         from hask.Prelude import flip
         s = flip(safediv)
-        self.assertEqual(Just(3), Just(9) >> s(3))
-        self.assertEqual(Just(1), Just(9) >> s(3) >> s(3))
-        self.assertEqual(Nothing, Just(9) >> s(0) >> s(3))
-        self.assertEqual(Nothing, Nothing >> s(3) >> s(3))
+        self.assertEqual(Just(3), Just(9) |bind| s(3))
+        self.assertEqual(Just(1), Just(9) |bind| s(3) |bind| s(3))
+        self.assertEqual(Nothing, Just(9) |bind| s(0) |bind| s(3))
+        self.assertEqual(Nothing, Nothing |bind| s(3) |bind| s(3))
 
         # monad laws
-        s_composed = (lambda x: s(3, x) >> s(3)) ** (H/ int >> t(Maybe, int))
-        self.assertEqual(Just(2), Just(2) >> Just)
-        self.assertEqual(Nothing, Nothing >> Just)
-        self.assertEqual(Just(4) >> s(2), s(2, 4))
-        self.assertEqual(Just(1), (Just(9) >> s(3)) >> s(3))
-        self.assertEqual(Just(1), Just(9) >> s_composed)
-        self.assertEqual(Nothing, (Nothing >> s(3)) >> s(3))
-        self.assertEqual(Nothing, Nothing >> s_composed)
+        s_composed = (lambda x: s(3, x) |bind| s(3)) ** (H/ int >> t(Maybe, int))
+        self.assertEqual(Just(2), Just(2) |bind| Just)
+        self.assertEqual(Nothing, Nothing |bind| Just)
+        self.assertEqual(Just(4) |bind| s(2), s(2, 4))
+        self.assertEqual(Just(1), (Just(9) |bind| s(3)) |bind| s(3))
+        self.assertEqual(Just(1), Just(9) |bind| s_composed)
+        self.assertEqual(Nothing, (Nothing |bind| s(3)) |bind| s(3))
+        self.assertEqual(Nothing, Nothing |bind| s_composed)
 
         from hask.Control.Monad import join, liftM
         self.assertEqual(join(Just(Just(1))), Just(1))
@@ -1592,21 +1593,21 @@ class TestEither(unittest.TestCase):
 
         sub = flip(sub_whole)
 
-        self.assertEqual(Right(2), Right(4) >> sub(2))
-        self.assertEqual(Right(0), Right(4) >> sub(2) >> sub(2))
-        self.assertEqual(Left("err"), Right(4) >> sub(10))
-        self.assertEqual(Left("0"), Left("0") >> sub_whole(1))
+        self.assertEqual(Right(2), Right(4) |bind| sub(2))
+        self.assertEqual(Right(0), Right(4) |bind| sub(2) |bind| sub(2))
+        self.assertEqual(Left("err"), Right(4) |bind| sub(10))
+        self.assertEqual(Left("0"), Left("0") |bind| sub_whole(1))
 
         # monad laws
-        sub_composed = (lambda x: sub_whole(4, x) >> sub(2)) ** \
+        sub_composed = (lambda x: sub_whole(4, x) |bind| sub(2)) ** \
                 (H/ int >> t(Either, "a", int))
-        self.assertEqual(Right(7), Right(7) >> Right)
-        self.assertEqual(Left(7), Left(7) >> Right)
-        self.assertEqual(Right(1), (Right(5) >> sub(1)) >> sub(3))
-        self.assertEqual(Left("e"), (Left("e") >> sub(1)) >> sub(3))
-        self.assertEqual(Left("err"), (Right(5) >> sub(10)) >> sub(3))
-        self.assertEqual(Right(0), Right(2) >> sub_composed)
-        self.assertEqual(Left("e"), Left("e") >> sub_composed)
+        self.assertEqual(Right(7), Right(7) |bind| Right)
+        self.assertEqual(Left(7), Left(7) |bind| Right)
+        self.assertEqual(Right(1), (Right(5) |bind| sub(1)) |bind| sub(3))
+        self.assertEqual(Left("e"), (Left("e") |bind| sub(1)) |bind| sub(3))
+        self.assertEqual(Left("err"), (Right(5) |bind| sub(10)) |bind| sub(3))
+        self.assertEqual(Right(0), Right(2) |bind| sub_composed)
+        self.assertEqual(Left("e"), Left("e") |bind| sub_composed)
 
         self.assertEqual(Right(2), bind(Right(4), sub(2)))
 
@@ -1900,26 +1901,26 @@ class TestList(unittest.TestCase):
         def double(x):
             return L[x, x]
 
-        self.assertEqual(L[[]], L[[]] >> double)
-        self.assertEqual(L[1, 1], L[[1]] >> double)
-        self.assertEqual(L[1, 1, 2, 2], L[1, 2] >> double)
+        self.assertEqual(L[[]], L[[]] |bind| double)
+        self.assertEqual(L[1, 1], L[[1]] |bind| double)
+        self.assertEqual(L[1, 1, 2, 2], L[1, 2] |bind| double)
         self.assertEqual(L[1, 1, 1, 1, 2, 2, 2, 2],
-                         L[1, 2] >> double >> double)
+                         L[1, 2] |bind| double |bind| double)
 
         @sig(H/ "a" >> ["a"])
         def single(x):
             return L[[x]]
 
-        composed_double = (lambda x: double(x) >> double) ** (H/ "a" >> ["a"])
+        composed_double = (lambda x: double(x) |bind| double) ** (H/ "a" >> ["a"])
 
         # monad laws
-        self.assertEqual(L[[]], L[[]] >> single)
-        self.assertEqual(L[[1]], L[[1]] >> single)
-        self.assertEqual(L[1, ..., 20], L[1, ..., 20] >> single)
+        self.assertEqual(L[[]], L[[]] |bind| single)
+        self.assertEqual(L[[1]], L[[1]] |bind| single)
+        self.assertEqual(L[1, ..., 20], L[1, ..., 20] |bind| single)
         self.assertEqual(L[1, 1, 1, 1, 2, 2, 2, 2],
-                         (L[1, 2] >> double) >> double)
+                         (L[1, 2] |bind| double) |bind| double)
         self.assertEqual(L[1, 1, 1, 1, 2, 2, 2, 2],
-                         L[1, 2] >> (composed_double))
+                         L[1, 2] |bind| (composed_double))
 
     def test_len(self):
         self.assertEqual(0, len(L[[]]))
@@ -2568,13 +2569,13 @@ class Test_README_Examples(unittest.TestCase):
 
         from hask.Prelude import flip
         divBy = flip(safe_div)
-        self.assertEqual(J(9) >> divBy(3), J(3))
+        self.assertEqual(J(9) |bind| divBy(3), J(3))
 
-        self.assertEqual(Just(12) >> divBy(2) >> divBy(2) >> divBy(3), J(1))
-        self.assertEqual(J(12) >> divBy(0) >> divBy(6), N)
+        self.assertEqual(Just(12) |bind| divBy(2) |bind| divBy(2) |bind| divBy(3), J(1))
+        self.assertEqual(J(12) |bind| divBy(0) |bind| divBy(6), N)
 
         from hask.Data.List import replicate
-        self.assertEqual(L[1, 2] >> replicate(2) >> replicate(2),
+        self.assertEqual(L[1, 2] |bind| replicate(2) |bind| replicate(2),
                 L[1, 1, 1, 1, 2, 2, 2, 2])
 
         class Person(object):
@@ -2628,11 +2629,11 @@ class Test_README_Examples(unittest.TestCase):
         maybe_eat = in_maybe(eat_cheese)
         self.assertEqual(maybe_eat(1), Just(0))
         self.assertEqual(maybe_eat(0), Nothing)
-        self.assertEqual(Just(6), Just(7) >> maybe_eat)
+        self.assertEqual(Just(6), Just(7) |bind| maybe_eat)
         self.assertEqual(Just(7),
-                         Just(10) >> maybe_eat >> maybe_eat >> maybe_eat)
+                         Just(10) |bind| maybe_eat |bind| maybe_eat |bind| maybe_eat)
         self.assertEqual(Nothing,
-                         Just(1) >> maybe_eat >> maybe_eat >> maybe_eat)
+                         Just(1) |bind| maybe_eat |bind| maybe_eat |bind| maybe_eat)
 
         either_eat = in_either(eat_cheese)
         self.assertEqual(either_eat(10), Right(9))
