@@ -1,23 +1,12 @@
-from hask.lang import Read
-from hask.lang import Show
-from hask.lang import sig
-from hask.lang import H
-from hask.lang import t
-from hask.lang import d
-from hask.lang import caseof
-from hask.lang import m
-from hask.lang import p
-from hask.lang import data
-from hask.lang import deriving
-from hask.lang import instance
-from hask.lang import L
-from hask.lang import typify
+from hask.lang import Read, Show
+from hask.lang import H, t, d, caseof, m, p, sig
+from hask.lang import data, deriving, instance, L, typify
 
 from .Eq import Eq
 
 from .Ord import Ord
 
-from .Functor import Functor
+from .Functor import Functor, fmap
 
 from hask.Control.Applicative import Applicative
 from hask.Control.Monad import Monad
@@ -36,7 +25,10 @@ instance(Functor, Either).where(
 )
 
 instance(Applicative, Either).where(
-    pure = Right
+    pure = Right,
+    ap = lambda v, x: ~(caseof(v)
+                          | m(Left(m.l)) >> Left(p.l)
+                          | m(Right(m.r)) >> fmap(p.r, x))
 )
 
 instance(Monad, Either).where(

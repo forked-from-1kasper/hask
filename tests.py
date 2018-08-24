@@ -2529,7 +2529,13 @@ class Test_README_Examples(unittest.TestCase):
         self.assertEqual((toFloat * times2) * N, N)
 
         instance(Applicative, M).where(
-            pure = J
+            pure = J,
+            ap = lambda fs, xs: ~(caseof(fs)
+                                    | m(J(m.f)) >> \
+                                        ~(caseof(xs)
+                                            | m(J(m.x)) >> J(p.f(p.x))
+                                            | m(N) >> N)
+                                    | m(N) >> N)
         )
 
         instance(Monad, M).where(

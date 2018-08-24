@@ -19,11 +19,14 @@ class Applicative(Functor):
         pure
     """
     @classmethod
-    def make_instance(self, cls, pure):
+    def make_instance(self, cls, pure, ap):
         pure = pure ** (H[(Applicative, "f")]/ "a" >> t("f", "a"))
-        build_instance(Applicative, cls, {"pure":pure})
+        ap = ap ** (H[(Applicative, "f")]/\
+                    t("f", H/ "a" >> "b") >> t("f", "a") >> t("f", "b"))
+        build_instance(Applicative, cls, {"pure":pure, "ap":ap})
         return
 
 instance(Applicative, List).where(
-    pure = (lambda x: L[[x]]) ** (H/ "a" >> ["a"])
+    pure = lambda x: L[[x]],
+    ap = lambda fs, xs: L[[f(x) for f in fs for x in xs]]
 )

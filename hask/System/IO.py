@@ -44,6 +44,19 @@ def unsafePerformIO(io):
     """
     return io.i0(Star)
 
+@sig(H/ (H/ "a" >> "b") >> t(IO, "a") >> t(IO, "b"))
+def fmapIO(f, x):
+    """
+    fmapIO :: (a -> b) -> (IO a -> IO b)
+
+    (<$>) realisation of IO.
+    *Do not use this. Use Data.Functor.fmap*
+    """
+    def _fmap(n):
+        unboxed = unsafePerformIO(x)
+        return f(unboxed)
+    return LazyPure(_fmap ** (H/ Unit >> "b"))
+
 @sig(H/ "a" >> t(IO, "a"))
 def pure(x):
     """
@@ -53,13 +66,26 @@ def pure(x):
     """
     return LazyPure((lambda n: x) ** (H/ Unit >> "a"))
 
+@sig(H[(Applicative, "f")]/ t("f", H/ "a" >> "b") >> t("f", "a") >> t("f", "b"))
+def apIO(f, x):
+    """
+    apIO :: (a -> b) -> (IO a -> IO b)
+
+    (<*>) realisation of IO.
+    *Do not use this. Use Control.Applicative.ap*
+    """
+    def _ap(n):
+        unboxedF = unsafePerformIO(f)
+        unboxedX = unsafePerformIO(x)
+        return unboxedF(unboxedX)
+    return LazyPure(_ap ** (H/ Unit >> "b"))
 
 @sig(H/ t(IO, "a") >> (H/ "a" >> t(IO, "b")) >> t(IO, "b"))
 def bindIO(x, f):
     """
     bindIO :: IO a -> (a -> IO b) -> IO b
 
-    (>>=) realisation for IO.
+    (>>=) realization of IO.
     *Do not use this. Use Control.Monad.bind*
     """
     def _bind(n):
@@ -67,19 +93,6 @@ def bindIO(x, f):
         return unsafePerformIO(f(unboxed))
     return LazyPure(_bind ** (H/ Unit >> "b"))
 
-@sig(H/ (H/ "a" >> "b") >> t(IO, "a") >> t(IO, "b"))
-def fmapIO(f, x):
-    """
-    fmapIO :: (a -> b) -> (IO a -> IO b)
-
-    (<$>) realisation for IO.
-    *Do not use this. Use Data.Functor.fmap*
-    """
-    def _fmap(n):
-        unboxed = unsafePerformIO(x)
-        return f(unboxed)
-    return LazyPure(_fmap ** (H/ Unit >> "b"))
-
 instance(Functor, IO).where(fmap = fmapIO)
-instance(Applicative, IO).where(pure = pure)
+instance(Applicative, IO).where(pure = pure, ap = apIO)
 instance(Monad, IO).where(bind = bindIO)

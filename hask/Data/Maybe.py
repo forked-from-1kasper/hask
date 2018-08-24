@@ -31,7 +31,13 @@ instance(Functor, Maybe).where(
 )
 
 instance(Applicative, Maybe).where(
-    pure = Just
+    pure = Just,
+    ap = lambda fs, xs: ~(caseof(fs)
+                          | m(Just(m.f)) >> \
+                              ~(caseof(xs)
+                                  | m(Just(m.x)) >> Just(p.f(p.x))
+                                  | m(Nothing) >> Nothing)
+                          | m(Nothing) >> Nothing)
 )
 
 instance(Monad, Maybe).where(
