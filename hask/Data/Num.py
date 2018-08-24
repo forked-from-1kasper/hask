@@ -77,9 +77,29 @@ def add(a, b):
     """
     add :: Num a => a -> a -> a
 
-    Adds two numerals.
+    Adds two numbers.
     """
     return Num[a].add(a, b)
+
+
+@sig(H[(Num, "a")]/ "a" >> "a" >> "a")
+def sub(a, b):
+    """
+    sub :: Num a => a -> a -> a
+
+    Subtracts two numbers.
+    """
+    return Num[a].sub(a, b)
+
+
+@sig(H[(Num, "a")]/ "a" >> "a" >> "a")
+def mul(a, b):
+    """
+    mul :: Num a => a -> a -> a
+
+    Multiplies two numbers.
+    """
+    return Num[a].mul(a, b)
 
 
 instance(Num, int).where(
@@ -133,6 +153,16 @@ class Fractional(Num):
         attrs = {"fromRational":fromRational, "div":div, "recip":recip}
         build_instance(Fractional, cls, attrs)
         return
+
+
+@sig(H[(Fractional, "a")]/ "a" >> "a" >> "a")
+def div(a, b):
+    """
+    div :: Num a => a -> a -> a
+
+    Divide two numbers.
+    """
+    return Num[a].mul(a, b)
 
 
 Ratio, R =\

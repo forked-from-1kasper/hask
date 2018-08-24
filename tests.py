@@ -2530,12 +2530,9 @@ class Test_README_Examples(unittest.TestCase):
 
         instance(Applicative, M).where(
             pure = J,
-            ap = lambda fs, xs: ~(caseof(fs)
-                                    | m(J(m.f)) >> \
-                                        ~(caseof(xs)
-                                            | m(J(m.x)) >> J(p.f(p.x))
-                                            | m(N) >> N)
-                                    | m(N) >> N)
+            ap = lambda fs, xs: ~(caseof((fs, xs))
+                                    | m((J(m.f), J(m.x))) >> J(p.f(p.x))
+                                    | m((N, m.x)) >> N)
         )
 
         instance(Monad, M).where(

@@ -1,17 +1,6 @@
-from hask.lang import Read
-from hask.lang import Show
-from hask.lang import L
-from hask.lang import H
-from hask.lang import sig
-from hask.lang import t
-from hask.lang import data
-from hask.lang import d
-from hask.lang import caseof
-from hask.lang import m
-from hask.lang import p
-from hask.lang import deriving
-from hask.lang import instance
-from hask.lang import typify
+from hask.lang import Read, Show
+from hask.lang import L, H, sig, t, data, d, caseof, m, p
+from hask.lang import deriving, instance, typify
 
 from .Eq import Eq
 from .Ord import Ord
@@ -32,12 +21,9 @@ instance(Functor, Maybe).where(
 
 instance(Applicative, Maybe).where(
     pure = Just,
-    ap = lambda fs, xs: ~(caseof(fs)
-                          | m(Just(m.f)) >> \
-                              ~(caseof(xs)
-                                  | m(Just(m.x)) >> Just(p.f(p.x))
-                                  | m(Nothing) >> Nothing)
-                          | m(Nothing) >> Nothing)
+    ap = lambda fs, xs: ~(caseof((fs, xs))
+                            | m((Just(m.f), Just(m.x))) >> Just(p.f(p.x))
+                            | m((Nothing, m.x)) >> Nothing)
 )
 
 instance(Monad, Maybe).where(

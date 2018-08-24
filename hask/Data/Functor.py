@@ -33,7 +33,7 @@ class Functor(Typeclass):
 @Infix
 def map(f, x):
     """
-    map :: Functor f => (a -> b) -> (f a -> f b)
+    (map) :: Functor f => (a -> b) -> (f a -> f b)
 
     This is infix and non-curried version of `fmap`.
     Maps function over functor.

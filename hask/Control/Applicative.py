@@ -38,7 +38,7 @@ def appAp(f, x):
 @Infix
 def ap(f, x):
     """
-    ap :: Applicative f => f (a -> b) -> f a -> f b
+    (ap) :: Applicative f => f (a -> b) -> f a -> f b
 
     This is infix and non-curried version of `appAp`.
     """
