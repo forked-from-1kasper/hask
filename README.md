@@ -24,13 +24,13 @@ language tools from Haskell, including:
     `Applicative`, `Monad`, `Enum`, `Num`, and all the rest
   * Standard library functions from `base`, including all functions from
     `Prelude`, `Data.List`, `Data.Maybe`, and more
+* Monadic, lazy I/O *(WIP)*
 
 Features not yet implemented, but coming soon:
 
 * Better support for polymorphic return values/type defaulting
 * Better support for lazy evaluation (beyond just the `List` type and pattern matching)
 * More of the Haskell standard library (`Control.*` libraries, QuickCheck, and more)
-* Monadic, lazy I/O
 
 **Note that all of this is still very much pre-alpha, and some things may be buggy!**
 

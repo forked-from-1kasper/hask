@@ -23,6 +23,7 @@ import hask.Data.Traversable
 import hask.Data.Tuple
 import hask.Control.Applicative
 import hask.Control.Monad
+import hask.System.IO
 from .Python.builtins import *
 
 
