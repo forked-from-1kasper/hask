@@ -11,10 +11,7 @@ from .type_system import Typeclass
 from .type_system import Hask
 from .type_system import build_instance
 
-from .typeclasses import Show
-from .typeclasses import show
-from .typeclasses import Eq
-from .typeclasses import Ord
+from .typeclasses import Show, show, Eq, Ord
 
 from .syntax import Syntax
 from .syntax import instance

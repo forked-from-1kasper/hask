@@ -72,6 +72,16 @@ def abs(a):
     return Num[a].abs(a)
 
 
+@sig(H[(Num, "a")]/ "a" >> "a" >> "a")
+def add(a, b):
+    """
+    add :: Num a => a -> a -> a
+
+    Adds two numerals.
+    """
+    return Num[a].add(a, b)
+
+
 instance(Num, int).where(
     add = int.__add__,
     mul = int.__mul__,

@@ -24,6 +24,9 @@ import hask.Data.Tuple
 import hask.Control.Applicative
 import hask.Control.Monad
 
+from hask.Data.Functor import fmap, map
+from hask.Control.Monad import bind, bindIgnore
+
 import hask.System.IO
 from hask.System.IO import IO, putStr, putStrLn, getLine, print
 

@@ -11,6 +11,7 @@ from hask.lang import instance
 from hask.Data.Functor import fmap
 from hask.Data.Function import const
 from .Applicative import Applicative
+from hask.lang.infix import Infix
 
 
 class Monad(Applicative):
@@ -41,7 +42,7 @@ class Monad(Applicative):
         return
 
 
-@sig(H[(Monad, "m")]/ t("m", "a") >> (H/ "a" >> t("m", "b")) >> t("m", "b"))
+@Infix
 def bind(m, fn):
     """
     bind :: Monad m => m a -> (a -> m b) -> m b
@@ -51,7 +52,7 @@ def bind(m, fn):
     return Monad[m].bind(m, fn)
 
 
-@sig(H[(Monad, "m")]/ t("m", "a") >> t("m", "b") >> t("m", "b"))
+@Infix
 def bindIgnore(m, k):
     """
     bindIgnore :: Monad m => m a -> m b -> m b

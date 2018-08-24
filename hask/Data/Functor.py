@@ -4,6 +4,8 @@ from hask.lang import L, H, sig, t
 from hask.lang import instance, deriving, Show, data, d
 from hask.Data.Function import const, comp
 from hask.Data.Unit import Unit, Star
+from hask.lang.infix import Infix
+import builtins
 
 class Functor(Typeclass):
     """
@@ -28,17 +30,17 @@ class Functor(Typeclass):
         build_instance(Functor, cls, {"fmap":fmap})
         return
 
-
-@sig(H[(Functor, "f")]/ (H/ "a" >> "b") >> t("f", "a") >> t("f", "b"))
-def fmap(f, x):
+@Infix
+def map(f, x):
     return Functor[x].fmap(f, x)
+fmap = map
 
 @sig(H[(Functor, "f")]/ t("f", "a") >> t("f", Unit))
 def void(x):
     return fmap(const(Star), x)
 
 instance(Functor, List).where(
-    fmap = lambda fn, lst: L[map(fn, iter(lst))]
+    fmap = lambda fn, lst: L[builtins.map(fn, builtins.iter(lst))]
 )
 
 instance(Functor, TypedFunc).where(

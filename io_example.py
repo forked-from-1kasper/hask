@@ -1,12 +1,11 @@
 from hask import *
-from hask.Data.Functor import fmap
-from hask.Control.Monad import bind, bindIgnore
 
 @sig(H/ String >> t(IO, Unit))
 def helloPrint(s):
     return print(Just(s + "!"))
 
-helloTest = bindIgnore(putStr("Enter string: "), bind(getLine, helloPrint))
-helloTest2 = fmap((lambda s: s + "!") ** (H/ String >> String))(getLine)
+helloTest = putStr("Enter string: ") |bindIgnore| (getLine |bind| helloPrint)
+helloTest2 = (lambda s: s + "!") ** (H/ String >> String) |map| getLine
 
-System.IO.unsafePerformIO(helloTest)
+main = bindIgnore(helloTest, helloTest2 |bind| putStrLn)
+System.IO.unsafePerformIO(main)
