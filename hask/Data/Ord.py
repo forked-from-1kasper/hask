@@ -4,9 +4,14 @@ from hask.lang import deriving
 from .Eq import Eq
 from hask.lang.adt_syntax import ADT, HKT
 
-# data Ordering = LT | EQ | GT deriving(Show, Eq, Ord, Bounded)
 @ADT
 class Ordering(HKT(deriving=[Read, Show, Eq, Ord, Bounded])):
+    """
+    `data Ordering = LT | EQ | GT deriving(Show, Eq, Ord, Bounded)`
+
+    The `Ordering` datatype allows a single comparison
+    to determine the precise ordering of two objects.
+    """
     LT : []
     EQ : []
     GT : []

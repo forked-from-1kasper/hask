@@ -13,10 +13,19 @@ from hask.Control.Monad import Monad
 
 from hask.lang.adt_syntax import ADT, HKT
 
-
-# data Either a b = Left a | Right b deriving(Read, Show, Eq, Ord)
 @ADT
 class Either(HKT("a", "b", deriving=[Read, Show, Eq, Ord])):
+    """
+    `data Either a b = Left a | Right b deriving(Read, Show, Eq, Ord)`
+
+    The Either type represents values with two possibilities:
+    a value of type `Either a b` is either `Left a` or `Right b`.
+
+    The Either type is sometimes used to represent a value which is
+    either correct or an error; by convention, the `Left` constructor is used
+    to hold an error value and the `Right` constructor is used
+    to hold a correct value (mnemonic: “right” also means “correct”).
+    """
     Left : "a"
     Right : "b"
 Left, Right = Either.enums
