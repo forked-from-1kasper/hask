@@ -167,6 +167,7 @@ def mapM_(f, xs):
 # Miscellaneous functions
 
 from hask.Data.Function import id, const, flip, comp
+from hask.Data.String import String
 
 
 @sig(H/ (H/ "a" >> bool) >> (H/ "a" >> "a") >> "a" >> "a")
@@ -193,10 +194,10 @@ def asTypeOf(a, b):
     return a
 
 
-@sig(H/ str >> "a")
+@sig(H/ String >> "a")
 def error(msg):
     """
-    error :: str -> a
+    error :: String -> a
 
     error(msg) stops execution and displays an error message.
     """

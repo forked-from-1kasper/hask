@@ -3,7 +3,10 @@ from hask.lang import sig
 from hask.lang import L
 
 
-@sig(H/ str >> [str])
+String = str
+
+
+@sig(H/ String >> [String])
 def lines(string):
     """
     lines :: String -> [String]
@@ -14,7 +17,7 @@ def lines(string):
     return L[[]] if not string else L[string.split("\n")]
 
 
-@sig(H/ str >> [str])
+@sig(H/ String >> [String])
 def words(string):
     """
     words :: String -> [String]
@@ -25,7 +28,7 @@ def words(string):
     return L[[]] if string == "" else L[string.split(" ")]
 
 
-@sig(H/ [str] >> str)
+@sig(H/ [String] >> String)
 def unlines(strings):
     """
     lines :: [String] -> String
@@ -36,7 +39,7 @@ def unlines(strings):
     return "\n".join(strings)
 
 
-@sig(H/ [str] >> str)
+@sig(H/ [String] >> String)
 def unwords(strings):
     """
     unwords :: [String] -> String
