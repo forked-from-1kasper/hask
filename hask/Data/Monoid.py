@@ -33,10 +33,10 @@ def mappend(x, y):
 
 
 @sig(H[(Monoid, "m")]/ ["m"] >> "m")
-def mconcat(m):
+def mconcat(xs):
     """
     mconcat :: (Monoid m) => [m] -> m
 
     Fold a list using the monoid.
     """
-    return Monoid[x].mconcat(xs)
+    return Monoid[xs[0]].mconcat(xs)

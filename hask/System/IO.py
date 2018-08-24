@@ -74,7 +74,7 @@ def fmapIO(f, x):
     """
     fmapIO :: (a -> b) -> (IO a -> IO b)
 
-    (<$>) realisation of IO.
+    (<$>) realization of IO.
     *Do not use this. Use Data.Functor.fmap*
     """
     def _fmap(n):
@@ -96,7 +96,7 @@ def apIO(f, x):
     """
     apIO :: (a -> b) -> (IO a -> IO b)
 
-    (<*>) realisation of IO.
+    (<*>) realization of IO.
     *Do not use this. Use Control.Applicative.ap*
     """
     def _ap(n):
