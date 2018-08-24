@@ -1,7 +1,7 @@
 # Hask
 
 [![Build Status](https://travis-ci.org/forked-from-1kasper/hask.svg?branch=master)](https://travis-ci.org/forked-from-1kasper/hask)
-[![Coverage Status](https://coveralls.io/repos/github/1kasper/hask/badge.svg?branch=master)](https://coveralls.io/github/1kasper/hask?branch=master)
+[![Coverage Status](https://coveralls.io/repos/github/1kasper/hask/badge.svg?branch=master)](https://coveralls.io/github/forked-from-1kasper/hask?branch=master)
 
 Hask is a pure-Python, zero-dependencies library that mimics most of the core
 language tools from Haskell, including:
