@@ -45,14 +45,41 @@ class Monad(Applicative):
 @Infix
 def bind(m, fn):
     """
-    bind :: Monad m => m a -> (a -> m b) -> m b
+    (bind) :: Monad m => m a -> (a -> m b) -> m b
+
+    This is infix and non-curried version of `mbind`.
+    Monadic bind.
+    """
+    return Monad[m].bind(m, fn)
+
+
+@sig(H[(Monad, "m")]/ t("m", "a") >> (H/ "a" >> t("m", "b")) >> t("m", "b"))
+def mbind(m, fn):
+    """
+    mbind :: Monad m => m a -> (a -> m b) -> m b
 
     Monadic bind.
     """
     return Monad[m].bind(m, fn)
 
 
+
+
 @Infix
+def chain(m, k):
+    """
+    (chain) :: Monad m => m a -> m b -> m b
+
+    This is infix and non-curried version of `bindIgnore`.
+
+    Sequentially compose two actions, discarding any value produced
+    by the first, like sequencing operators (such as the semicolon)
+    in imperative languages.
+    """
+    return Monad[m].bind(m, const(k))
+
+
+@sig(H[(Monad, "m")]/ t("m", "a") >> t("m", "b") >> t("m", "b"))
 def bindIgnore(m, k):
     """
     bindIgnore :: Monad m => m a -> m b -> m b

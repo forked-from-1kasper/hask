@@ -25,7 +25,8 @@ import hask.Control.Applicative
 import hask.Control.Monad
 
 from hask.Data.Functor import fmap, map
-from hask.Control.Monad import bind, bindIgnore
+from hask.Control.Monad import bind, chain, mbind, bindIgnore
+from hask.Control.Applicative import ap, appAp
 
 import hask.System.IO
 from hask.System.IO import IO, putStr, putStrLn, getLine, print

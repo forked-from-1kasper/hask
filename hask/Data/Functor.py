@@ -32,8 +32,22 @@ class Functor(Typeclass):
 
 @Infix
 def map(f, x):
+    """
+    map :: Functor f => (a -> b) -> (f a -> f b)
+
+    This is infix and non-curried version of `fmap`.
+    Maps function over functor.
+    """
     return Functor[x].fmap(f, x)
-fmap = map
+
+@sig(H[(Functor, "f")]/ (H/ "a" >> "b") >> t("f", "a") >> t("f", "b"))
+def fmap(f, x):
+    """
+    fmap :: Functor f => (a -> b) -> (f a -> f b)
+
+    Maps function over functor.
+    """
+    return Functor[x].fmap(f, x)
 
 @sig(H[(Functor, "f")]/ t("f", "a") >> t("f", Unit))
 def void(x):
