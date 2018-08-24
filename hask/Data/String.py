@@ -48,3 +48,12 @@ def unwords(strings):
     spaces.
     """
     return " ".join(strings)
+
+@sig(H/ String >> String >> String)
+def concat(x, y):
+    """
+    concat :: String -> String -> String
+
+    Concatenates two strings.
+    """
+    return x + y
