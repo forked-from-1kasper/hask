@@ -9,6 +9,7 @@ from hask.lang import is_builtin
 from hask.lang import List
 from hask.lang import instance
 from hask.Data.Functor import fmap
+from hask.Data.Function import const
 from .Applicative import Applicative
 
 
@@ -48,6 +49,18 @@ def bind(m, fn):
     Monadic bind.
     """
     return Monad[m].bind(m, fn)
+
+
+@sig(H[(Monad, "m")]/ t("m", "a") >> t("m", "b") >> t("m", "b"))
+def bindIgnore(m, k):
+    """
+    bindIgnore :: Monad m => m a -> m b -> m b
+
+    Sequentially compose two actions, discarding any value produced
+    by the first, like sequencing operators (such as the semicolon)
+    in imperative languages.
+    """
+    return Monad[m].bind(m, const(k))
 
 
 @sig(H[(Monad, "m")]/ t("m", t("m", "a")) >> t("m", "a"))
