@@ -208,7 +208,7 @@ For example:
 @ADT
 class FooBar(HKT("a", "b")):
     Foo : ["a", "b", str]
-    Bar
+    Bar : []
 Foo, Bar = FooBar.enums
 ```
 
