@@ -21,6 +21,7 @@ import hask.Data.Ratio
 import hask.Data.String
 import hask.Data.Traversable
 import hask.Data.Tuple
+import hask.Data.Void
 import hask.Control.Applicative
 import hask.Control.Monad
 

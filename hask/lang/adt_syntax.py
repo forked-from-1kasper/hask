@@ -21,16 +21,14 @@ def ADT(cls):
                   typeargs = typeargs,
                   data_constructors = data_constructors,
                   to_derive = deriving)
-    res = t[0]
-    for (constructor, value) in zip(annotations, t[1:]):
+    res, *constructors = t
+
+    for (constructor, value) in zip(annotations, constructors):
         setattr(res, constructor, value)
-    setattr(res, 'enums', list(t[1:]))
+    setattr(res, 'enums', constructors)
     return res
 
 class HKT():
     def __init__(self, *args, **kwargs):
         self.typeargs = args
-        if "deriving" in kwargs:
-            self.deriving = kwargs["deriving"]
-        else:
-            self.deriving = []
+        self.deriving = kwargs.get("deriving", [])

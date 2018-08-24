@@ -11,11 +11,15 @@ from .Functor import Functor, fmap
 from hask.Control.Applicative import Applicative
 from hask.Control.Monad import Monad
 
+from hask.lang.adt_syntax import ADT, HKT
 
-# data Either a b = Left b | Right a deriving(Read, Show, Eq, Ord)
-Either, Left, Right =\
-data.Either("a", "b") == d.Left("a") | d.Right("b") \
-                       & deriving(Read, Show, Eq, Ord)
+
+# data Either a b = Left a | Right b deriving(Read, Show, Eq, Ord)
+@ADT
+class Either(HKT("a", "b", deriving=[Read, Show, Eq, Ord])):
+    Left : "a"
+    Right : "b"
+Left, Right = Either.enums
 
 
 instance(Functor, Either).where(
