@@ -11,6 +11,17 @@ from hask.lang.adt_syntax import ADT, HKT
 
 @ADT
 class IO(HKT("a")):
+    """
+    A value of type `IO a` is a computation which, when performed,
+    does some I/O before returning a value of type `a`.
+
+    There is really only one good way to “perform” an I/O action:
+    using `System.IO.unsafePerformIO` at end of your program.
+
+    `IO` is a monad, so `IO` actions can be combined using
+    the `(>>)` (`|chain|`) and `(>>=)` (`|bind|`) operations
+    from the `Monad` (Control.Monad) class.
+    """
     LazyPure: [(H/ Unit >> "a").sig]
 LazyPure = IO.LazyPure
 
