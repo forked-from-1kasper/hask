@@ -9,6 +9,7 @@ from hask.Control.Applicative import Applicative
 from hask.Control.Monad import Monad
 
 from hask.lang.adt_syntax import ADT, HKT
+from hask.lang.func_syntax import typed
 
 @ADT
 class Maybe(HKT("a", deriving=[Read, Show, Eq, Ord])):
@@ -65,8 +66,8 @@ def in_maybe(fn):
     return typify(fn, hkt=lambda x: t(Maybe, x))(closure_in_maybe)
 
 
-@sig(H/ "b" >> (H/ "a" >> "b") >> t(Maybe, "a") >> "b")
-def maybe(default, f, maybe_a):
+@typed()
+def maybe(default: "b", f: H/ "a" >> "b", maybe_a: t(Maybe, "a")) -> "b":
     """
     maybe :: b -> (a -> b) -> Maybe a -> b
 

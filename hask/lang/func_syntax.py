@@ -4,7 +4,9 @@ import inspect
 
 def typed(*constraints):
     def get_annotation(annotation, name):
-        if annotation == inspect._empty:
+        if isinstance(annotation, __signature__):
+            return annotation.sig
+        elif annotation == inspect._empty:
             raise TypeError('need annotation for “%s”' % name)
         else:
             return annotation
