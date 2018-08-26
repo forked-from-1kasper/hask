@@ -165,7 +165,7 @@ class Hask(object):
 class Undefined(Hask):
     """
     A class with no concrete type definition (so its type can unify with any
-    other type). Used to create `undefined` and to enable psuedo-laziness in
+    other type). Used to create `undefined` and to enable pseudo-laziness in
     pattern matching.
     """
     def __type__(self):
@@ -389,7 +389,6 @@ class TypedFunc(Hask):
 class ADT(Hask):
     """Base class for Hask algebraic data types."""
     pass
-
 
 def make_type_const(name, typeargs):
     """

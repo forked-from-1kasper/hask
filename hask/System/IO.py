@@ -38,6 +38,7 @@ def putStr(s):
         return Star
     return LazyPure(_putStr)
 
+
 @sig(H/ String >> t(IO, Unit))
 def putStrLn(s):
     """

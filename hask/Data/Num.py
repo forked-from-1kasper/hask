@@ -167,7 +167,7 @@ def div(a, b):
 @ADT
 class Ratio(HKT("a", deriving=[Eq])):
     """
-    data Ratio a = R a a
+    `data Ratio a = R a a`
 
     Rational numbers, with numerator and denominator of some `Integral` type.
     """
