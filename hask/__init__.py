@@ -30,6 +30,7 @@ from hask.Control.Monad import bind, chain, mbind, bindIgnore
 from hask.Control.Applicative import ap, appAp
 
 import hask.System.IO
+import hask.System.Environment
 from hask.System.IO import IO, putStr, putStrLn, getLine, print
 
 from .Python.builtins import *
