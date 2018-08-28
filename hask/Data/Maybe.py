@@ -11,6 +11,7 @@ from hask.Control.Monad import Monad
 from hask.lang.adt_syntax import ADT, HKT
 from hask.lang.func_syntax import typed
 
+
 @ADT
 class Maybe(HKT("a", deriving=[Read, Show, Eq, Ord])):
     """
