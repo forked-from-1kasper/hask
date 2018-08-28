@@ -28,8 +28,11 @@ version = ''
 # The full version, including alpha/beta/rc tags
 release = ''
 
-
 # -- General configuration ---------------------------------------------------
+
+import os
+import sys
+sys.path.insert(0, os.path.abspath('..'))
 
 # If your documentation needs a minimal Sphinx version, state it here.
 #

@@ -14,18 +14,18 @@ from hask.lang.func_syntax import typed
 @ADT
 class Maybe(HKT("a", deriving=[Read, Show, Eq, Ord])):
     """
-    `data Maybe a = Nothing | Just a deriving(Show, Eq, Ord)`
+    ``data Maybe a = Nothing | Just a deriving(Show, Eq, Ord)``
 
     The Maybe type encapsulates an optional value.
-    A value of type `Maybe a` either contains a value of type `a`
-   (represented as `Just a`), or it is empty (represented as `Nothing`).
+    A value of type ``Maybe a`` either contains a value of type ``a``
+    (represented as ``Just a``), or it is empty (represented as ``Nothing``).
     Using Maybe is a good way to deal with errors or exceptional cases
     without resorting to drastic measures such as error.
 
-    The `Maybe` type is also a monad.
+    The ``Maybe`` type is also a monad.
     It is a simple kind of error monad,
-    where all errors are represented by `Nothing`.
-    A richer error monad can be built using the `Either` type.
+    where all errors are represented by ``Nothing``.
+    A richer error monad can be built using the ``Either`` type.
     """
     Nothing : []
     Just : "a"
@@ -69,11 +69,11 @@ def in_maybe(fn):
 @typed()
 def maybe(default: "b", f: H/ "a" >> "b", maybe_a: t(Maybe, "a")) -> "b":
     """
-    maybe :: b -> (a -> b) -> Maybe a -> b
+    ``maybe :: b -> (a -> b) -> Maybe a -> b``
 
-    The maybe function takes a default value, a function, and a Maybe value. If
-    the Maybe value is Nothing, the function returns the default value.
-    Otherwise, it applies the function to the value inside the Just and returns
+    The maybe function takes a default value, a function, and a ``Maybe`` value.
+    If the ``Maybe`` value is ``Nothing``, the function returns the default value.
+    Otherwise, it applies the function to the value inside the ``Just`` and returns
     the result.
     """
     return default if maybe_a == Nothing else f(maybe_a[0])
@@ -108,10 +108,10 @@ def listToMaybe(a):
 @sig(H/ t(Maybe, "a") >> ["a"])
 def maybeToList(a):
     """
-    maybeToList :: Maybe a -> [a]
+    ``maybeToList :: Maybe a -> [a]``
 
-    The maybeToList function returns an empty list when given Nothing or a
-    singleton list when not given Nothing.
+    The maybeToList function returns an empty list when given ``Nothing`` or a
+    singleton list when not given ``Nothing``.
     """
     return ~(caseof(a)
                 | m(Nothing)   >> L[[]]
@@ -121,10 +121,10 @@ def maybeToList(a):
 @sig(H/ [t(Maybe, "a")] >> ["a"])
 def catMaybes(a):
     """
-    catMaybes :: [Maybe a] -> [a]
+    ``catMaybes :: [Maybe a] -> [a]``
 
     The catMaybes function takes a list of Maybes and returns a list of all the
-    Just values.
+    ``Just`` values.
     """
     return L[(fromJust(item) for item in a if isJust(item))]
 
@@ -132,11 +132,11 @@ def catMaybes(a):
 @sig(H/ (H/ "a" >> t(Maybe, "b")) >> ["a"] >> ["b"])
 def mapMaybe(f, la):
     """
-    mapMaybe :: (a -> Maybe b) -> [a] -> [b]
+    ``mapMaybe :: (a -> Maybe b) -> [a] -> [b]``
 
     The mapMaybe function is a version of map which can throw out elements. In
-    particular, the functional argument returns something of type Maybe b. If
-    this is Nothing, no element is added on to the result list. If it is Just
+    particular, the functional argument returns something of type ``Maybe b``. If
+    this is ``Nothing``, no element is added on to the result list. If it is Just
     b, then b is included in the result list.
     """
     return L[(fromJust(b) for b in (f(a) for a in la) if isJust(b))]

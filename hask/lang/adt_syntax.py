@@ -31,6 +31,7 @@ def ADT(cls):
     for (constructor, value) in zip(annotations, constructors):
         setattr(res, constructor, value)
     setattr(res, 'enums', constructors)
+    setattr(res, '__doc__', env.get('__doc__', ''))
     return res
 
 class HKT():

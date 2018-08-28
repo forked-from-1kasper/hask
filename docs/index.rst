@@ -10,6 +10,8 @@ Welcome to hask's documentation!
    :maxdepth: 2
    :caption: Contents:
 
+   maybe
+
 Hask is a pure-Python, zero-dependencies library that mimics most of the core language tools from Haskell, including:
 
  * Full Hindley-Milner type system (with typeclasses) that will typecheck any function decorated with a Hask type signature

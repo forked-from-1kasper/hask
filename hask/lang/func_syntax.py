@@ -22,5 +22,7 @@ def typed(*constraints):
 
         fn_args = build_sig(sig)
         fn_type = make_fn_type(fn_args)
-        return TypedFunc(fn, fn_args, fn_type)
+        res = TypedFunc(fn, fn_args, fn_type)
+        setattr(res, '__annotations__', fn.__annotations__)
+        return res
     return make_typed
