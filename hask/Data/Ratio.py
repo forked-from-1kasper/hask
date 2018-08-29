@@ -19,7 +19,7 @@ from .Num import toRational
 @sig(H[(Integral, "a")]/ t(Ratio, "a") >> "a")
 def numerator(ratio):
     """
-    numerator :: Integral a => Ratio a -> a
+    ``numerator :: Integral a => Ratio a -> a``
 
     Extract the numerator of the ratio in reduced form: the numerator and
     denominator have no common factor and the denominator is positive.
@@ -30,7 +30,7 @@ def numerator(ratio):
 @sig(H[(Integral, "a")]/ t(Ratio, "a") >> "a")
 def denominator(ratio):
     """
-    denominator :: Integral a => Ratio a -> a
+    ``denominator :: Integral a => Ratio a -> a``
 
     Extract the denominator of the ratio in reduced form: the numerator and
     denominator have no common factor and the denominator is positive.
@@ -41,7 +41,7 @@ def denominator(ratio):
 @sig(H[(RealFrac, "a")]/ "a" >> "a" >> Rational)
 def approxRational(x, epsilon):
     """
-    approxRational :: RealFrac a => a -> a -> Rational
+    ``approxRational :: RealFrac a => a -> a -> Rational``
 
     approxRational, applied to two real fractional numbers x and epsilon,
     returns the simplest rational number within epsilon of x. A rational number

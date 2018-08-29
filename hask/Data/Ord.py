@@ -7,7 +7,7 @@ from hask.lang.adt_syntax import ADT, HKT
 @ADT
 class Ordering(HKT(deriving=[Read, Show, Eq, Ord, Bounded])):
     """
-    `data Ordering = LT | EQ | GT deriving(Show, Eq, Ord, Bounded)`
+    ``data Ordering = LT | EQ | GT deriving(Show, Eq, Ord, Bounded)``
 
     The `Ordering` datatype allows a single comparison
     to determine the precise ordering of two objects.
@@ -21,7 +21,7 @@ LT, EQ, GT = Ordering.enums
 @sig(H[(Ord, "a")]/ "a" >> "a" >> "a")
 def max(x, y):
     """
-    max :: a -> a -> a
+    ``max :: a -> a -> a``
 
     Maximum function.
     """
@@ -31,7 +31,7 @@ def max(x, y):
 @sig(H[(Ord, "a")]/ "a" >> "a" >> "a")
 def min(x, y):
     """
-    min :: a -> a -> a
+    ``min :: a -> a -> a``
 
     Minumum function.
     """
@@ -41,7 +41,7 @@ def min(x, y):
 @sig(H[(Ord, "a")]/ "a" >> "a" >> Ordering)
 def compare(x, y):
     """
-    compare :: a -> a -> Ordering
+    ``compare :: a -> a -> Ordering``
 
     Comparison function.
     """
@@ -51,7 +51,7 @@ def compare(x, y):
 @sig(H[(Ord, "a")]/ (H/ "a" >> "b") >> "b" >> "b" >> Ordering)
 def comparing(p, x, y):
     """
-    comparing :: Ord a => (b -> a) -> b -> b -> Ordering
+    ``comparing :: Ord a => (b -> a) -> b -> b -> Ordering``
 
     comparing(p, x, y) = compare(p(x), p(y))
 

@@ -87,7 +87,7 @@ class Enum(Typeclass):
 @sig(H/ "a" >> int)
 def fromEnum(a):
     """
-    fromEnum :: a -> int
+    ``fromEnum :: a -> int``
 
     Convert to an int.
     """
@@ -97,9 +97,9 @@ def fromEnum(a):
 @sig(H/ "a" >> "a")
 def succ(a):
     """
-    succ :: a -> a
+    ``succ :: a -> a``
 
-    the successor of a value. For numeric types, succ adds 1.
+    the successor of a value. For numeric types, ``succ`` adds 1.
     """
     return Enum[a].succ(a)
 
@@ -107,9 +107,9 @@ def succ(a):
 @sig(H/ "a" >> "a")
 def pred(a):
     """
-    pred :: a -> a
+    ``pred :: a -> a``
 
-    the predecessor of a value. For numeric types, pred subtracts 1.
+    the predecessor of a value. For numeric types, ``pred`` subtracts 1.
     """
     return Enum[a].pred(a)
 
@@ -117,9 +117,9 @@ def pred(a):
 @sig(H/ "a" >> "a" >> ["a"])
 def enumFromThen(start, second):
     """
-    enumFromThen :: a -> a -> [a]
+    ``enumFromThen :: a -> a -> [a]``
 
-    Used in translation of [n, n_, ...]
+    Used in translation of ``[n, n_, ...]``
     """
     return L[Enum[start].enumFromThen(start, second)]
 
@@ -127,9 +127,9 @@ def enumFromThen(start, second):
 @sig(H/ "a" >> ["a"])
 def enumFrom(start):
     """
-    enumFrom :: a -> [a]
+    ``enumFrom :: a -> [a]``
 
-    Used in translation of L[n, ...]
+    Used in translation of ``L[n, ...]``
     """
     return L[Enum[start].enumFrom(start)]
 
@@ -137,9 +137,9 @@ def enumFrom(start):
 @sig(H/ "a" >> "a" >> "a" >> ["a"])
 def enumFromThenTo(start, second, end):
     """
-    enumFromThenTo :: a -> a -> a -> [a]
+    ``enumFromThenTo :: a -> a -> a -> [a]``
 
-    Used in translation of L[n, n_, ..., m]
+    Used in translation of ``L[n, n_, ..., m]``
     """
     return L[Enum[start].enumFromThenTo(start, second, end)]
 
@@ -147,9 +147,9 @@ def enumFromThenTo(start, second, end):
 @sig(H/ "a" >> "a" >> ["a"])
 def enumFromTo(start, end):
     """
-    enumFromTo :: a -> a -> [a]
+    ``enumFromTo :: a -> a -> [a]``
 
-    Used in translation of L[n, ..., m]
+    Used in translation of ``L[n, ..., m]``
     """
     return L[Enum[start].enumFromTo(start, end)]
 
@@ -231,7 +231,7 @@ class List(collections.Sequence, Hask):
 
     def __add__(self, other):
         """
-        (+) :: [a] -> [a] -> [a]
+        ``(+) :: [a] -> [a] -> [a]``
 
         + is the list concatenation operator, equivalent to ++ in Haskell and +
         for Python lists

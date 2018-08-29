@@ -57,7 +57,7 @@ class Show(Typeclass):
 @sig(H/ "a" >> str)
 def show(obj):
     """
-    show :: a -> str
+    ``show :: a -> str``
 
     Convert a value to a readable string.
     """

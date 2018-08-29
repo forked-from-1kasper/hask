@@ -8,19 +8,19 @@ import sys, os
 getArgs = LazyPure((lambda n: L[[]] if len(sys.argv) < 1 else L[sys.argv[1:]]) **
                    (H/ Unit >> [String]))
 getArgs.__doc__ = """
-    getArgs :: IO [String]
+    ``getArgs :: IO [String]``
 
-    Computation `getArgs` returns a list of the program’s
+    Computation ``getArgs`` returns a list of the program’s
     command line arguments (not including the program name).
 """
 
 @sig(H/ String >> t(IO, t(Maybe, String)))
 def lookupEnv(var):
     """
-    lookupEnv :: String -> IO (Maybe String) 
+    ``lookupEnv :: String -> IO (Maybe String)``
 
-    Return the value of the environment variable `var`,
-    or `Nothing` if there is no such value.
+    Return the value of the environment variable ``var``,
+    or ``Nothing`` if there is no such value.
     """
     def unsafeToMaybe(x):
         if x is None:
