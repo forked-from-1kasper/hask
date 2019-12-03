@@ -2,10 +2,10 @@ from hask.lang import Show, Read, Bounded, Ord
 from hask.lang import sig, H, data, d
 from hask.lang import deriving
 from .Eq import Eq
-from hask.lang.adt_syntax import ADT, HKT
+from hask.lang.adt_syntax import ADT
 
-@ADT
-class Ordering(HKT(deriving=[Read, Show, Eq, Ord, Bounded])):
+@ADT(deriving=[Read, Show, Eq, Ord, Bounded])
+class Ordering:
     """
     ``data Ordering = LT | EQ | GT deriving(Show, Eq, Ord, Bounded)``
 

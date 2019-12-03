@@ -92,6 +92,14 @@ class Typeclass(object, metaclass=TypeMeta):
     See typeclasses.py for examples.
     """
 
+    def __new__(typeclass, type):
+        """
+        Useful to reduce bracket usage.
+
+        Now instead of ``(T, "a")`` you can use ``T("a")``.
+        """
+        return (typeclass, type)
+
     @classmethod
     def make_instance(typeclass, type_, *args):
         raise NotImplementedError("Typeclasses must implement make_instance")
@@ -228,6 +236,15 @@ class TypeSignatureHKT(object):
         self.tcon = tcon
         self.params = params
 
+    def __call__(self, *args):
+        """
+        Useful to reduce bracket usage and visual noise.
+
+        Now instead of ``(t(Either, int, String), "a")`` you can use
+        just ``Either(int, String)("a")``.
+        """
+        return (self, *args)
+
 
 class TypeSignatureError(Exception):
     pass
@@ -260,7 +277,7 @@ def build_sig_arg(arg, cons, var_dict):
     elif isinstance(arg, TypeSignature):
         return make_fn_type(build_sig(arg, var_dict))
 
-    # HKT, e.g. t(Maybe "a") or t("m", "a", "b")
+    # HKT, e.g. t(Maybe, "a") or t("m", "a", "b")
     elif isinstance(arg, TypeSignatureHKT):
         if type(arg.tcon) == str:
             hkt = build_sig_arg(arg.tcon, cons, var_dict)
@@ -456,7 +473,7 @@ def make_data_const(name, fields, type_constructor, slot_num):
     """
     # create the data constructor
     base = namedtuple(name, ["i%s" % i for i, _ in enumerate(fields)])
-    cls = type(name, (type_constructor, base), {})
+    cls = type(name, (type_constructor, base), dict(__new__=base.__new__))
     cls.__type_constructor__ = type_constructor
     cls.__ADT_slot__ = slot_num
 

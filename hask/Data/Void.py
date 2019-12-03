@@ -1,8 +1,8 @@
 from hask.lang import H, caseof, sig
-from hask.lang.adt_syntax import ADT, HKT
+from hask.lang.adt_syntax import ADT
 
-@ADT
-class Void(HKT()):
+@ADT()
+class Void:
     """
     ``data Void``
 

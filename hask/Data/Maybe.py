@@ -8,12 +8,12 @@ from .Functor import Functor
 from hask.Control.Applicative import Applicative
 from hask.Control.Monad import Monad
 
-from hask.lang.adt_syntax import ADT, HKT
+from hask.lang.adt_syntax import ADT
 from hask.lang.func_syntax import typed
 
 
-@ADT
-class Maybe(HKT("a", deriving=[Read, Show, Eq, Ord])):
+@ADT("a", deriving=[Read, Show, Eq, Ord])
+class Maybe:
     """
     ``data Maybe a = Nothing | Just a deriving(Show, Eq, Ord)``
 

@@ -130,7 +130,7 @@ List comprehensions can be used on ints, longs, floats, one-character strings,
 or any other instance of the `Enum` typeclass (more on this later).
 
 Hask provides all of the Haskell functions for List manipulation (`take`,
-`drop`, `takeWhile`, etc.), or you can also use Python-style indexing.
+`drop`, `takeWhile` etc), or you can also use Python-style indexing.
 
 ```python
 >>> L[1, ...]
@@ -178,21 +178,21 @@ Here is the definition for the infamous `Maybe` type:
 ```python
 from hask import data, d, deriving
 from hask import Read, Show, Eq, Ord
-from hask.lang.adt_syntax import ADT, HKT
+from hask.lang.adt_syntax import ADT
 
-@ADT
-class Maybe(HKT("a", deriving=[Read, Show, Eq, Ord])):
+@ADT("a", deriving=[Read, Show, Eq, Ord])
+class Maybe:
     Nothing : []
     Just : "a"
 Nothing, Just = Maybe.enums # brings `Nothing` and `Just` to outer scope
 ```
 
-Let's break this down a bit. The syntax for defining a new [type
+Let’s break this down a bit. The syntax for defining a new [type
 constructor](https://wiki.haskell.org/Constructor#Type_constructor) is:
 
 ```python
-@ADT
-class TypeName(HKT("type param", "type param2" ... "type param n"))
+@ADT("type param", "type param2" ... "type param n")
+class TypeName
 ```
 
 This defines a new algebraic datatype with type parameters.
@@ -205,30 +205,30 @@ fields. If your data constructor has no fields, use `[]`.
 For example:
 
 ```python
-@ADT
-class FooBar(HKT("a", "b")):
+@ADT("a", "b")
+class FooBar:
     Foo : ["a", "b", str]
     Bar : []
 Foo, Bar = FooBar.enums
 ```
 
 To automagically derive typeclass instances for the type, add
-`deriving` parameter after the tzpe parameters.
+`deriving` parameter after the type parameters.
 Currently, the only typeclasses that can be derived are `Eq`, `Show`, `Read`,
 `Ord`, and `Bounded`.
 
 Putting it all together, here are the definitions of `Either` and `Ordering`:
 
 ```python
-@ADT
-class Either(HKT("a", "b", deriving=[Read, Show, Eq])):
+@ADT("a", "b", deriving=[Read, Show, Eq])
+class Either:
     Left : "a"
     Right : "b"
 Left, Right = Either.enums
 
 
-@ADT
-class Ordering(HKT(deriving=[Read, Show, Eq, Ord, Bounded])):
+@ADT(deriving=[Read, Show, Eq, Ord, Bounded])
+class Ordering:
     LT : []
     EQ : []
     GT : []
@@ -431,7 +431,8 @@ It is also possible to create type synonyms using `t`.
 For example, check out the definition of `Rational`:
 
 ```python
-class Ratio(HKT("a", deriving=[Eq])):
+@ADT("a", deriving=[Eq]))
+class Ratio:
     R : ["a", "a"]
 R = Ratio.R
 

@@ -1,5 +1,5 @@
 from hask.lang import H
-from hask.lang import sig
+from hask.lang import sig, annotated
 import unicodedata
 import builtins
 
@@ -8,8 +8,8 @@ import builtins
 # Character classification
 
 
-@sig(H/ str >> bool)
-def isControl(s):
+@annotated
+def isControl(s : str) -> bool:
     """
     isControl :: str -> bool
 
@@ -19,8 +19,8 @@ def isControl(s):
     return unicodedata.category(s) == 'Cc' # Other, Control category
 
 
-@sig(H/ str >> bool)
-def isSpace(s):
+@annotated
+def isSpace(s : str) -> bool:
     """
     isSpace :: str -> bool
 
@@ -30,8 +30,8 @@ def isSpace(s):
     return s in " \t\n\r\f\v"
 
 
-@sig(H/ str >> bool)
-def isLower(s):
+@annotated
+def isLower(s : str) -> bool:
     """
     isLower :: str -> bool
 
@@ -40,8 +40,8 @@ def isLower(s):
     return s.lower() == s
 
 
-@sig(H/ str >> bool)
-def isUpper(s):
+@annotated
+def isUpper(s : str) -> bool:
     """
     isUpper :: str -> bool
 
@@ -52,8 +52,8 @@ def isUpper(s):
     return s.upper() == s
 
 
-@sig(H/ str >> bool)
-def isAlpha(s):
+@annotated
+def isAlpha(s : str) -> bool:
     """
     isAlpha :: str -> bool
 
@@ -64,8 +64,8 @@ def isAlpha(s):
     return s.isalpha()
 
 
-@sig(H/ str >> bool)
-def isNumber(s):
+@annotated
+def isNumber(s : str) -> bool:
     """
     isNumber :: str -> bool
 
@@ -75,8 +75,8 @@ def isNumber(s):
     return unicodedata.category(s) in ['Nd', 'Nl', 'No']
 
 
-@sig(H/ str >> bool)
-def isAlphaNum(s):
+@annotated
+def isAlphaNum(s : str) -> bool:
     """
     isAlphaNum :: str -> bool
 
@@ -89,8 +89,8 @@ def isAlphaNum(s):
     return isAlpha(s) or isNumber(s)
 
 
-@sig(H/ str >> bool)
-def isPrint(s):
+@annotated
+def isPrint(s : str) -> bool:
     """
     isPrint :: str -> bool
 
@@ -100,8 +100,8 @@ def isPrint(s):
     raise NotImplementedError
 
 
-@sig(H/ str >> bool)
-def isDigit(s):
+@annotated
+def isDigit(s : str) -> bool:
     """
     isDigit :: str -> bool
 
@@ -110,8 +110,8 @@ def isDigit(s):
     return s in "0123456789"
 
 
-@sig(H/ str >> bool)
-def isOctDigit(s):
+@annotated
+def isOctDigit(s : str) -> bool:
     """
     isOctDigit :: str -> bool
 
@@ -120,8 +120,8 @@ def isOctDigit(s):
     return s in "01234567"
 
 
-@sig(H/ str >> bool)
-def isHexDigit(s):
+@annotated
+def isHexDigit(s : str) -> bool:
     """
     isHexDigit :: str -> bool
 
@@ -130,8 +130,8 @@ def isHexDigit(s):
     return s in "0123456789abcdefABCDEF"
 
 
-@sig(H/ str >> bool)
-def isLetter(s):
+@annotated
+def isLetter(s : str) -> bool:
     """
     isLetter :: str -> bool
 
@@ -142,8 +142,8 @@ def isLetter(s):
     return isAlpha(s)
 
 
-@sig(H/ str >> bool)
-def isMark(s):
+@annotated
+def isMark(s : str) -> bool:
     """
     isMark :: str -> bool
 
@@ -153,8 +153,8 @@ def isMark(s):
     return unicodedata.category(s) in ['Mn', 'Mc', 'Me']
 
 
-@sig(H/ str >> bool)
-def isPunctuation(s):
+@annotated
+def isPunctuation(s : str) -> bool:
     """
     isPunctuation :: str -> bool
 
@@ -164,8 +164,8 @@ def isPunctuation(s):
     return unicodedata.category(s) in ['Pc', 'Pd', 'Ps', 'Pe', 'Pi', 'Pf', 'Po']
 
 
-@sig(H/ str >> bool)
-def isSymbol(s):
+@annotated
+def isSymbol(s : str) -> bool:
     """
     isSymbol :: str -> bool
 
@@ -175,8 +175,8 @@ def isSymbol(s):
     return unicodedata.category(s) in ['Sm', 'Sc', 'Sk', 'So']
 
 
-@sig(H/ str >> bool)
-def isSeparator(s):
+@annotated
+def isSeparator(s : str) -> bool:
     """
     isSeparator :: str -> bool
 
@@ -189,8 +189,8 @@ def isSeparator(s):
 # Subranges
 
 
-@sig(H/ str >> bool)
-def isAscii(s):
+@annotated
+def isAscii(s : str) -> bool:
     """
     isAscii :: str -> bool
 
@@ -200,8 +200,8 @@ def isAscii(s):
     return ord(s) < 128
 
 
-@sig(H/ str >> bool)
-def isLatin1(s):
+@annotated
+def isLatin1(s : str) -> bool:
     """
     isLatin1 :: str -> bool
 
@@ -211,8 +211,8 @@ def isLatin1(s):
     return ord(s) < 256
 
 
-@sig(H/ str >> bool)
-def isAsciiUpper(s):
+@annotated
+def isAsciiUpper(s : str) -> bool:
     """
     isAsciiUpper :: str -> bool
 
@@ -222,8 +222,8 @@ def isAsciiUpper(s):
     return isAscii(s) and isUpper(s)
 
 
-@sig(H/ str >> bool)
-def isAsciiLower(s):
+@annotated
+def isAsciiLower(s : str) -> bool:
     """
     isAsciiLower :: str -> bool
 
@@ -237,8 +237,8 @@ def isAsciiLower(s):
 # Case conversion
 
 
-@sig(H/ str >> str)
-def toUpper(s):
+@annotated
+def toUpper(s : str) -> str:
     """
     toUpper :: str -> str
 
@@ -248,8 +248,8 @@ def toUpper(s):
     return s.upper()
 
 
-@sig(H/ str >> str)
-def toLower(s):
+@annotated
+def toLower(s : str) -> str:
     """
     toLower :: str -> str
 
@@ -259,8 +259,8 @@ def toLower(s):
     return s.lower()
 
 
-@sig(H/ str >> str)
-def toTitle(s):
+@annotated
+def toTitle(s : str) -> str:
     """
     toTitle :: str -> str
 
@@ -275,8 +275,8 @@ def toTitle(s):
 # Single digit characters
 
 
-@sig(H/ str >> int)
-def digitToInt(s):
+@annotated
+def digitToInt(s : str) -> int:
     """
     digitToInt :: str -> int
 
@@ -289,8 +289,8 @@ def digitToInt(s):
     return "0123456789abcdef".index(s.lower())
 
 
-@sig(H/ int >> str)
-def intToDigit(s):
+@annotated
+def intToDigit(s : int) -> str:
     """
     intToDigit :: int -> str
 

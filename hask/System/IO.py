@@ -7,10 +7,10 @@ from hask.Data.Functor import Functor, fmap
 from hask.Control.Applicative import Applicative
 from hask.Control.Monad import Monad, bind, bindIgnore
 from hask.Data.Unit import Unit, Star
-from hask.lang.adt_syntax import ADT, HKT
+from hask.lang.adt_syntax import ADT
 
-@ADT
-class IO(HKT("a")):
+@ADT("a")
+class IO:
     """
     A value of type `IO a` is a computation which, when performed,
     does some I/O before returning a value of type `a`.

@@ -11,10 +11,10 @@ from .Functor import Functor, fmap
 from hask.Control.Applicative import Applicative
 from hask.Control.Monad import Monad
 
-from hask.lang.adt_syntax import ADT, HKT
+from hask.lang.adt_syntax import ADT
 
-@ADT
-class Either(HKT("a", "b", deriving=[Read, Show, Eq, Ord])):
+@ADT("a", "b", deriving=[Read, Show, Eq, Ord])
+class Either:
     """
     `data Either a b = Left a | Right b deriving(Read, Show, Eq, Ord)`
 
@@ -65,7 +65,7 @@ def in_either(fn):
     return typify(fn, hkt=lambda x: t(Either, "aa", x))(closure_in_either)
 
 
-@sig(H/ (H/ "a" >> "c") >> (H/ "b" >> "c") >> t(Either, "a", "b") >> "c")
+@sig(H/ (H/ "a" >> "c") >> (H/ "b" >> "c") >> Either("a", "b") >> "c")
 def either(fa, fb, e):
     """
     either :: (a -> c) -> (b -> c) -> Either a b -> c
@@ -78,7 +78,7 @@ def either(fa, fb, e):
                 | m(Right(m.b)) >> fb(p.b))
 
 
-@sig(H/ [t(Either, "a", "b")] >> ["a"])
+@sig(H/ [Either("a", "b")] >> ["a"])
 def lefts(xs):
     """
     lefts :: [Either a b] -> [a]
@@ -89,7 +89,7 @@ def lefts(xs):
     return L[(x[0] for x in xs if isLeft(x))]
 
 
-@sig(H/ [t(Either, "a", "b")] >> ["b"])
+@sig(H/ [Either("a", "b")] >> ["b"])
 def rights(xs):
     """
     rights :: [Either a b] -> [b]
@@ -100,7 +100,7 @@ def rights(xs):
     return L[(x[0] for x in xs if isRight(x))]
 
 
-@sig(H/ t(Either, "a", "b") >> bool)
+@sig(H/ Either("a", "b") >> bool)
 def isLeft(x):
     """
     isLeft :: Either a b -> bool
@@ -112,7 +112,7 @@ def isLeft(x):
                 | m(Left(m.x))  >> True)
 
 
-@sig(H/ t(Either, "a", "b") >> bool)
+@sig(H/ Either("a", "b") >> bool)
 def isRight(x):
     """
     isRight :: Either a b -> bool
@@ -122,7 +122,7 @@ def isRight(x):
     return not isLeft(x)
 
 
-@sig(H/ [t(Either, "a", "b")] >> (["a"], ["b"]))
+@sig(H/ [Either("a", "b")] >> (["a"], ["b"]))
 def partitionEithers(xs):
     """
     partitionEithers :: [Either a b] -> ([a], [b])

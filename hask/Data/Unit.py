@@ -1,8 +1,8 @@
 from hask.lang import deriving, data, d, Show, Eq
-from hask.lang.adt_syntax import ADT, HKT
+from hask.lang.adt_syntax import ADT
 
-@ADT
-class Unit(HKT(deriving=[Show, Eq])):
+@ADT(deriving=[Show, Eq])
+class Unit:
     """
     ``data Unit = Star``
 

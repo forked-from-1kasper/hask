@@ -30,7 +30,7 @@ from hask.lang.hindley_milner import unify
 
 from hask.lang.lazylist import List
 
-from hask.lang.adt_syntax import ADT, HKT
+from hask.lang.adt_syntax import ADT
 from hask.Control.Monad import bind
 
 te = TypeError
@@ -820,8 +820,8 @@ class TestADTSyntax(unittest.TestCase):
 
     def test_adts(self):
         """Assorted ADT tests that don't fit anywhere else"""
-        @ADT
-        class T(HKT("a", "b", deriving=[Eq])):
+        @ADT("a", "b", deriving=[Eq])
+        class T:
             M1 : "a"
             M2 : "b"
             M3 : []
@@ -838,8 +838,8 @@ class TestADTSyntax(unittest.TestCase):
         self.assertFalse(M3 != M3)
         with self.assertRaises(te): M1("a") == M1(3.0)
 
-        @ADT
-        class A(HKT(deriving=[Show, Eq])):
+        @ADT(deriving=[Show, Eq])
+        class A:
             B : [str, str]
             C : [str]
         B, C = A.enums
@@ -855,8 +855,8 @@ class TestADTSyntax(unittest.TestCase):
         with self.assertRaises(te): M1("a") == C("a")
 
         # make sure everything works with only 1 constructor
-        @ADT
-        class A(HKT(deriving=[Show, Eq])):
+        @ADT(deriving=[Show, Eq])
+        class A:
             B : [str, str]
         B = A.B
         self.assertTrue(has_instance(A, Show))
@@ -866,8 +866,8 @@ class TestADTSyntax(unittest.TestCase):
         self.assertNotEqual(B("a", "b"), B("a", "c"))
 
         # make sure everything works with a bunch of constructors
-        @ADT
-        class X(HKT(deriving=[Eq, Ord])):
+        @ADT(deriving=[Eq, Ord])
+        class X:
             X1 : []
             X2 : []
             X3 : []
@@ -880,8 +880,8 @@ class TestADTSyntax(unittest.TestCase):
         self.assertTrue(X1 < X2 < X3 < X4 < X5 < X6)
         with self.assertRaises(te): X1 < A("a", "a")
         with self.assertRaises(te):
-            @ADT
-            class X(HKT(deriving=[Show, 1])):
+            @ADT(deriving=[Show, 1])
+            class X:
                 A : []
                 B : []
 
@@ -1223,8 +1223,8 @@ class TestSyntax(unittest.TestCase):
 class TestTypeclass(unittest.TestCase):
 
     def test_typeclasses(self):
-        @ADT
-        class A(HKT(deriving=[Show, Eq])):
+        @ADT(deriving=[Show, Eq])
+        class A:
             B : []
         B = A.B
         self.assertTrue(has_instance(A, Show))
@@ -2420,8 +2420,8 @@ class Test_README_Examples(unittest.TestCase):
         self.assertTrue(55 in L[1, 3, ...])
 
     def test_ADT(self):
-        @ADT
-        class FooBar(HKT("a", "b")):
+        @ADT("a", "b")
+        class FooBar:
             Foo : ["a", "b", str]
             Bar : []
         Foo, Bar = FooBar.enums
@@ -2484,8 +2484,8 @@ class Test_README_Examples(unittest.TestCase):
         def launch_missiles(num_missiles):
             return Star
 
-        @ADT
-        class Ratio(HKT("a", deriving=[Eq])):
+        @ADT("a", deriving=[Eq])
+        class Ratio:
             R : ["a", "a"]
         R = Ratio.R
 
@@ -2526,8 +2526,8 @@ class Test_README_Examples(unittest.TestCase):
 
     def test_typeclasses(self):
         from hask.Prelude import fmap
-        @ADT
-        class M(HKT("a", deriving=[Show, Eq, Ord])):
+        @ADT("a", deriving=[Show, Eq, Ord])
+        class M:
             N : []
             J : "a"
         N, J = M.enums
