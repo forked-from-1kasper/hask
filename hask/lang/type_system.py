@@ -236,15 +236,6 @@ class TypeSignatureHKT(object):
         self.tcon = tcon
         self.params = params
 
-    def __call__(self, *args):
-        """
-        Useful to reduce bracket usage and visual noise.
-
-        Now instead of ``(t(Either, int, String), "a")`` you can use
-        just ``Either(int, String)("a")``.
-        """
-        return (self, *args)
-
 
 class TypeSignatureError(Exception):
     pass
