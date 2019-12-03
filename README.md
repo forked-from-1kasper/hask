@@ -431,7 +431,7 @@ It is also possible to create type synonyms using `t`.
 For example, check out the definition of `Rational`:
 
 ```python
-@ADT("a", deriving=[Eq]))
+@ADT("a", deriving=[Eq])
 class Ratio:
     R : ["a", "a"]
 R = Ratio.R
@@ -732,7 +732,7 @@ Guards will also play nicely with sections:
 ...     | c(_ < 20)  >> "Porridge is too cold!"
 ...     | c(_ < 90)  >> "Porridge is just right!"
 ...     | c(_ < 150) >> "Porridge is too hot!"
-...     | otherwise   >> "Porridge has gone thermonuclear"
+...     | otherwise  >> "Porridge has gone thermonuclear"
 ... )
 'Porridge is just right!'
 ```
@@ -745,7 +745,7 @@ def examine_password_security(password):
     analysis = ~(guard(password)
         | c(lambda x: len(x) > 20) >> "Wow, that's one secure password"
         | c(lambda x: len(x) < 5)  >> "You made Bruce Schneier cry"
-        | c(_ == "12345")         >> "Same combination as my luggage!"
+        | c(_ == "12345")          >> "Same combination as my luggage!"
         | otherwise                >> "Hope it's not 'password'"
     )
     return analysis

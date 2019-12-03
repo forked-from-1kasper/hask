@@ -5,6 +5,9 @@ import inspect
 
 def constraint(*constraints):
     def get_annotation(annotation, name):
+        if isinstance(annotation, __signature__):
+            return get_annotation(annotation.sig, name)
+
         if annotation == inspect._empty:
             raise TypeError('Missing type for “%s”' % name)
         else:
