@@ -1,11 +1,11 @@
 from hask import *
 
-@sig(H/ String >> t(IO, Unit))
-def helloPrint(s):
+@annotated
+def helloPrint(s : String) -> IO(Unit):
     return print(Just(s + "!"))
 
-@sig(H/ String >> t(IO, String))
-def getLineWithPrompt(prompt):
+@annotated
+def getLineWithPrompt(prompt : String) -> IO(String):
     return putStr(prompt) |chain| getLine
 
 helloTest = getLineWithPrompt("Enter string: ") |bind| helloPrint

@@ -55,7 +55,7 @@ from hask.lang import L
 from hask.lang import data, d, deriving
 
 ## Type signatures
-from hask.lang import sig, H, t, func, TypeSignatureError
+from hask.lang import sig, annotated, constraint, H, t, func, TypeSignatureError
 
 ## Pattern matching
 from hask.lang import caseof, p, m, IncompletePatternError
