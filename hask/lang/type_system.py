@@ -270,7 +270,7 @@ def build_sig_arg(arg, cons, var_dict):
 
     # HKT, e.g. t(Maybe, "a") or t("m", "a", "b")
     elif isinstance(arg, TypeSignatureHKT):
-        if type(arg.tcon) == str:
+        if isinstance(arg.tcon, str):
             hkt = build_sig_arg(arg.tcon, cons, var_dict)
         else:
             hkt = arg.tcon

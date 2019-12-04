@@ -1,7 +1,9 @@
 import builtins
 from sys import stdin
-from hask.lang import H, d, data, t, sig, caseof, m, p, _t, instance
+from hask.lang import H, d, data, t, sig, annotated, constraint
+from hask.lang import caseof, m, p, _t, instance
 from hask.lang import Show, show
+from hask.lang.type_vars import *
 from hask.Data.String import String
 from hask.Data.Functor import Functor, fmap
 from hask.Control.Applicative import Applicative
@@ -25,8 +27,8 @@ class IO:
     LazyPure: [(H/ Unit >> "a").sig]
 LazyPure = IO.LazyPure
 
-@sig(H/ String >> t(IO, Unit))
-def putStr(s):
+@annotated
+def putStr(s : String) -> IO(Unit):
     """
     putStr :: String -> IO Unit
 
@@ -39,8 +41,8 @@ def putStr(s):
     return LazyPure(_putStr)
 
 
-@sig(H/ String >> t(IO, Unit))
-def putStrLn(s):
+@annotated
+def putStrLn(s : String) -> IO(Unit):
     """
     putStrLn :: String -> IO Unit
 
@@ -52,8 +54,8 @@ def putStrLn(s):
         return Star
     return LazyPure(_putStrLn)
 
-@sig(H[(Show, "a")]/ "a" >> t(IO, Unit))
-def print(x):
+@constraint(Show(a))
+def print(x : a) -> IO(Unit):
     """
     print :: Show a => a -> IO Unit
 
@@ -76,8 +78,8 @@ getContents.__doc__ = """
 """
 
 
-@sig(H/ "a" >> t(IO, "a"))
-def pure(x):
+@annotated
+def pure(x : a) -> IO(a):
     """
     pure :: a -> IO a
 
@@ -86,8 +88,8 @@ def pure(x):
     return LazyPure((lambda n: x) ** (H/ Unit >> "a"))
 
 
-@sig(H/ t(IO, "a") >> "a")
-def unsafePerformIO(io):
+@annotated
+def unsafePerformIO(io : IO(a)) -> a:
     """
     unsafePerformIO :: IO a -> a
 
@@ -96,23 +98,19 @@ def unsafePerformIO(io):
     return io.i0(Star)
 
 
-@sig(H/ (H/ "a" >> "b") >> t(IO, "a") >> Unit >> "b")
-def unsafeFmapIO(f, x, n):
-    unboxed = unsafePerformIO(x)
-    return f(unboxed)
+@annotated
+def unsafeFmapIO(f : a >> b, x : IO(a), n : Unit) -> b:
+    return f(unsafePerformIO(x))
 
 
-@sig(H[(Applicative, "f")]/ t("f", H/ "a" >> "b") >> t("f", "a") >> Unit >> "b")
-def unsafeApIO(f, x, n):
-    unboxedF = unsafePerformIO(f)
-    unboxedX = unsafePerformIO(x)
-    return unboxedF(unboxedX)
+@annotated
+def unsafeApIO(fn : IO(a >> b), x : IO(a), n : Unit) -> b:
+    return unsafePerformIO(fn)(unsafePerformIO(x))
 
 
-@sig(H/ t(IO, "a") >> (H/ "a" >> t(IO, "b")) >> Unit >> "b")
-def unsafeBindIO(x, f, n):
-    unboxed = unsafePerformIO(x)
-    return unsafePerformIO(f(unboxed))
+@annotated
+def unsafeBindIO(x : IO(a), f : a >> IO(b), n : Unit) -> b:
+    return unsafePerformIO(f(unsafePerformIO(x)))
 
 
 instance(Functor, IO).where(fmap = lambda f, x: LazyPure(unsafeFmapIO(f, x)))

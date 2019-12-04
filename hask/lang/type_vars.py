@@ -8,7 +8,7 @@ class TypeVarSyntax(str):
     def __call__(self, *args):
         return t(self, *args)
 
-reserved = "mpdt"
+reserved = "mpdtxyz"
 
 for alpha in ascii_lowercase:
     if alpha not in reserved:

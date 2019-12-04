@@ -2,8 +2,9 @@ from hask.lang import build_instance
 from hask.lang import List
 from hask.lang import instance
 from hask.Data.Functor import Functor
-from hask.lang import sig, H, t, L
+from hask.lang import sig, constraint, H, t, L
 from hask.lang.infix import Infix
+from hask.lang.type_vars import *
 
 class Applicative(Functor):
     """
@@ -27,12 +28,12 @@ class Applicative(Functor):
         build_instance(Applicative, cls, {"pure":pure, "ap":ap})
         return
 
-@sig(H[(Applicative, "f")]/ t("f", H/ "a" >> "b") >> t("f", "a") >> t("f", "b"))
-def appAp(f, x):
+@constraint(Applicative(f))
+def appAp(fn : f(a >> b), x : f(a)) -> f(b):
     """
     appAp :: Applicative f => f (a -> b) -> f a -> f b
     """
-    return Applicative[x].ap(f, x)
+    return Applicative[x].ap(fn, x)
 
 
 @Infix
