@@ -1,7 +1,7 @@
 import functools
 import operator
 
-from hask.lang import sig
+from hask.lang import sig, annotated, constraint
 from hask.lang import H
 from hask.lang import t
 from hask.lang import L
@@ -10,6 +10,7 @@ from hask.lang import build_instance
 from hask.lang import is_builtin
 from hask.lang import List
 from hask.lang import instance
+from hask.lang.type_vars import *
 
 import hask.Data.List as DL
 from hask.Data.Unit import Unit, Star
@@ -75,20 +76,20 @@ class Foldable(Typeclass):
         return
 
 
-@sig(H[(Foldable, "t")]/ (H/ "a" >> "b" >> "b") >> "b" >> t("t", "a") >> "b")
-def foldr(f, z, t):
+@constraint(Foldable(r))
+def foldr(f : a >> b >> b, z : b, t : r(a)) -> b:
     """
-    foldr :: Foldable t => (a -> b -> b) -> b -> t a -> b
+    foldr :: Foldable r => (a -> b -> b) -> b -> r a -> b
 
     Right-associative fold of a structure.
     """
     return Foldable[t].foldr(f, z, t)
 
 
-@sig(H[(Foldable, "t")]/ (H/ "a" >> "a" >> "a") >> t("t", "a") >> "a")
-def foldr1(f, t):
+@constraint(Foldable(r))
+def foldr1(f : a >> a >> a, t : r(a)) -> a:
     """
-    foldr1 :: Foldable t => (a -> a -> a) -> t a -> a
+    foldr1 :: Foldable r => (a -> a -> a) -> r a -> a
 
     A variant of foldr that has no base case, and thus may only be applied to
     non-empty structures.

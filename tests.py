@@ -5,7 +5,7 @@ import unittest
 from hask import H, sig, t, func, TypeSignatureError
 from hask import p, m, caseof, IncompletePatternError
 from hask import has_instance
-from hask import guard, c, otherwise, NoGuardMatchException
+from hask import guard, case, otherwise, NoGuardMatchException
 from hask import _
 from hask import data, d, deriving, instance
 from hask import L
@@ -1030,48 +1030,48 @@ class TestSyntax(unittest.TestCase):
         me = NoGuardMatchException
 
         self.assertTrue(~(guard(1)
-            | c(lambda x: x == 1) >> True
-            | otherwise           >> False))
+            | case(lambda x: x == 1) >> True
+            | otherwise              >> False))
         self.assertFalse(~(guard(2)
-            | c(lambda y: y == 1) >> True
-            | otherwise           >> False))
+            | case(lambda y: y == 1) >> True
+            | otherwise               >> False))
         self.assertFalse(~(guard(2)
             | otherwise >> False))
         self.assertFalse(~(guard(2)
-            | otherwise           >> False
-            | c(lambda x: x == 2) >> True))
+            | otherwise              >> False
+            | case(lambda x: x == 2) >> True))
         self.assertEqual("foo", ~(guard(1)
-            | c(lambda x: x > 1)  >> "bar"
-            | c(lambda x: x < 1)  >> "baz"
-            | c(lambda x: x == 1) >> "foo"
-            | otherwise           >> "Err"))
+            | case(lambda x: x > 1)  >> "bar"
+            | case(lambda x: x < 1)  >> "baz"
+            | case(lambda x: x == 1) >> "foo"
+            | otherwise              >> "Err"))
 
-        with self.assertRaises(ve): ~(guard(2) | c(1) >> 1)
-        with self.assertRaises(me): ~(guard(1) | c(lambda x: x == 2) >> 1)
+        with self.assertRaises(ve): ~(guard(2) | case(1) >> 1)
+        with self.assertRaises(me): ~(guard(1) | case(lambda x: x == 2) >> 1)
 
         # syntax checks
-        with self.assertRaises(se): c(lambda x: x == 10) + c(lambda _: 1)
-        with self.assertRaises(se): c(lambda x: x == 10) - c(lambda _: 1)
-        with self.assertRaises(se): c(lambda x: x == 10) * c(lambda _: 1)
-        with self.assertRaises(se): c(lambda x: x == 10) / c(lambda _: 1)
-        with self.assertRaises(se): c(lambda x: x == 10) % c(lambda _: 1)
-        with self.assertRaises(se): c(lambda x: x == 10) ** c(lambda _: 1)
-        with self.assertRaises(se): c(lambda x: x == 10) << c(lambda _: 1)
-        with self.assertRaises(se): c(lambda x: x == 10) & c(lambda _: 1)
-        with self.assertRaises(se): c(lambda x: x == 10) ^ c(lambda _: 1)
+        with self.assertRaises(se): case(lambda x: x == 10) + case(lambda _: 1)
+        with self.assertRaises(se): case(lambda x: x == 10) - case(lambda _: 1)
+        with self.assertRaises(se): case(lambda x: x == 10) * case(lambda _: 1)
+        with self.assertRaises(se): case(lambda x: x == 10) / case(lambda _: 1)
+        with self.assertRaises(se): case(lambda x: x == 10) % case(lambda _: 1)
+        with self.assertRaises(se): case(lambda x: x == 10) ** case(lambda _: 1)
+        with self.assertRaises(se): case(lambda x: x == 10) << case(lambda _: 1)
+        with self.assertRaises(se): case(lambda x: x == 10) & case(lambda _: 1)
+        with self.assertRaises(se): case(lambda x: x == 10) ^ case(lambda _: 1)
 
-        with self.assertRaises(se): c(lambda x: x == 10) >> c(lambda _: 1)
-        with self.assertRaises(se): c(lambda x: x == 10) >> 2 >> 2
-        with self.assertRaises(se): c(lambda x: x > 1) | c(lambda x: x < 1)
-        with self.assertRaises(se): otherwise >> c(lambda _: 1)
-        with self.assertRaises(se): otherwise | c(lambda x: x < 1)
-        with self.assertRaises(se): otherwise >> c(lambda _: 1)
-        with self.assertRaises(se): otherwise | c(lambda x: x < 1)
+        with self.assertRaises(se): case(lambda x: x == 10) >> case(lambda _: 1)
+        with self.assertRaises(se): case(lambda x: x == 10) >> 2 >> 2
+        with self.assertRaises(se): case(lambda x: x > 1) | case(lambda x: x < 1)
+        with self.assertRaises(se): otherwise >> case(lambda _: 1)
+        with self.assertRaises(se): otherwise | case(lambda x: x < 1)
+        with self.assertRaises(se): otherwise >> case(lambda _: 1)
+        with self.assertRaises(se): otherwise | case(lambda x: x < 1)
         with self.assertRaises(se):
-            ~(guard(2) | c(lambda x: x == 2) >> 1 | c(lambda y: y == 2))
-        with self.assertRaises(se): c(lambda x: x == 10) >> "1" >> "2"
-        with self.assertRaises(se): "1" >> c(lambda x: x == 10)
-        with self.assertRaises(se): guard(1) | c(lambda x: x > 1)
+            ~(guard(2) | case(lambda x: x == 2) >> 1 | case(lambda y: y == 2))
+        with self.assertRaises(se): case(lambda x: x == 10) >> "1" >> "2"
+        with self.assertRaises(se): "1" >> case(lambda x: x == 10)
+        with self.assertRaises(se): guard(1) | case(lambda x: x > 1)
         with self.assertRaises(se): guard(1) | (lambda x: x > 1)
         with self.assertRaises(se): ~guard(1) | (lambda x: x > 1)
         with self.assertRaises(se): ~guard(1)
@@ -2599,19 +2599,19 @@ class Test_README_Examples(unittest.TestCase):
         porridge_tempurature = 80
         self.assertEqual(
                 ~(guard(porridge_tempurature)
-                    | c(_ < 20)  >> "Porridge is too cold!"
-                    | c(_ < 90)  >> "Porridge is just right!"
-                    | c(_ < 150) >> "Porridge is too hot!"
-                    | otherwise   >> "Porridge has gone thermonuclear"
+                    | case(_ < 20)  >> "Porridge is too cold!"
+                    | case(_ < 90)  >> "Porridge is just right!"
+                    | case(_ < 150) >> "Porridge is too hot!"
+                    | otherwise     >> "Porridge has gone thermonuclear"
                 ),
                 'Porridge is just right!')
 
         def examine_password_security(password):
             analysis = ~(guard(password)
-                | c(lambda x: len(x) > 20) >> "Wow, that's one secure password"
-                | c(lambda x: len(x) < 5)  >> "You made Bruce Schneier cry"
-                | c(_ == "12345")         >> "Same combination as my luggage!"
-                | otherwise                >> "Hope it's not `password`"
+                | case(lambda x: len(x) > 20) >> "Wow, that's one secure password"
+                | case(lambda x: len(x) < 5)  >> "You made Bruce Schneier cry"
+                | case(_ == "12345")          >> "Same combination as my luggage!"
+                | otherwise                   >> "Hope it's not `password`"
             )
             return analysis
 

@@ -38,13 +38,15 @@ from .syntax import func
 from .syntax import typify
 from .syntax import NoGuardMatchException
 from .syntax import guard
-from .syntax import c
+from .syntax import case
 from .syntax import otherwise
 from .syntax import instance
 from .syntax import __
 from .syntax import _t
 from .syntax import _q
 from .syntax import _i
+
+from .type_vars import *
 
 from .lazylist import List
 from .lazylist import L

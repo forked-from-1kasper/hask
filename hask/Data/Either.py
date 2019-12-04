@@ -1,5 +1,5 @@
 from hask.lang import Read, Show
-from hask.lang import H, t, d, caseof, m, p, sig
+from hask.lang import H, t, d, caseof, m, p, sig, annotated
 from hask.lang import data, deriving, instance, L, typify
 
 from .Eq import Eq
@@ -12,8 +12,9 @@ from hask.Control.Applicative import Applicative
 from hask.Control.Monad import Monad
 
 from hask.lang.adt_syntax import ADT
+from hask.lang.type_vars import *
 
-@ADT("a", "b", deriving=[Read, Show, Eq, Ord])
+@ADT(a, b, deriving=[Read, Show, Eq, Ord])
 class Either:
     """
     `data Either a b = Left a | Right b deriving(Read, Show, Eq, Ord)`
@@ -26,8 +27,8 @@ class Either:
     to hold an error value and the `Right` constructor is used
     to hold a correct value (mnemonic: “right” also means “correct”).
     """
-    Left : "a"
-    Right : "b"
+    Left : a
+    Right : b
 Left, Right = Either.enums
 
 
@@ -65,8 +66,8 @@ def in_either(fn):
     return typify(fn, hkt=lambda x: t(Either, "aa", x))(closure_in_either)
 
 
-@sig(H/ (H/ "a" >> "c") >> (H/ "b" >> "c") >> Either("a", "b") >> "c")
-def either(fa, fb, e):
+@annotated
+def either(fa : a >> c, fb : b >> c, e : Either(a, b)) -> c:
     """
     either :: (a -> c) -> (b -> c) -> Either a b -> c
 
@@ -78,8 +79,8 @@ def either(fa, fb, e):
                 | m(Right(m.b)) >> fb(p.b))
 
 
-@sig(H/ [Either("a", "b")] >> ["a"])
-def lefts(xs):
+@annotated
+def lefts(xs : [Either(a, b)]) -> [a]:
     """
     lefts :: [Either a b] -> [a]
 
@@ -89,8 +90,8 @@ def lefts(xs):
     return L[(x[0] for x in xs if isLeft(x))]
 
 
-@sig(H/ [Either("a", "b")] >> ["b"])
-def rights(xs):
+@annotated
+def rights(xs : [Either(a, b)]) -> [b]:
     """
     rights :: [Either a b] -> [b]
 
@@ -100,8 +101,8 @@ def rights(xs):
     return L[(x[0] for x in xs if isRight(x))]
 
 
-@sig(H/ Either("a", "b") >> bool)
-def isLeft(x):
+@annotated
+def isLeft(x : Either(a, c)) -> bool:
     """
     isLeft :: Either a b -> bool
 
@@ -112,8 +113,8 @@ def isLeft(x):
                 | m(Left(m.x))  >> True)
 
 
-@sig(H/ Either("a", "b") >> bool)
-def isRight(x):
+@annotated
+def isRight(x : Either(a, b)) -> bool:
     """
     isRight :: Either a b -> bool
 
@@ -122,8 +123,8 @@ def isRight(x):
     return not isLeft(x)
 
 
-@sig(H/ [Either("a", "b")] >> (["a"], ["b"]))
-def partitionEithers(xs):
+@annotated
+def partitionEithers(xs : [Either(a, b)]) -> ([a], [b]):
     """
     partitionEithers :: [Either a b] -> ([a], [b])
 

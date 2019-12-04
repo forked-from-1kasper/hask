@@ -46,7 +46,7 @@ from hask.lang import instance
 from hask.lang import __ as _
 
 ## Guard expressions
-from hask.lang import guard, c, otherwise, NoGuardMatchException
+from hask.lang import guard, case, otherwise, NoGuardMatchException
 
 ## Lists/list comprehensions
 from hask.lang import L
@@ -66,6 +66,9 @@ from hask.lang import _i as info
 
 ## Type system/typeclasses
 from hask.lang import typeof, has_instance, Typeclass, Hask
+
+## Type variables (a, b, c, ...)
+from hask.lang.type_vars import *
 
 
 #=============================================================================#

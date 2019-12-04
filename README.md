@@ -711,9 +711,9 @@ to the syntax for pattern matching.
 
 ```python
 ~(guard(expr_to_test)
-    | c(test_1) >> return_value_1
-    | c(test_2) >> return_value_2
-    | otherwise >> return_value_3
+    | case(test_1) >> return_value_1
+    | case(test_2) >> return_value_2
+    | otherwise    >> return_value_3
 )
 ```
 
@@ -724,15 +724,15 @@ is not present), a `NoGuardMatchException` will be raised.
 Guards will also play nicely with sections:
 
 ```python
->>> from hask import guard, c, otherwise
+>>> from hask import guard, case, otherwise
 
 >>> porridge_tempurature = 80
 
 >>> ~(guard(porridge_tempurature)
-...     | c(_ < 20)  >> "Porridge is too cold!"
-...     | c(_ < 90)  >> "Porridge is just right!"
-...     | c(_ < 150) >> "Porridge is too hot!"
-...     | otherwise  >> "Porridge has gone thermonuclear"
+...     | case(_ < 20)  >> "Porridge is too cold!"
+...     | case(_ < 90)  >> "Porridge is just right!"
+...     | case(_ < 150) >> "Porridge is too hot!"
+...     | otherwise     >> "Porridge has gone thermonuclear"
 ... )
 'Porridge is just right!'
 ```
@@ -743,10 +743,10 @@ Python functions, or any other callable in your guard condition.
 ```python
 def examine_password_security(password):
     analysis = ~(guard(password)
-        | c(lambda x: len(x) > 20) >> "Wow, that's one secure password"
-        | c(lambda x: len(x) < 5)  >> "You made Bruce Schneier cry"
-        | c(_ == "12345")          >> "Same combination as my luggage!"
-        | otherwise                >> "Hope it's not 'password'"
+        | case(lambda x: len(x) > 20) >> "Wow, that's one secure password"
+        | case(lambda x: len(x) < 5)  >> "You made Bruce Schneier cry"
+        | case(_ == "12345")          >> "Same combination as my luggage!"
+        | otherwise                   >> "Hope it's not 'password'"
     )
     return analysis
 

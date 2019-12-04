@@ -822,9 +822,9 @@ class __guard_test__(Syntax):
     Usage:
 
     ~(guard(<expr to test>)
-        | c(<test_fn_1>) >> <return_value_1>
-        | c(<test_fn_2>) >> <return_value_2>
-        | otherwise      >> <return_value_3>
+        | case(<test_fn_1>) >> <return_value_1>
+        | case(<test_fn_2>) >> <return_value_2>
+        | otherwise         >> <return_value_3>
     )
 
     See help(guard) for more details.
@@ -928,24 +928,24 @@ class guard(__unmatched_guard__):
     Usage:
 
     ~(guard(<expr to test>)
-        | c(<test_fn_1>) >> <return_value_1>
-        | c(<test_fn_2>) >> <return_value_2>
+        | case(<test_fn_1>) >> <return_value_1>
+        | case(<test_fn_2>) >> <return_value_2>
         | otherwise      >> <return_value_3>
     )
 
     Examples:
 
     ~(guard(8)
-         | c(lambda x: x < 5) >> "less than 5"
-         | c(lambda x: x < 9) >> "less than 9"
+         | case(lambda x: x < 5) >> "less than 5"
+         | case(lambda x: x < 9) >> "less than 9"
          | otherwise          >> "unsure"
     )
 
     # Using guards with sections. See help(__) for information on sections.
     ~(guard(20)
-        | c(__ > 10)  >> 20
-        | c(__ == 10) >> 10
-        | c(__ > 5)   >> 5
+        | case(__ > 10)  >> 20
+        | case(__ == 10) >> 10
+        | case(__ > 5)   >> 5
         | otherwise   >> 0)
 
     Args:
@@ -962,8 +962,8 @@ class guard(__unmatched_guard__):
         raise self.invalid_syntax
 
 
-c = __guard_test__
-otherwise = c(lambda _: True)
+case = __guard_test__
+otherwise = case(lambda _: True)
 
 
 #=============================================================================#
