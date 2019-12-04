@@ -10,9 +10,10 @@ from hask.Control.Monad import Monad
 
 from hask.lang.adt_syntax import ADT
 from hask.lang.annotations import annotated
+from hask.lang.type_vars import *
 
 
-@ADT("a", deriving=[Read, Show, Eq, Ord])
+@ADT(a, deriving=[Read, Show, Eq, Ord])
 class Maybe:
     """
     ``data Maybe a = Nothing | Just a deriving(Show, Eq, Ord)``
@@ -29,7 +30,7 @@ class Maybe:
     A richer error monad can be built using the ``Either`` type.
     """
     Nothing : []
-    Just : "a"
+    Just : a
 Nothing, Just = Maybe.enums
 
 instance(Functor, Maybe).where(
@@ -68,7 +69,7 @@ def in_maybe(fn):
 
 
 @annotated
-def maybe(default: "b", f: H/ "a" >> "b", maybe_a: t(Maybe, "a")) -> "b":
+def maybe(default: b, f: a >> b, maybe_a: Maybe(a)) -> b:
     """
     ``maybe :: b -> (a -> b) -> Maybe a -> b``
 
@@ -80,58 +81,58 @@ def maybe(default: "b", f: H/ "a" >> "b", maybe_a: t(Maybe, "a")) -> "b":
     return default if maybe_a == Nothing else f(maybe_a[0])
 
 
-@sig(H/ t(Maybe, "a") >> bool)
-def isJust(a):
+@annotated
+def isJust(a : Maybe(a)) -> bool:
     return not isNothing(a)
 
 
-@sig(H/ t(Maybe, "a")  >> bool)
-def isNothing(a):
+@annotated
+def isNothing(a : Maybe(a)) -> bool:
     return ~(caseof(a)
                 | m(Nothing)   >> True
                 | m(Just(m.x)) >> False)
 
 
-@sig(H/ t(Maybe, "a") >> "a")
-def fromJust(x):
+@annotated
+def fromJust(x : Maybe(a)) -> a:
     if isJust(x):
         return x[0]
     raise ValueError("Cannot call fromJust on Nothing.")
 
 
-@sig(H/ ["a"] >> t(Maybe, "a"))
-def listToMaybe(a):
-    return ~(caseof(a)
+@annotated
+def listToMaybe(xs : [a]) -> Maybe(a):
+    return ~(caseof(xs)
                 | m(m.a ^ m.b) >> Just(p.a)
                 | m(m.a)       >> Nothing)
 
 
-@sig(H/ t(Maybe, "a") >> ["a"])
-def maybeToList(a):
+@annotated
+def maybeToList(xs : Maybe(a)) -> [a]:
     """
     ``maybeToList :: Maybe a -> [a]``
 
     The maybeToList function returns an empty list when given ``Nothing`` or a
     singleton list when not given ``Nothing``.
     """
-    return ~(caseof(a)
+    return ~(caseof(xs)
                 | m(Nothing)   >> L[[]]
                 | m(Just(m.x)) >> L[[p.x]])
 
 
-@sig(H/ [t(Maybe, "a")] >> ["a"])
-def catMaybes(a):
+@annotated
+def catMaybes(xs : [Maybe(a)]) -> [a]:
     """
     ``catMaybes :: [Maybe a] -> [a]``
 
     The catMaybes function takes a list of Maybes and returns a list of all the
     ``Just`` values.
     """
-    return L[(fromJust(item) for item in a if isJust(item))]
+    return L[(fromJust(item) for item in xs if isJust(item))]
 
 
-@sig(H/ (H/ "a" >> t(Maybe, "b")) >> ["a"] >> ["b"])
-def mapMaybe(f, la):
+@annotated
+def mapMaybe(f : a >> Maybe(b), la : [a]) -> [b]:
     """
     ``mapMaybe :: (a -> Maybe b) -> [a] -> [b]``
 

@@ -1,10 +1,11 @@
 from hask.lang import TypedFunc, Typeclass, is_builtin
 from hask.lang import build_instance, List
-from hask.lang import L, H, sig, t
+from hask.lang import L, H, sig, constraint, t
 from hask.lang import instance, deriving, Show, data, d
 from hask.Data.Function import const, comp
 from hask.Data.Unit import Unit, Star
 from hask.lang.infix import Infix
+from hask.lang.type_vars import *
 import builtins
 
 class Functor(Typeclass):
@@ -40,17 +41,17 @@ def map(f, x):
     """
     return Functor[x].fmap(f, x)
 
-@sig(H[(Functor, "f")]/ (H/ "a" >> "b") >> t("f", "a") >> t("f", "b"))
-def fmap(f, x):
+@constraint(Functor(f))
+def fmap(fn : a >> b, x : f(a)) -> f(b):
     """
     fmap :: Functor f => (a -> b) -> (f a -> f b)
 
     Maps function over functor.
     """
-    return Functor[x].fmap(f, x)
+    return Functor[x].fmap(fn, x)
 
-@sig(H[(Functor, "f")]/ t("f", "a") >> t("f", Unit))
-def void(x):
+@constraint(Functor(f))
+def void(x : f(a)) -> f(Unit):
     return fmap(const(Star), x)
 
 instance(Functor, List).where(

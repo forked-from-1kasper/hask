@@ -1,5 +1,6 @@
-from hask.lang import H, caseof, sig
+from hask.lang import H, caseof, sig, annotated
 from hask.lang.adt_syntax import ADT
+from hask.lang.type_vars import *
 
 @ADT()
 class Void:
@@ -11,8 +12,8 @@ class Void:
     """
     pass
 
-@sig(H/ Void >> "a")
-def absurd(v):
+@annotated
+def absurd(v : Void) -> a:
     """
     ``absurd :: Void -> a``
 

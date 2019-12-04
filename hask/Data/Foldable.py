@@ -97,20 +97,20 @@ def foldr1(f : a >> a >> a, t : r(a)) -> a:
     return Foldable[t].foldr(f, t)
 
 
-@sig(H[(Foldable, "t")]/ (H/ "a" >> "a" >> "b") >> "b" >> t("t", "a") >> "b")
-def foldl(f, z, t):
+@constraint(Foldable(r))
+def foldl(f : a >> a >> b, z : b, t : r(a)) -> b:
     """
-    foldl :: Foldable t => (b -> a -> b) -> b -> t a -> b
+    foldl :: Foldable r => (b -> a -> b) -> b -> r a -> b
 
     Left-associative fold of a structure.
     """
     return Foldable[t].foldl(f, z, t)
 
 
-@sig(H[(Foldable, "t")]/ (H/ "a" >> "a" >> "b") >> "b" >> t("t", "a") >> "b")
-def foldl_(f, z, t):
+@constraint(Foldable(r))
+def foldl_(f : a >> a >> b, z : b, t : r(a)) -> b:
     """
-    foldl' :: Foldable t => (b -> a -> b) -> b -> t a -> b
+    foldl' :: Foldable r => (b -> a -> b) -> b -> r a -> b
 
     Left-associative fold of a structure. but with strict application of the
     operator.
@@ -118,10 +118,10 @@ def foldl_(f, z, t):
     return Foldable[t].foldl_(f, z, t)
 
 
-@sig(H[(Foldable, "t")]/ (H/ "a" >> "a" >> "a") >> t("t", "a") >> "a")
-def foldl1(f, t):
+@constraint(Foldable(r))
+def foldl1(f : a >> a >> a, t : r(a)) -> a:
     """
-    foldl1 :: Foldable t => (a -> a -> a) -> t a -> a
+    foldl1 :: Foldable r => (a -> a -> a) -> r a -> a
 
     A variant of foldl that has no base case, and thus may only be applied to
     non-empty structures.
@@ -129,20 +129,20 @@ def foldl1(f, t):
     Foldable[t].foldl1(f, t)
 
 
-@sig(H[(Foldable, "t")]/ t("t", "a") >> ["a"])
-def toList(t):
+@constraint(Foldable(r))
+def toList(t : r(a)) -> [a]:
     """
-    toList :: Foldable t => t a -> [a]
+    toList :: Foldable r => r a -> [a]
 
     List of elements of a structure, from left to right.
     """
     return Foldable[t].toList(t)
 
 
-@sig(H[(Foldable, "t")]/ t("t", "a") >> bool)
-def null(t):
+@constraint(Foldable(r))
+def null(t : r(a)) -> bool:
     """
-    null :: Foldable t => t a -> Bool
+    null :: Foldable r => r a -> Bool
     Source
 
     Test whether the structure is empty.
@@ -150,60 +150,60 @@ def null(t):
     return Foldable[t].null(t)
 
 
-@sig(H[(Foldable, "t")]/ t("t", "a") >> int)
-def length(t):
+@constraint(Foldable(r))
+def length(t : r(a)) -> int:
     """
-    length :: Foldable t => t a -> int
+    length :: Foldable r => r a -> int
 
     Returns the size/length of a finite structure as an int.
     """
     return Foldable[t].length(t)
 
 
-@sig(H[(Foldable, "t"), (Eq, "a")]/ t("t", "a") >> "a")
-def elem(a, t):
+@constraint(Foldable(r), Eq(a))
+def elem(x : a, t : r(a)) -> bool:
     """
-    elem :: (Foldable t, Eq a) => a -> t a -> bool
+    elem :: (Foldable r, Eq a) => a -> r a -> bool
 
     Does the element occur in the structure?
     """
     return Foldable[t].elem(t)
 
 
-@sig(H[(Foldable, "t"), (Ord, "a")]/ t("t", "a") >> "a")
-def maximum(t):
+@constraint(Foldable(r), Ord(a))
+def maximum(t : r(a)) -> a:
     """
-    maximum :: (Foldable t, forall a. Ord a) => t a -> a
+    maximum :: (Foldable r, forall a. Ord a) => r a -> a
 
     The largest element of a non-empty structure.
     """
     return Foldable[t].maximum(t)
 
 
-@sig(H[(Foldable, "t"), (Ord, "a")]/ t("t", "a") >> "a")
-def minimum(t):
+@constraint(Foldable(r), Ord(a))
+def minimum(t : r(a)) -> a:
     """
-    minimum :: (Foldable t, forall a. Ord a) => t a -> a
+    minimum :: (Foldable r, forall a. Ord a) => r a -> a
 
     The least element of a non-empty structure.
     """
     return Foldable[t].minimum(t)
 
 
-@sig(H[(Foldable, "t"), (Num, "a")]/ t("t", "a") >> "a")
-def sum(t):
+@constraint(Foldable(t), Num(a))
+def sum(t : r(a)) -> a:
     """
-    sum :: (Foldable t, Num a) => t a -> a
+    sum :: (Foldable r, Num a) => r a -> a
 
     The sum function computes the sum of the numbers of a structure.
     """
     return Foldable[t].sum(t)
 
 
-@sig(H[(Foldable, "t"), (Num, "a")]/ t("t", "a") >> "a")
-def product(t):
+@constraint(Foldable(t), Num(a))
+def product(t : r(a)) -> a:
     """
-    product :: (Foldablet, Num a) => t a -> a
+    product :: (Foldable r, Num a) => r a -> a
 
     The product function computes the product of the numbers of a structure.
     """
@@ -214,11 +214,10 @@ def product(t):
 # Special biased folds
 
 
-@sig(H[(Foldable, "t"), (Monad, "m")]/ (H/ "a" >> "b" >> t("m", "b")) >>
-    "b" >> t("t", "a") >> t("m", "b"))
-def foldlM(f, b, ta):
+@constraint(Foldable(r), Monad(e))
+def foldlM(f : a >> b >> e(b), x : b, ra : r(a)) -> e(b):
     """
-    foldrM :: (Foldable t, Monad m) => (a -> b -> m b) -> b -> t a -> m b
+    foldrM :: (Foldable r, Monad e) => (a -> b -> e b) -> b -> r a -> e b
 
     Monadic fold over the elements of a structure, associating to the right,
     i.e. from right to left.
@@ -226,11 +225,10 @@ def foldlM(f, b, ta):
     raise NotImplementedError()
 
 
-@sig(H[(Foldable, "t"), (Monad, "m")]/ (H/ "b" >> "a" >> t("m", "b")) >>
-    "b" >> t("t", "a") >> t("m", "b"))
-def foldrM(f, b, ta):
+@constraint(Foldable(r), Monad(e))
+def foldrM(f : b >> a >> e(b), x : b, ra : r(a)) -> e(b):
     """
-    foldlM :: (Foldable t, Monad m) => (b -> a -> m b) -> b -> t a -> m b
+    foldlM :: (Foldable r, Monad n) => (b -> a -> e b) -> b -> r a -> e b
 
     Monadic fold over the elements of a structure, associating to the left,
     i.e. from left to right.
@@ -242,11 +240,10 @@ def foldrM(f, b, ta):
 # Applicative actions
 
 
-@sig(H[(Foldable, "t"), (Applicative, "f")]/ (H/ "a" >> t("f", "b")) >>
-        t("f", "a") >> t("f", Unit))
-def traverse_(f, t):
+@constraint(Foldable(r), Applicative(f))
+def traverse_(fn : a >> f(b), t : r(a)) -> f(Unit):
     """
-    traverse_ :: (Foldable t, Applicative f) => (a -> f b) -> t a -> f ()
+    traverse_ :: (Foldable r, Applicative f) => (a -> f b) -> r a -> f ()
 
     Map each element of a structure to an action, evaluate these actions from
     left to right, and ignore the results. For a version that doesn't ignore
@@ -255,11 +252,10 @@ def traverse_(f, t):
     raise NotImplementedError()
 
 
-@sig(H[(Foldable, "t"), (Applicative, "f")]/ t("f", "a") >>
-        (H/ "a" >> t("f", "b")) >> t("f", Unit))
-def for_(t, f):
+@constraint(Foldable(r), Applicative(f))
+def for_(t : r(a), f : a >> f(b)) -> f(Unit):
     """
-    for_ :: (Foldable t, Applicative f) => t a -> (a -> f b) -> f ()
+    for_ :: (Foldable r, Applicative f) => r a -> (a -> f b) -> f ()
 
     for_ is traverse_ with its arguments flipped. For a version that doesn't
     ignore the results see for.
@@ -267,11 +263,10 @@ def for_(t, f):
     return traverse(f, t)
 
 
-@sig(H[(Foldable, "t"), (Applicative, "f")]/ t("t", t("m", "a")) >>
-        t("f", Unit))
-def sequenceA_(t):
+@constraint(Foldable(r), Applicative(f))
+def sequenceA_(t : r(f(a))) -> f(Unit):
     """
-    sequenceA_ :: (Foldable t, Applicative f) => t (f a) -> f ()
+    sequenceA_ :: (Foldable r, Applicative f) => r (f a) -> f ()
 
     Evaluate each action in the structure from left to right, and ignore the
     results. For a version that doesn't ignore the results see sequenceA.
@@ -283,11 +278,10 @@ def sequenceA_(t):
 # Monadic actions
 
 
-@sig(H[(Foldable, "t"), (Monad, "m")]/ (H/ "a" >> t("m", "b")) >>
-        t("m", "a") >> t("m", Unit))
-def mapM_(f, t):
+@constraint(Foldable(r), Monad(e))
+def mapM_(fn : a >> e(b), t : r(a)) -> e(Unit):
     """
-    mapM_ :: (Foldable t, Monad m) => (a -> m b) -> t a -> m ()
+    mapM_ :: (Foldable r, Monad e) => (a -> e b) -> r a -> e ()
 
     Map each element of a structure to a monadic action, evaluate these actions
     from left to right, and ignore the results. For a version that doesn't
@@ -295,14 +289,13 @@ def mapM_(f, t):
 
     As of base 4.8.0.0, mapM_ is just traverse_, specialized to Monad.
     """
-    return traverse_(f, t)
+    return traverse_(fn, t)
 
 
-@sig(H[(Foldable, "t"), (Monad, "m")]/ t("m", "a") >>
-        (H/ "a" >> t("m", "b")) >> t("m", Unit))
-def forM_(t, f):
+@constraint(Foldable(r), Monad(e))
+def forM_(t : r(a), f : a >> e(b)) -> e(Unit):
     """
-    forM_ :: (Foldable t, Monad m) => t a -> (a -> m b) -> m ()
+    forM_ :: (Foldable r, Monad e) => r a -> (a -> e b) -> e ()
 
     forM_ is mapM_ with its arguments flipped. For a version that doesn't
     ignore the results see forM.
@@ -312,10 +305,10 @@ def forM_(t, f):
     return mapM_(f, t)
 
 
-@sig(H[(Foldable, "t"), (Monad, "m")]/ t("t", t("m", "a")) >> t("m", Unit))
-def sequence_(t):
+@constraint(Foldable(r), Monad(e))
+def sequence_(t : r(e(a))) -> e(Unit):
     """
-    sequence_ :: (Foldable t, Monad m) => t (m a) -> m ()
+    sequence_ :: (Foldable r, Monad e) => r (e a) -> e ()
 
     Evaluate each monadic action in the structure from left to right, and
     ignore the results. For a version that doesn't ignore the results see
@@ -330,20 +323,20 @@ def sequence_(t):
 # Specialized folds
 
 
-@sig(H[(Foldable, "t")]/ t("t", ["a"]) >> ["a"])
-def concat(t):
+@constraint(Foldable(r))
+def concat(xs : r([a])) -> [a]:
     """
-    concat :: Foldable t => t [a] -> [a]
+    concat :: Foldable r => r [a] -> [a]
 
     The concatenation of all the elements of a container of lists.
     """
-    return DL.concat(toList(t))
+    return DL.concat(toList(xs))
 
 
-@sig(H[(Foldable, "t")]/ (H/ "a" >> ["b"]) >> t("t", "a") >> ["b"])
-def concatMap(f, t):
+@constraint(Foldable(r))
+def concatMap(f : a >> [b], t : r(a)) -> [b]:
     """
-    concatMap :: Foldable t => (a -> [b]) -> t a -> [b]
+    concatMap :: Foldable r => (a -> [b]) -> r a -> [b]
 
     Map a function over all the elements of a container and concatenate the
     resulting lists.
@@ -351,10 +344,10 @@ def concatMap(f, t):
     return DL.concatMap(f, toList(t))
 
 
-@sig(H[(Foldable, "t")]/ t("t", bool) >> bool)
-def and_(t):
+@constraint(Foldable(r))
+def and_(t : r(bool)) -> bool:
     """
-    and :: Foldable t => t bool -> bool
+    and :: Foldable r => r bool -> bool
 
     and returns the conjunction of a container of Bools. For the result to be
     True, the container must be finite; False, however, results from a False
@@ -363,8 +356,8 @@ def and_(t):
     return DL.and_(toList(t))
 
 
-@sig(H[(Foldable, "t")]/ t("t", bool) >> bool)
-def or_(t):
+@constraint(Foldable(r))
+def or_(t : r(bool)) -> bool:
     """
     or :: Foldable t => t bool -> bool
 
@@ -375,30 +368,30 @@ def or_(t):
     return DL.or_(toList(t))
 
 
-@sig(H[(Foldable, "t")]/ (H/ "a" >> bool) >> t("t", "a") >> bool)
-def any_(f, t):
+@constraint(Foldable(r))
+def any_(f : a >> bool, t : r(a)) -> bool:
     """
-    any :: Foldable t => (a -> bool) -> t a -> bool
+    any :: Foldable r => (a -> bool) -> r a -> bool
 
     Determines whether any element of the structure satisfies the predicate.
     """
     return DL.any_(toList(t))
 
 
-@sig(H[(Foldable, "t")]/ (H/ "a" >> bool) >> t("t", "a") >> bool)
-def all_(f, t):
+@constraint(Foldable(r))
+def all_(f : a >> bool, t : r(a)) -> bool:
     """
-    all :: Foldable t => (a -> bool) -> t a -> bool
+    all :: Foldable r => (a -> bool) -> r a -> bool
 
     Determines whether all elements of the structure satisfy the predicate.
     """
     return DL.all_(toList(t))
 
 
-@sig(H[(Foldable, "t")]/ (H/ "a" >> "a" >> Ordering) >> t("t", "a") >> "a")
-def maximumBy_(f, t):
+@constraint(Foldable(r))
+def maximumBy_(f : a >> a >> Ordering, t : r(a)) -> a:
     """
-    maximumBy :: Foldable t => (a -> a -> Ordering) -> t a -> a
+    maximumBy :: Foldable r => (a -> a -> Ordering) -> r a -> a
 
     The largest element of a non-empty structure with respect to the given
     comparison function.
@@ -406,10 +399,10 @@ def maximumBy_(f, t):
     return DL.maximumBy(toList(t))
 
 
-@sig(H[(Foldable, "t")]/ (H/ "a" >> "a" >> Ordering) >> t("t", "a") >> "a")
-def minimumBy_(f, t):
+@constraint(Foldable(r))
+def minimumBy_(f : a >> a >> Ordering, t : r(a)) -> a:
     """
-    minimumBy :: Foldable t => (a -> a -> Ordering) -> t a -> a
+    minimumBy :: Foldable r => (a -> a -> Ordering) -> r a -> a
 
     The least element of a non-empty structure with respect to the given
     comparison function.
@@ -421,20 +414,20 @@ def minimumBy_(f, t):
 # Searches
 
 
-@sig(H[(Foldable, "t"), (Eq, "a")]/ "a" >> t("t", "a") >> bool)
-def notElem(a, t):
+@constraint(Foldable(r), Eq(a))
+def notElem(x : a, t : r(a)) -> bool:
     """
-    notElem :: (Foldable t, Eq a) => a -> t a -> bool
+    notElem :: (Foldable r, Eq a) => a -> r a -> bool
 
     notElem is the negation of elem.
     """
-    return not elem(a, t)
+    return not elem(x, t)
 
 
-@sig(H[(Foldable, "t")]/ (H/ "a" >> bool) >> t("t", "a") >> t(Maybe, "a"))
-def find(f, t):
+@constraint(Foldable(r))
+def find(f : a >> bool, t : r(a)) -> Maybe(a):
     """
-    find :: Foldable t => (a -> bool) -> t a -> Maybe a
+    find :: Foldable r => (a -> bool) -> r a -> Maybe a
 
     The find function takes a predicate and a structure and returns the
     leftmost element of the structure matching the predicate, or Nothing if
