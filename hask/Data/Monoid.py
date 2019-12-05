@@ -1,7 +1,7 @@
 from hask.lang import Typeclass
 from hask.lang import build_instance
-from hask.lang import H
-from hask.lang import sig
+from hask.lang import H, sig, constraint
+from hask.lang.type_vars import *
 
 
 class Monoid(Typeclass):
@@ -22,8 +22,8 @@ class Monoid(Typeclass):
         return
 
 
-@sig(H[(Monoid, "m")]/ "m" >> "m" >> "m")
-def mappend(x, y):
+@constraint(Monoid(a))
+def mappend(x : a, y : a) -> a:
     """
     mappend :: (Monoid m) => m -> m -> m
 
@@ -32,8 +32,8 @@ def mappend(x, y):
     return Monoid[x].mappend(x, y)
 
 
-@sig(H[(Monoid, "m")]/ ["m"] >> "m")
-def mconcat(xs):
+@constraint(Monoid(a))
+def mconcat(xs : [a]) -> a:
     """
     mconcat :: (Monoid m) => [m] -> m
 

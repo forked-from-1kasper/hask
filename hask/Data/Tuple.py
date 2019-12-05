@@ -1,9 +1,9 @@
-from hask.lang import H
-from hask.lang import sig
+from hask.lang import H, sig, annotated
+from hask.lang.type_vars import *
 
 
-@sig(H/ ("a", "b") >> "a")
-def fst(tup):
+@annotated
+def fst(tup : (a, b)) -> a:
     """
     ``fst :: (a, b) -> a``
 
@@ -13,8 +13,8 @@ def fst(tup):
     return x
 
 
-@sig(H/ ("a", "b") >> "b")
-def snd(tup):
+@annotated
+def snd(tup : (a, b)) -> b:
     """
     ``snd :: (a, b) -> b``
 
@@ -24,8 +24,8 @@ def snd(tup):
     return y
 
 
-@sig(H/ (H/ ("a", "b") >> "c") >> "a" >> "b" >> "c")
-def curry(tup_fn, x, y):
+@annotated
+def curry(tup_fn : H/ (a, b) >> c, x : a, y : b) -> c:
     """
     ``curry :: ((a, b) -> c) -> a -> b -> c``
 
@@ -34,8 +34,8 @@ def curry(tup_fn, x, y):
     return tup_fn((x, y))
 
 
-@sig(H/ (H/ "a" >> "b" >> "c") >> ("a", "b") >> "c")
-def uncurry(fn, tup):
+@annotated
+def uncurry(fn : a >> b >> c, tup : (a, b)) -> c:
     """
     ``uncurry :: (a -> b -> c) -> (a, b) -> c``
 
@@ -44,8 +44,8 @@ def uncurry(fn, tup):
     return fn(fst(tup), snd(tup))
 
 
-@sig(H/ ("a", "b") >> ("b", "a") )
-def swap(tup):
+@annotated
+def swap(tup : (a, b)) -> (b, a):
     """
     ``swap :: (a, b) -> (b, a)``
 

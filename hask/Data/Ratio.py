@@ -1,6 +1,7 @@
-from hask.lang import sig
+from hask.lang import sig, constraint
 from hask.lang import H
 from hask.lang import t
+from hask.lang.type_vars import *
 
 
 # Current implementation is just a wrapper around Python's Fraction. This is
@@ -16,8 +17,8 @@ from .Num import toRatio
 from .Num import toRational
 
 
-@sig(H[(Integral, "a")]/ t(Ratio, "a") >> "a")
-def numerator(ratio):
+@constraint(Integral(a))
+def numerator(ratio : Ratio(a)) -> a:
     """
     ``numerator :: Integral a => Ratio a -> a``
 
@@ -27,8 +28,8 @@ def numerator(ratio):
     return toRatio(ratio[0], ratio[1])[0]
 
 
-@sig(H[(Integral, "a")]/ t(Ratio, "a") >> "a")
-def denominator(ratio):
+@constraint(Integral(a))
+def denominator(ratio : Ratio(a)) -> a:
     """
     ``denominator :: Integral a => Ratio a -> a``
 
@@ -38,8 +39,8 @@ def denominator(ratio):
     return toRatio(ratio[0], ratio[1])[1]
 
 
-@sig(H[(RealFrac, "a")]/ "a" >> "a" >> Rational)
-def approxRational(x, epsilon):
+@constraint(RealFrac(a))
+def approxRational(x : a, epsilon : a) -> Rational:
     """
     ``approxRational :: RealFrac a => a -> a -> Rational``
 

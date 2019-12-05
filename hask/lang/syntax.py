@@ -930,7 +930,7 @@ class guard(__unmatched_guard__):
     ~(guard(<expr to test>)
         | case(<test_fn_1>) >> <return_value_1>
         | case(<test_fn_2>) >> <return_value_2>
-        | otherwise      >> <return_value_3>
+        | otherwise         >> <return_value_3>
     )
 
     Examples:
@@ -938,7 +938,7 @@ class guard(__unmatched_guard__):
     ~(guard(8)
          | case(lambda x: x < 5) >> "less than 5"
          | case(lambda x: x < 9) >> "less than 9"
-         | otherwise          >> "unsure"
+         | otherwise             >> "unsure"
     )
 
     # Using guards with sections. See help(__) for information on sections.
@@ -946,7 +946,7 @@ class guard(__unmatched_guard__):
         | case(__ > 10)  >> 20
         | case(__ == 10) >> 10
         | case(__ > 5)   >> 5
-        | otherwise   >> 0)
+        | otherwise      >> 0)
 
     Args:
         value: the value being tested in the guard expression
