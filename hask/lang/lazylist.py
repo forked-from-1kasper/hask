@@ -1,4 +1,4 @@
-import collections
+import collections.abc
 import itertools
 import sys
 
@@ -163,7 +163,7 @@ instance(Enum, str).where(fromEnum=ord, toEnum=chr)
 # List
 
 
-class List(collections.Sequence, Hask):
+class List(collections.abc.Sequence, Hask):
     """
     Statically typed lazy sequence datatype.
 
