@@ -506,9 +506,9 @@ their fields to temporary variables.
 
 ```python
 def default_to_zero(x):
-    return ~(caseof(x)
-                | m(Just(m.x)) >> p.x
-                | m(Nothing)   >> 0)
+    match x:
+        case Just(x): return x
+        case Nothing: return 0
 
 
 >>> default_to_zero(Just(27))

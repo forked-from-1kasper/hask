@@ -377,6 +377,10 @@ class TypedFunc(Hask):
 
         * is the function compose operator, equivalent to . in Haskell
         """
+
+        if isinstance(fn, TypeConstructor):
+            return self.__mul__(fn.fun)
+
         if not isinstance(fn, TypedFunc):
             return fn.__rmul__(self)
 
@@ -388,6 +392,14 @@ class TypedFunc(Hask):
         newargs = [fn.fn_args[0]] + self.fn_args[1:]
 
         return TypedFunc(composed_fn, fn_args=newargs, fn_type=newtype)
+
+
+class TypeConstructor(type):
+    def __mod__(self, arg):
+        return self.fun.__mod__(arg)
+
+    def __mul__(self, fn):
+        return self.fun.__mul__(fn)
 
 
 #=============================================================================#
@@ -463,10 +475,12 @@ def make_data_const(name, fields, type_constructor, slot_num):
         The new data constructor
     """
     # create the data constructor
-    base = namedtuple(name, ["i%s" % i for i, _ in enumerate(fields)])
-    cls = type(name, (type_constructor, base), dict(__new__=base.__new__))
+    slots = ["i%s" % i for i, _ in enumerate(fields)]
+    base = namedtuple(name, slots)
+    cls = TypeConstructor(name, (type_constructor, base), dict(__new__=base.__new__))
     cls.__type_constructor__ = type_constructor
     cls.__ADT_slot__ = slot_num
+    cls.__match_args__ = tuple(slots)
 
     if len(fields) == 0:
         # If the data constructor takes no arguments, create an instance of it
@@ -527,7 +541,7 @@ def build_ADT(typename, typeargs, data_constructors, to_derive):
         return_type = TypeSignatureHKT(newtype, typeargs)
         sig = TypeSignature(list(dc_fields) + [return_type], [])
         sig_args = build_sig(sig, {})
-        dcons[i] = TypedFunc(dcons[i], sig_args, make_fn_type(sig_args))
+        dcons[i].fun = TypedFunc(dcons[i], sig_args, make_fn_type(sig_args))
     return tuple([newtype,] + dcons)
 
 
