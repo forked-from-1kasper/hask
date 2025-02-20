@@ -28,7 +28,7 @@ class Lam(object):
         self.body = body
 
     def __str__(self):
-        return "(\{v} -> {body})".format(v=self.v, body=self.body)
+        return "(\\{v} -> {body})".format(v=self.v, body=self.body)
 
 
 class Var(object):
