@@ -3,31 +3,29 @@ from hask.lang import H, t, sig
 from hask.lang import Read, Show, Eq, Ord
 from hask.lang.type_system import TypeMeta
 
-def ADT(*typeargs, deriving=[]):
-    def __new__(cls, *args):
-        return t(cls, *args)
-
-    def generator(cls):
+def ADT(*typeargs, deriving = []):
+    def retfun(cls):
         for obj in deriving:
             if not isinstance(obj, TypeMeta):
-                raise TypeError('“%a” is not typeclass' % obj)
+                raise TypeError('“%a” is not typeclass'.format(obj))
 
         annotations = getattr(cls, '__annotations__', {})
-        data_constructors = [(key, annotations[key]) for key in annotations]
+        data_constructors = list(annotations.items())
 
-        t = build_ADT(typename = cls.__name__,
-                      typeargs = typeargs,
-                      data_constructors = data_constructors,
-                      to_derive = deriving)
-        res, *constructors = t
+        klass, *ctors = build_ADT(
+            typename = cls.__name__,
+            typeargs = typeargs,
+            data_constructors = data_constructors,
+            to_derive = deriving
+        )
 
-        for (constructor, value) in zip(annotations, constructors):
-            setattr(res, constructor, value)
+        for ctor, value in zip(annotations, ctors):
+            setattr(klass, ctor, value)
 
-        setattr(res, 'enums', constructors)
-        setattr(res, '__new__', __new__)
-        setattr(res, '__doc__', getattr(cls, '__doc__', ''))
+        klass.enums = ctors
+        klass.__new__ = t
+        klass.__doc__ = getattr(cls, '__doc__', '')
 
-        return res
+        return klass
 
-    return generator
+    return retfun
