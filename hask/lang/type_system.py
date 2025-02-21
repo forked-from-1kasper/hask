@@ -204,6 +204,9 @@ def typeof(obj):
     if isinstance(obj, Hask):
         return obj.__type__()
 
+    elif isinstance(obj, TypeConstructor):
+        return obj.fn_type
+
     elif isinstance(obj, tuple):
         return Tuple(list(map(typeof, obj)))
 
@@ -329,77 +332,84 @@ def build_sig(type_signature, var_dict=None):
     return [build_sig_arg(i, cons, var_dict) for i in args]
 
 
-class TypedFunc(Hask):
-    """
-    Partially applied, statically typed function wrapper.
-    """
-    def __init__(self, fn, fn_args, fn_type):
-        self.__doc__ = fn.__doc__
-        self.func = fn
-        self.fn_args = fn_args
-        self.fn_type = fn_type
-        return
-
-    def __type__(self):
-        return self.fn_type
-
-    def __call__(self, *args, **kwargs):
+class TypedCallable:
+    def __call__(o, *w, **kw):
         # the environment contains the type of the function and the types
         # of the arguments
-        env = {id(self):self.fn_type}
-        env.update({id(arg):typeof(arg) for arg in args})
-        ap = Var(id(self))
+        rho = {id(x) : typeof(x) for x in w}
+        rho[id(o)] = o.fn_type
 
-        for arg in args:
-            if isinstance(arg, Undefined):
-                return arg
-            ap = App(ap, Var(id(arg)))
-        result_type = analyze(ap, env)
+        apexpr = Var(id(o))
 
-        if len(self.fn_args) - 1 == len(args):
-            result = self.func(*args)
-            unify(result_type, typeof(result))
-            return result
-        return TypedFunc(functools.partial(self.func, *args, **kwargs),
-                         self.fn_args[len(args):], result_type)
+        for argval in w:
+            if isinstance(argval, Undefined):
+                return argval
 
-    def __mod__(self, arg):
-        """
-        (%) :: (a -> b) -> a -> b
+            apexpr = App(apexpr, Var(id(argval)))
 
-        % is the apply operator, equivalent to $ in Haskell
-        """
-        return self.__call__(arg)
+        rettyp = analyze(apexpr, rho)
 
-    def __mul__(self, fn):
+        if len(o.fn_args) - 1 == len(w):
+            retval = o.func(*w, **kw)
+            unify(rettyp, typeof(retval))
+
+            return retval
+
+        return TypedFunc(
+            functools.partial(o.func, *w, **kw),
+            o.fn_args[len(w):], rettyp
+        )
+
+    def __mul__(f, g):
         """
         (*) :: (b -> c) -> (a -> b) -> (a -> c)
 
         * is the function compose operator, equivalent to . in Haskell
         """
 
-        if isinstance(fn, TypeConstructor):
-            return self.__mul__(fn.fun)
+        if isinstance(g, TypedCallable):
+            rho = {id(f) : f.fn_type, id(g) : g.fn_type}
+            comexpr = Lam("arg", App(Var(id(f)), App(Var(id(g)), Var("arg"))))
 
-        if not isinstance(fn, TypedFunc):
-            return fn.__rmul__(self)
+            newtype = analyze(comexpr, rho)
+            newargs = [g.fn_args[0]] + f.fn_args[1:]
 
-        env = {id(self):self.fn_type, id(fn):fn.fn_type}
-        compose = Lam("arg", App(Var(id(self)), App(Var(id(fn)), Var("arg"))))
-        newtype = analyze(compose, env)
-
-        composed_fn = lambda x: self.func(fn.func(x))
-        newargs = [fn.fn_args[0]] + self.fn_args[1:]
-
-        return TypedFunc(composed_fn, fn_args=newargs, fn_type=newtype)
+            return TypedFunc(
+                lambda x: f.func(g.func(x)),
+                fn_args = newargs, fn_type = newtype
+            )
+        else:
+            return g.__rmul__(f)
 
 
-class TypeConstructor(type):
-    def __mod__(self, arg):
-        return self.fun.__mod__(arg)
+    def __mod__(self, x):
+        """
+        (%) :: (a -> b) -> a -> b
 
-    def __mul__(self, fn):
-        return self.fun.__mul__(fn)
+        % is the apply operator, equivalent to $ in Haskell
+        """
+
+        return self.__call__(x)
+
+
+class TypedFunc(TypedCallable, Hask):
+    """
+    Partially applied, statically typed function wrapper.
+    """
+
+    def __init__(self, fn, fn_args, fn_type):
+        self.__doc__ = fn.__doc__
+        self.func    = fn
+        self.fn_args = fn_args
+        self.fn_type = fn_type
+
+
+    def __type__(self):
+        return self.fn_type
+
+
+class TypeConstructor(TypedCallable, type):
+    pass
 
 
 #=============================================================================#
@@ -475,29 +485,37 @@ def make_data_const(name, fields, type_constructor, slot_num):
         The new data constructor
     """
     # create the data constructor
-    slots = ["i%s" % i for i, _ in enumerate(fields)]
+    slots = tuple("i{}".format(i) for i, _ in enumerate(fields))
     base = namedtuple(name, slots)
-    cls = TypeConstructor(name, (type_constructor, base), dict(__new__=base.__new__))
-    cls.__type_constructor__ = type_constructor
-    cls.__ADT_slot__ = slot_num
-    cls.__match_args__ = tuple(slots)
+
+    klass = TypeConstructor(name, (type_constructor, base), {})
+    klass.__type_constructor__ = type_constructor
+    klass.__ADT_slot__         = slot_num
+    klass.__match_args__       = slots
 
     if len(fields) == 0:
         # If the data constructor takes no arguments, create an instance of it
         # and return that instance rather than returning the class
-        cls = cls()
+        klass = base.__new__(klass)
     else:
+        rettyp = TypeSignatureHKT(type_constructor, type_constructor.__params__)
+        sig = TypeSignature(list(fields) + [rettyp], [])
+
+        klass.func    = lambda *w, **kw: base.__new__(klass, *w, **kw)
+        klass.fn_args = build_sig(sig, {})
+        klass.fn_type = make_fn_type(klass.fn_args)
+
         # Otherwise, modify __type__ so that it matches up fields from the data
         # constructor with type params from the type constructor
         def __type__(self):
-            args = [typeof(self[fields.index(p)]) \
+            args = [typeof(self[fields.index(p)])
                     if p in fields else TypeVariable()
                     for p in type_constructor.__params__]
             return TypeOperator(type_constructor, args)
-        cls.__type__ = __type__
+        klass.__type__ = __type__
 
-    type_constructor.__constructors__ += (cls,)
-    return cls
+    type_constructor.__constructors__ += (klass,)
+    return klass
 
 
 def build_ADT(typename, typeargs, data_constructors, to_derive):
@@ -533,15 +551,6 @@ def build_ADT(typename, typeargs, data_constructors, to_derive):
     for tclass in to_derive:
         tclass.derive_instance(newtype)
 
-    # 3) Wrap data constructors in TypedFunc instances
-    for i, (dc_name, dc_fields) in enumerate(data_constructors):
-        if len(dc_fields) == 0:
-            continue
-
-        return_type = TypeSignatureHKT(newtype, typeargs)
-        sig = TypeSignature(list(dc_fields) + [return_type], [])
-        sig_args = build_sig(sig, {})
-        dcons[i].fun = TypedFunc(dcons[i], sig_args, make_fn_type(sig_args))
     return tuple([newtype,] + dcons)
 
 
